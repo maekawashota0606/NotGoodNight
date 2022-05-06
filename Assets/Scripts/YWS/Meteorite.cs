@@ -5,13 +5,16 @@ using UnityEngine;
 public class Meteorite : MonoBehaviour
 {
     [SerializeField]
+    private GameObject root = null;
+
+    [SerializeField]
     private GameObject meteorPrefab = null;
 
     // Start is called before the first frame update
     void Start()
     {
         Map.Instance.CheckMap();
-        Generate();
+        //Generate();
         Map.Instance.CheckMap();
     }
 
@@ -24,9 +27,11 @@ public class Meteorite : MonoBehaviour
         }
     }
 
-    private void Generate()
+    private void Generate(Vector3 GeneratePos)
     {
-        GameObject Meteor = Instantiate(meteorPrefab);
+        GameObject meteor = Instantiate(meteorPrefab);
+        meteor.transform.parent = root.transform;
+        meteor.transform.position = GeneratePos;
     }
 
     public void MeteorMove()
