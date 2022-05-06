@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Meteorite : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject meteorPrefab = null;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,7 +26,7 @@ public class Meteorite : MonoBehaviour
 
     private void Generate()
     {
-        Map.Instance.map[0,5] = "x";
+        GameObject Meteor = Instantiate(meteorPrefab);
     }
 
     public void MeteorMove()
