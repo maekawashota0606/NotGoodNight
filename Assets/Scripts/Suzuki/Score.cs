@@ -6,24 +6,26 @@ using UnityEngine.UI;
 public class Score : MonoBehaviour
 {
     int score = 0;
-    Text textComponent;
+    [SerializeField]private Text textComponent;
 
     // Start is called before the first frame update
     void Start()
     {
-        this.textComponent = GameObject.Find("Text").GetComponent<Text>();
-        this.textComponent.text = "Score" + score.ToString();
+        textComponent.text = "Score" + score.ToString();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            AddScore();
+        }
     }
 
     public void AddScore()
     {
-        this.score += 1;
-        this.textComponent.text = "Score" + score.ToString();
+        score += 100;
+        textComponent.text = "Score" + score.ToString();
     }
 }
