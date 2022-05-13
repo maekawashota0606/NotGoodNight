@@ -4,11 +4,8 @@ using UnityEngine;
 
 public class Meteorite : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject root = null;
-
-    [SerializeField]
-    private GameObject meteorPrefab = null;
+    [SerializeField] private GameObject root = null;
+    [SerializeField] private GameObject meteorPrefab = null;
 
     // Start is called before the first frame update
     void Start()
