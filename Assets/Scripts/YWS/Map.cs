@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Map : SingletonMonoBehaviour<Map>
 {
-    public string[,] map = new string[10, 10] // z, x座標で指定
+    public string[,] map = new string[11, 10] // z, x座標で指定
     {
         {"□", "□", "□", "□", "□", "□", "□", "□", "□", "□"},
         {"□", "□", "□", "□", "□", "□", "□", "□", "□", "□"},
@@ -16,7 +16,11 @@ public class Map : SingletonMonoBehaviour<Map>
         {"□", "□", "□", "□", "□", "□", "□", "□", "□", "□"},
         {"□", "□", "□", "□", "□", "□", "□", "□", "□", "□"},
         {"□", "□", "□", "□", "□", "□", "□", "□", "□", "□"},
+        {"x", "x", "x", "x", "x", "x", "x", "x", "x", "x"},
     };
+
+    public readonly string field = "□";
+    public readonly string deleteZone = "x";
 
     // map確認用
     public void CheckMap()
