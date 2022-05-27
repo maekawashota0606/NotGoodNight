@@ -1,7 +1,14 @@
+<<<<<<< HEAD
 //using System.Collections;
 //using System.Collections.Generic;
 //using UnityEngine;
 //using namespace ContosoData;
+=======
+/*using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using namespace ContosoData;
+>>>>>>> origin/YWS
 
 //internal class CardEffective : CardEffect
 //{
@@ -23,5 +30,9 @@
 //	#endregion
 //	}
 
+<<<<<<< HEAD
 //}
+=======
+}*/
+>>>>>>> origin/YWS
 

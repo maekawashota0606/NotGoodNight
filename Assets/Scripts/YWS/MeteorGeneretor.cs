@@ -13,7 +13,7 @@ public class MeteorGeneretor : MonoBehaviour
     {
         // コマ1つ目処理
         GameObject meteor = Instantiate(meteorPrefab);
-        //meteor.transform.parent = root.transform;
+        meteor.transform.parent = root.transform;
         meteor.transform.position = GeneratePos;
         Meteorite p1 = meteor.GetComponent<Meteorite>();
 
