@@ -1,4 +1,4 @@
-using System.Collections;
+/*using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using namespace ContosoData;
@@ -23,5 +23,5 @@ internal class CardEffective : CardEffect
 	#endregion
 	}
 
-}
+}*/
 
