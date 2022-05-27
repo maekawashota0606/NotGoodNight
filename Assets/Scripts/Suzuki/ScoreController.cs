@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Score : MonoBehaviour
+public class ScoreController : MonoBehaviour
 {
-    int score = 0;
-    [SerializeField]private Text textComponent;
+    public int score = 0;
+    [SerializeField] private Text textComponent;
 
     // Start is called before the first frame update
     void Start()
@@ -25,7 +25,7 @@ public class Score : MonoBehaviour
 
     public void AddScore()
     {
-        score += 1000;
+        score += 10000;
         textComponent.text = "Score" + score.ToString("d6");
     }
 }
