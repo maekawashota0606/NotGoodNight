@@ -9,6 +9,11 @@ public class draw : MonoBehaviour
 
     public void OnClick()
     {
+        Draw();
+    }
+
+    public void Draw()
+    {
         Instantiate(cardPrefab, playerHand);
     }
 

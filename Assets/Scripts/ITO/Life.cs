@@ -5,21 +5,22 @@ using UnityEngine.UI;
 
 public class Life : MonoBehaviour
 {
+    public int life_num = 3;
+    [SerializeField] private Text textComponent;
 
-    public GameObject life_object = null; // Textオブジェクト
-    public int life_num = 3; // スコア変数
-
-    // 初期化
     void Start()
     {
+        textComponent.text = "Life" + life_num;
+        
     }
 
     // 更新
     void Update()
     {
-        // オブジェクトからTextコンポーネントを取得
-        Text life_text = life_object.GetComponent<Text>();
-        // テキストの表示を入れ替える
-        life_text.text = "Life:" + life_num;
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            life_num -= 1;
+        }
+        textComponent.text = "Life" + life_num;
     }
 }
