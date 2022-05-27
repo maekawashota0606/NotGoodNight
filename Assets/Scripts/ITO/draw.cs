@@ -2,19 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class draw : MonoBehaviour
+public class Draw : MonoBehaviour
 {
     [SerializeField] GameObject cardPrefab;
     [SerializeField] Transform playerHand;
 
     public void OnClick()
     {
-        Draw();
+        Drawat();
     }
 
-    public void Draw()
+    public void Drawat()
     {
         Instantiate(cardPrefab, playerHand);
     }
-
 }
