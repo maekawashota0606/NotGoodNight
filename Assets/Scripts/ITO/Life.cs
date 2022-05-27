@@ -10,7 +10,7 @@ public class Life : MonoBehaviour
 
     void Start()
     {
-        textComponent.text = "Score" + life_num;
+        textComponent.text = "Life" + life_num;
         
     }
 
@@ -21,6 +21,6 @@ public class Life : MonoBehaviour
         {
             life_num -= 1;
         }
-        textComponent.text = "Score" + life_num;
+        textComponent.text = "Life" + life_num;
     }
 }
