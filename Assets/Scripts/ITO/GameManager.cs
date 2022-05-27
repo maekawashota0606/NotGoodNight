@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         // èD‚ğ”z‚éi©•ªj
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 5; i++)
         {
             Instantiate(cardPrefab, playerHand);
         }
