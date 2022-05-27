@@ -42,3 +42,5 @@ public class CardData
         this.CardEffectiveValue = effective;
     }
 }
+
+
