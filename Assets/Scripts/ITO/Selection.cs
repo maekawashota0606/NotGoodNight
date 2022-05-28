@@ -7,42 +7,69 @@ public class Selection : MonoBehaviour
 {
     //[SerializeField] Image gameObject;
     public bool i = false;
+    public bool l = false;
+    public bool r = false;
+    bool isCalledOnce = false;
+    bool isCalledOnce2 = false;
 
-    GameObject image_object = null;
-
+    [SerializeField]
     Image image_component = null;
 
     void OnMouseOver()
     {
         i = true;
-        Debug.Log("OnMouseOver");
+        //Debug.Log("OnMouseOver");
     }
     void OnMouseExit()
     {
         i = false;
-        Debug.Log("OnMouseExit");
+        //Debug.Log("OnMouseExit");
     }
-
+    void OnMouseDown()
+    {
+        l = true;
+        isCalledOnce2 = false;
+    }
     
+    
+
+
     void Start()
     {
-        // オブジェクトの取得
-        image_object = GameObject.Find("Image");
-        // コンポーネントの取得
-        image_component = image_object.GetComponent<Image>();
         
     }
     void Update()
     {
-        if (i == true)
+        if (!isCalledOnce2)
         {
-            image_component.color = Color.red;
-            
+            if (l == true)
+            {
+                image_component.color = Color.red;
+                isCalledOnce = true;
+            }
         }
-        else
+        if (Input.GetMouseButtonDown(1)&& i == true)
         {
             image_component.color = Color.white;
+            isCalledOnce2 = true;
+            isCalledOnce = false;
         }
+        if (!isCalledOnce)
+        {
+            
+
+            if (i == true)
+            {
+                image_component.color = Color.yellow;
+                
+            }
+            else
+            {
+                image_component.color = Color.white;
+                
+            }
+        }
+            
     }
     
 }
