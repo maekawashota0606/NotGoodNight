@@ -54,7 +54,6 @@ public class Mino : MonoBehaviour
             {
                 transform.position -= new Vector3(0,-1,0);
                 AddToGrid();
-                //今回の追加
                 CheckLines();
                 this.enabled = false;
                 FindObjectOfType<SpawnMino>().NewMino();

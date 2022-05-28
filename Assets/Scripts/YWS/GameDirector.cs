@@ -27,10 +27,9 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     public GameObject[] _activePieces = new GameObject[2];
     public float intervalTime = 0;
     public bool _isLanding = false;
-    public bool _isSkillBlack = false;
-    public bool _isSkillWhite = false;
     public GameState gameState = GameState.none;
     public GameState nextStateCue = GameState.none;
+    [SerializeField] draw _cardGenerator = null;
 
     public enum GameState
     {
@@ -57,10 +56,10 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         {
             case GameState.standby: //スタンバイフェイズ
                 //手札が5枚になるまでドロー
-                /*for (int hand = 0; hand < 5; hand++)
+                for (int hand = 0; hand < 5; hand++)
                 {
-                    draw;
-                }*/
+                    _cardGenerator.Draw();
+                }
 
                 //盤面の上4列に隕石を生成
                 //横一列につき、隕石を二個ランダムに生成
@@ -120,18 +119,16 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         //生成を試みた回数
         int tryNum = 0; 
 
-        GameObject meteor = null;
-
         while (true)
         {
             //生成する場所を乱数で出す
             int x = Random.Range(0,9); 
-            Vector3 checkPos = _DEFAULT_POSITION + new Vector3(x, columns);
-            if (Map.Instance.CheckEmpty(checkPos))
-            {
-                _generator.Generate(checkPos, out meteor);
+            Vector3 checkPos = _DEFAULT_POSITION + new Vector3(x*180, -columns*169);
+            //if (Map.Instance.CheckEmpty(checkPos))
+            //{
+                _generator.Generate(checkPos);
                 created++;
-            }
+            //}
             tryNum++;
 
             if (created == amount)
@@ -144,22 +141,6 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 Debug.Log("生成できる場所が存在しない");
                 break;
             }
-        }
-    }
-
-    public void AddScore(bool isBlack, int point)
-    {
-        if (isBlack)
-        {
-            //_player1.reverseScore += point;
-        }
-    }
-
-    public void AddPreScore(bool isBlack, int point)
-    {
-        if (isBlack)
-        {
-            //_player1.preScore += point;
         }
     }
 }

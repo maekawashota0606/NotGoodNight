@@ -4,23 +4,12 @@ using Random = UnityEngine.Random;
 
 public class MeteorGeneretor : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject root = null;
-    [SerializeField]
-    private GameObject meteorPrefab = null;
+    [SerializeField] private GameObject meteorPrefab = null;
 
-    public void Generate(Vector3 GeneratePos, out GameObject meteorObj)
+    public void Generate(Vector3 GenPos)
     {
-        // コマ1つ目処理
-        GameObject meteor = Instantiate(meteorPrefab);
-        meteor.transform.parent = root.transform;
-        meteor.transform.position = GeneratePos;
-        Meteorite p1 = meteor.GetComponent<Meteorite>();
+        Vector3 Pos = transform.position + GenPos;
 
-        // out引数のため代入
-        meteorObj = meteor;
-
-        // 代入
-        GameDirector.Instance._activePieces[0] = meteor;
+        Instantiate(meteorPrefab, Pos, Quaternion.identity);
     }
 }
