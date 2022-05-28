@@ -14,7 +14,7 @@ public class CardData
     //効果
     public enum CardEffective
     {
-        Kill,          //破壊
+        Destroy,    //破壊
         Draw,       //ドロー
         Move,       //移動
         Stop,        //停滞
@@ -28,11 +28,10 @@ public class CardData
         Reduse,   //コスト軽減
         Extra,      //外部干渉
     }
-
     public int ID = 0;
     public int Cost = 1;
     public CardType CardTypeValue = CardData.CardType.Attack;
-    public CardEffective CardEffectiveValue = CardData.CardEffective.Kill;
+    public CardEffective CardEffectiveValue = CardData.CardEffective.Destroy;
 
     public void Init(int id,int cost,CardType type,CardEffective effective)
     {
