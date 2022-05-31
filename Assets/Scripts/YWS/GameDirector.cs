@@ -160,7 +160,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         //生成を試みた回数
         int tryNum = 0;
 
-        while (true)
+        /*while (true)
         {
             //生成する場所を乱数で出す
             int x = Random.Range(0,9); 
@@ -183,15 +183,15 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 Debug.Log("生成できる場所が存在しない");
                 break;
             }
-        }
+        }*/
 
-        /*for (int x = 0; x < 10; x++)
+        for (int x = 0; x < 10; x++)
         {
             for (int z = 0; z < 10; z++)
             {
                 Vector3 checkPos = _DEFAULT_POSITION + new Vector3(x, 0, -z);
                 _generator.Generate(checkPos);
             }
-        }*/
+        }
     }
 }
