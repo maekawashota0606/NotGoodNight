@@ -5,15 +5,18 @@ using UnityEngine;
 
 public class Meteorite : MonoBehaviour
 {
-    private void Start()
+    /// <summary>
+    /// 隕石の移動
+    /// </summary>
+    public void Move()
     {
-
+        this.transform.position += new Vector3(0,0,-1);
     }
 
     /// <summary>
     /// 隕石の破壊
     /// </summary>
-    public void OnDestroy()
+    public void Destroy()
     {
         
     }
