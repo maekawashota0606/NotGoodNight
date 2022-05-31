@@ -75,12 +75,14 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 break;
 
             case GameState.fall: //隕石落下フェイズ
+                IsPlayerSelectMove = false;
                 for (int num = 0; num < meteors.Count; num++)
                 {
+                    Debug.Log(meteors[num]);
                     var x = (int)meteors[num].transform.position.x;
                     var z = (int)meteors[num].transform.position.z * -1;
                     //隕石の下１マスが空白だった場合
-                    if (z < 10)
+                    if (z < 9)
                     {
                         //隕石オブジェクトを１マス下に移動
                         meteors[num].transform.position += Vector3.back;
@@ -91,7 +93,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                     }
                     //隕石の下１マスが空白ではなかった場合
                     //下から順に処理を行っているため、隕石の下に他の隕石が存在する事はありえない
-                    else if (z == 10)
+                    else if (z == 9)
                     {
                         //隕石オブジェクトを削除する
                         Destroy(meteors[num]);
@@ -100,6 +102,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                         //マップから削除
                         Map.Instance.map[z, x] = Map.Instance.empty;
                     }
+                    Debug.Log(num);
                 }
                 gameState = GameState.judge;
                 break;
@@ -160,7 +163,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         //生成を試みた回数
         int tryNum = 0;
 
-        /*while (true)
+        while (true)
         {
             //生成する場所を乱数で出す
             int x = Random.Range(0,9); 
@@ -183,15 +186,15 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 Debug.Log("生成できる場所が存在しない");
                 break;
             }
-        }*/
+        }
 
-        for (int x = 0; x < 10; x++)
+        /*for (int x = 0; x < 10; x++)
         {
             for (int z = 0; z < 10; z++)
             {
                 Vector3 checkPos = _DEFAULT_POSITION + new Vector3(x, 0, -z);
                 _generator.Generate(checkPos);
             }
-        }
+        }*/
     }
 }
