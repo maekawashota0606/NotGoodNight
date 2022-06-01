@@ -22,6 +22,10 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     public bool IsPlayerSelectMove = false;
     //隕石を生成するかどうか
     public bool CanMeteorGenerate = true;
+    //ターンチェンジで生成する隕石の数
+    private int MeteorGenNum = 2;
+    //ターンカウント
+    private int TurnCount = 0;
     //勝敗判定用フラグ
     public bool IsPlayerWin = false;
     
@@ -43,6 +47,8 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         IsPlayerSelectMove = false;
         CanMeteorGenerate = true;
         IsPlayerWin = false;
+        MeteorGenNum = 2;
+        TurnCount = 0;
         gameState = GameState.standby;
     }
 
@@ -131,9 +137,26 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                         CanMeteorGenerate = false;
                     }
                 }
-                //以上の条件すべてに当てはまらない場合、アクティブフェイズに戻る
+                //以上の条件すべてに当てはまらない場合
                 else
                 {
+                    //新しい隕石が生成可能の場合、新たに隕石を生成する
+                    {
+                        //盤面の最上列に隕石を生成
+                        //隕石はランダムに生成
+                        if (CanMeteorGenerate == true)
+                        {
+                            MeteorSet(MeteorGenNum,0);
+                        }
+                    }
+                    //ターンカウントを１つ増やす
+                    TurnCount++;
+                    //１０ターンごとに生成する隕石の数を１個増やす（上限は６個）
+                    if (TurnCount % 10 == 0 && MeteorGenNum < 6)
+                    {
+                        MeteorGenNum++;
+                    }
+                    //アクティブフェイズに戻る
                     gameState = GameState.active;
                 }
                 break;
