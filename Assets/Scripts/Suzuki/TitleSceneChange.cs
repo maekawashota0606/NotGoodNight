@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class TitleController : MonoBehaviour
+public class TitleSceneChange : MonoBehaviour
 {
     public void SwitchScene()
     {
-        SceneManager.LoadScene("Title");
+        SceneManager.LoadScene("MainGame");
     }
 }

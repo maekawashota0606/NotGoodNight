@@ -48,24 +48,6 @@ public class Map : SingletonMonoBehaviour<Map>
     }
 
     /// <summary>
-    /// 隕石の下１マスは空白かどうか
-    /// </summary>
-    /// <param name="PosX">検索を行うX座標</param>
-    /// <param name="PosZ">検索を行うZ座標</param>
-    /// <returns></returns>
-    public bool CheckBelow(int PosX, int PosZ)
-    {
-        if (map[PosZ+1, PosX] == empty)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    /// <summary>
     /// マップ上に隕石が存在するかどうか
     /// </summary>
     /// <returns></returns>
@@ -82,5 +64,22 @@ public class Map : SingletonMonoBehaviour<Map>
             }
         }
         return true;
+    }
+
+    /// <summary>
+    /// マップデータ確認
+    /// </summary>
+    public void CheckMapData()
+    {
+        string printMapData = "";
+		for (int i = 0; i < 10; i++)
+		{
+			for (int j = 0; j < 10; j++)
+			{
+				printMapData += map[i, j].ToString() + ",";
+			}
+			printMapData += "\n";
+		}
+		Debug.Log("マップ\n" + printMapData);
     }
 }

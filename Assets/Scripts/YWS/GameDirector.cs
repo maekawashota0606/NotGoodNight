@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 
 public class GameDirector : SingletonMonoBehaviour<GameDirector>
 {
-    [SerializeField, Header("基本スコア")] public int point = 0;
+    [SerializeField, Header("基本獲得スコア")] public int point = 0;
     [SerializeField, Header("隕石の初期位置")] public Vector3 _DEFAULT_POSITION = Vector3.zero;
     [SerializeField, Header("隕石生成オブジェクト")] MeteorGenerator _generator = null;
     [SerializeField] Player _player = null;
@@ -22,6 +22,8 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     public bool IsPlayerSelectMove = false;
     //隕石を生成するかどうか
     public bool CanMeteorGenerate = true;
+    //勝敗判定用フラグ
+    public bool IsPlayerWin = false;
     
     public enum GameState
     {
@@ -40,6 +42,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         CanPlayerControl = false;
         IsPlayerSelectMove = false;
         CanMeteorGenerate = true;
+        IsPlayerWin = false;
         gameState = GameState.standby;
     }
 
@@ -56,7 +59,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
 
                 //盤面の上4列に隕石を生成
                 //横一列につき、隕石を二個ランダムに生成
-                for (int i = 4; i > -1; i--)
+                for (int i = 3; i > -1; i--)
                 {
                     MeteorSet(2,i);
                 }
@@ -78,7 +81,6 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 IsPlayerSelectMove = false;
                 for (int num = 0; num < meteors.Count; num++)
                 {
-                    Debug.Log(meteors[num]);
                     var x = (int)meteors[num].transform.position.x;
                     var z = (int)meteors[num].transform.position.z * -1;
                     //隕石の下１マスが空白だった場合
@@ -101,8 +103,10 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                         meteors.RemoveAt(num);
                         //マップから削除
                         Map.Instance.map[z, x] = Map.Instance.empty;
+                        //プレイヤーのライフを減らす
+                        _player.Life--;
+                        num--;
                     }
-                    Debug.Log(num);
                 }
                 gameState = GameState.judge;
                 break;
@@ -137,10 +141,12 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
             case GameState.end: //ゲーム終了処理
                 if (_player.Life == 0)
                 {
+                    IsPlayerWin = false;
                     Debug.Log("ゲームオーバー");
                 }
                 else
                 {
+                    IsPlayerWin = true;
                     Debug.Log("ゲームクリア");
                 }
                 gameState = GameState.ended;
