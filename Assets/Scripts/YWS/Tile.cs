@@ -5,43 +5,33 @@ using UnityEngine;
 public class Tile : MonoBehaviour
 {
     [SerializeField, Header("点滅させるオブジェクト")] private SpriteRenderer tile = null;
-    [SerializeField, Header("点滅させるスピード")] private float _blinkSpeed = 0.0f;
-
-    // 時間計測変数
-    private float _sceneTime = 0.0f;
-
+    private float alpha_Sin = 0.0f;
     private bool ShouldBlink = false;
     
     private void Start()
     {
         // 値を初期化
-        tile.color = GetAlphaColor(tile.color);
+        tile.color = new Color(255,255,255,0);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        tile.color = GetAlphaColor(tile.color);
-
-        //マウスが離れたら透明に戻る
-        if (ShouldBlink == false)
-        {
-            tile.color = new Color(255, 255, 255, 0);
-        }
+        alpha_Sin = Mathf.Sin(Time.time) / 2 + 0.5f;
     }
 
-    //Alpha値を更新してColorを返す
-    public Color GetAlphaColor(Color color)
+    private IEnumerator ColorCoroutine()
     {
-        _sceneTime += Time.deltaTime * 5.0f * _blinkSpeed;
-        color.a = Mathf.Sin(_sceneTime) * 0.5f + 0.5f;
+        yield return new WaitUntil(() => ShouldBlink == true);
 
-        return color;
+        Color _color = tile.material.color;
+        _color.a = alpha_Sin;
+        tile.material.color = _color;
     }
 
     private void OnMouseOver()
     {
         ShouldBlink = true;
+        StartCoroutine(ColorCoroutine());
     }
 
     private void OnMouseExit()

@@ -81,6 +81,26 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 {
                     gameState = GameState.fall;
                 }
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    _player.Score += 10000;
+                }
+                if (Input.GetKeyDown(KeyCode.Delete))
+                {
+                    for (int num = 0; num < meteors.Count; num++)
+                    {
+                        var x = (int)meteors[num].transform.position.x;
+                        var z = (int)meteors[num].transform.position.z * -1;
+                        //隕石オブジェクトを削除する
+                        Destroy(meteors[num]);
+                        //リストから削除
+                        meteors.RemoveAt(num);
+                        //マップから削除
+                        Map.Instance.map[z, x] = Map.Instance.empty;
+                        num--;
+                    }
+                    gameState = GameState.judge;
+                }
                 break;
 
             case GameState.fall: //隕石落下フェイズ
@@ -135,6 +155,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                     else
                     {
                         CanMeteorGenerate = false;
+                        gameState = GameState.active;
                     }
                 }
                 //以上の条件すべてに当てはまらない場合
