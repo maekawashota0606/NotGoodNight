@@ -7,6 +7,7 @@ public class Tile : MonoBehaviour
     [SerializeField, Header("点滅させるオブジェクト")] private SpriteRenderer tile = null;
     private float alpha_Sin = 0.0f;
     private bool ShouldBlink = false;
+    private bool IsMouseOver = false;
     
     private void Start()
     {
@@ -16,26 +17,22 @@ public class Tile : MonoBehaviour
 
     void Update()
     {
-        alpha_Sin = Mathf.Sin(Time.time) / 2 + 0.5f;
-    }
-
-    private IEnumerator ColorCoroutine()
-    {
-        yield return new WaitUntil(() => ShouldBlink == true);
-
-        Color _color = tile.material.color;
-        _color.a = alpha_Sin;
-        tile.material.color = _color;
+        if (GameDirector.Instance.CanPlayerControl == true && IsMouseOver == true && GameDirector.Instance.IsCardSelect == true && Input.GetMouseButtonDown(0))
+        {
+            this.tag = "Selected";
+            GameDirector.Instance.NeedSearch = true;
+        }
     }
 
     private void OnMouseOver()
     {
-        ShouldBlink = true;
-        StartCoroutine(ColorCoroutine());
+        tile.color = new Color(1, 1, 1, 0.5f);
+        IsMouseOver = true;
     }
 
     private void OnMouseExit()
     {
-        ShouldBlink = false;
+        tile.color = new Color(1, 1, 1, 0);
+        IsMouseOver = false;
     }
 }

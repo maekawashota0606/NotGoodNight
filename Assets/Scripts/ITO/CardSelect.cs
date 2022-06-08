@@ -25,6 +25,8 @@ public class CardSelect : MonoBehaviour
         {
             image_component.color = Color.red;
             IsClick = true;
+            GameDirector.Instance.IsCardSelect = true;
+            Debug.Log(this.name + "Selected");
         }
 
         //選択されたカードを右クリックしたら、そのカードの選択を解除し、枠を白色にする
@@ -32,6 +34,7 @@ public class CardSelect : MonoBehaviour
         {
             image_component.color = Color.white;
             IsClick = false;
+            GameDirector.Instance.IsCardSelect = false;
         }
 
         //このカードが選択されたいない場合
@@ -47,7 +50,13 @@ public class CardSelect : MonoBehaviour
             {
                 image_component.color = Color.white;
             }
-        }       
+        }
+
+        if (IsClick == true && GameDirector.Instance.IsCardUsed == true)
+        {
+            Destroy(this);
+            GameDirector.Instance.IsCardUsed = false;
+        }
     }
 
     /// <summary>
@@ -68,4 +77,3 @@ public class CardSelect : MonoBehaviour
         //Debug.Log("OnMouseExit");
     }
 }
-    

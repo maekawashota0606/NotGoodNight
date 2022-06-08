@@ -28,6 +28,9 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     private int TurnCount = 0;
     //勝敗判定用フラグ
     public bool IsPlayerWin = false;
+    public bool IsCardSelect = false;
+    public bool NeedSearch = false;
+    public bool IsCardUsed = false;
     
     public enum GameState
     {
@@ -246,5 +249,26 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 _generator.Generate(checkPos);
             }
         }*/
+    }
+
+    public void MeteorDestory(int x, int z)
+    {
+        for (int i = 0; i < meteors.Count; i++)
+        {
+            Debug.Log("searching meteor" + x + z);
+            if (meteors[i].transform.position.x == x && meteors[i].transform.position.z == z * -1)
+            {
+                Debug.Log("Destory");
+                Destroy(meteors[i]);
+                //リストから削除
+                meteors.RemoveAt(i);
+                //マップから削除
+                Map.Instance.map[z, x] = Map.Instance.empty;
+                _player.Score += 1000;
+                IsCardUsed = true;
+                CanPlayerControl = false;
+                IsPlayerSelectMove = true;
+            }
+        }
     }
 }

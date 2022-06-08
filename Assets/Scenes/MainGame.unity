@@ -2260,7 +2260,7 @@ MonoBehaviour:
   _width: 10
   _height: 10
   _tilePrefab: {fileID: 1059232087551633114, guid: 82d027b4112ff6747b44e8a098d8e07a, type: 3}
-  root: {fileID: 34254677}
+  root: {fileID: 34254680}
 --- !u!4 &1891735948
 Transform:
   m_ObjectHideFlags: 0

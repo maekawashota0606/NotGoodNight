@@ -15,6 +15,21 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
     // Update is called once per frame
     void Update()
     {
-        
+        if (GameDirector.Instance.NeedSearch == true)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                for (int j = 0; j < 10; j++)
+                {
+                    if (map[j, i].tag == "Selected")
+                    {
+                        Debug.Log("hit" + map[j, i].name);
+                        GameDirector.Instance.MeteorDestory(j, i);
+                        map[j, i].tag = "Untagged";
+                        break;
+                    }
+                }
+            }
+        }
     }
 }
