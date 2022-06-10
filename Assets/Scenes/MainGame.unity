@@ -997,6 +997,9 @@ MonoBehaviour:
   IsPlayerSelectMove: 0
   CanMeteorGenerate: 1
   IsPlayerWin: 0
+  IsCardSelect: 0
+  NeedSearch: 0
+  IsCardUsed: 0
 --- !u!4 &707400063
 Transform:
   m_ObjectHideFlags: 0
