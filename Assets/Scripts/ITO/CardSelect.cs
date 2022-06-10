@@ -12,22 +12,41 @@ public class CardSelect : MonoBehaviour
     public bool IsMouseOver = false;
     //クリックされた状態なのかどうか
     public bool IsClick = false;
+    GameObject aaa;
+    Count script;
 
     void Start()
     {
-        
+        aaa = GameObject.Find("CountManager");
+        script = aaa.GetComponent<Count>();
     }
 
     void Update()
     {
+        int count = script.counta;
         //選択されていないカードをクリックしたら、そのカードの枠を赤色にする
         if (IsMouseOver == true && Input.GetMouseButtonDown(0))
         {
-            image_component.color = Color.red;
-            IsClick = true;
-            GameDirector.Instance.IsCardSelect = true;
-            Debug.Log(this.name + "Selected");
+            
+            if (count == 0)
+            {
+                image_component.color = Color.red;
+                IsClick = true;
+                GameDirector.Instance.IsCardSelect = true;
+                Debug.Log(this.name + "Selected");
+                script.counta += 1;
+                
+            }
+            else
+            {
+                image_component.color = Color.green;
+                IsClick = true;
+                GameDirector.Instance.IsCardSelect = true;
+                Debug.Log(this.name + "Selected");
+                
+            }
         }
+        
 
         //選択されたカードを右クリックしたら、そのカードの選択を解除し、枠を白色にする
         if (IsMouseOver == true && Input.GetMouseButtonDown(1))
@@ -35,6 +54,7 @@ public class CardSelect : MonoBehaviour
             image_component.color = Color.white;
             IsClick = false;
             GameDirector.Instance.IsCardSelect = false;
+            script.counta = 0;
         }
 
         //このカードが選択されたいない場合
