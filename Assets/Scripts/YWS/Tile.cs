@@ -5,8 +5,6 @@ using UnityEngine;
 public class Tile : MonoBehaviour
 {
     [SerializeField, Header("点滅させるオブジェクト")] private SpriteRenderer tile = null;
-    private float alpha_Sin = 0.0f;
-    private bool ShouldBlink = false;
     private bool IsMouseOver = false;
     
     private void Start()

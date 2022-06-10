@@ -997,6 +997,9 @@ MonoBehaviour:
   IsPlayerSelectMove: 0
   CanMeteorGenerate: 1
   IsPlayerWin: 0
+  IsCardSelect: 0
+  NeedSearch: 0
+  IsCardUsed: 0
 --- !u!4 &707400063
 Transform:
   m_ObjectHideFlags: 0
@@ -2567,6 +2570,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardPrefab: {fileID: 6056595375295383613, guid: 5096e3dc965a7714b85c0baea891d2a0, type: 3}
   playerHand: {fileID: 677792873}
+  hands: []
   Score: 0
   scoreText: {fileID: 1428903323}
   Life: 3

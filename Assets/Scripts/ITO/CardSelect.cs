@@ -20,8 +20,13 @@ public class CardSelect : MonoBehaviour
 
     void Update()
     {
+        if (GameDirector.Instance.IsCardSelect == true && IsMouseOver == true && Input.GetMouseButtonDown(0))
+        {
+            image_component.color = Color.green;
+            IsClick = true;
+        }
         //選択されていないカードをクリックしたら、そのカードの枠を赤色にする
-        if (IsMouseOver == true && Input.GetMouseButtonDown(0))
+        else if (GameDirector.Instance.IsCardSelect == false && IsMouseOver == true && Input.GetMouseButtonDown(0))
         {
             image_component.color = Color.red;
             IsClick = true;

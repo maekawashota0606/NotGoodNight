@@ -1,44 +1,47 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-[System.Serializable]
-public class CardData
+public class CardData : MonoBehaviour
 {
-    //í—Ş
+    //??????
     public enum CardType
     {
-        Attack,     //UŒ‚i”j‰óô•¶j
-        Defence    //–hŒäi‰‡Œìô•¶j
+        Attack, //????
+        Special, //????
     }
-    //Œø‰Ê
-    public enum CardEffective
-    {
-        Destroy,    //”j‰ó
-        Draw,       //ƒhƒ[
-        Move,       //ˆÚ“®
-        Stop,        //’â‘Ø
-        Dump,      //Ì‚Ä‚é
-        Create,     //¶¬
-        Heel,        //‰ñ•œ 
-        Trump,     //Ø‚èD
-        Border,     //ƒ{[ƒ_[
-        Up,          // ˆø‚«ã‚°iè¦Î‚ğã‚É‚ ‚°‚éj
-        Copy,       //ƒRƒs[
-        Reduse,   //ƒRƒXƒgŒyŒ¸
-        Extra,      //ŠO•”Š±Â
-    }
-    public int ID = 0;
-    public int Cost = 1;
-    public CardType CardTypeValue = CardData.CardType.Attack;
-    public CardEffective CardEffectiveValue = CardData.CardEffective.Destroy;
 
-    public void Init(int id,int cost,CardType type,CardEffective effective)
+    //????????
+    public int ID; //?????
+    public string Name; //????
+    public int Cost; //??????
+    public CardType CardTypeValue; //?????
+    public string EffectText; //??????
+
+    [SerializeField, Header("????")] private Text CardName = null;
+    [SerializeField, Header("??????")] private Text CardCost = null;
+    [SerializeField, Header("????")] private Image CardFrame = null;
+    [SerializeField, Header("???????")] private Sprite[] _cardFrameImage = new Sprite[2];
+    //[SerializeField, Header("??????")] private Text CardText = null;
+
+    public void Init(int id,int cost,CardType type, string name)
     {
         this.ID = id;
         this.Cost = cost;
         this.CardTypeValue = type;
-        this.CardEffectiveValue = effective;
+        this.Name = name;
+
+        CardName.text = name;
+        CardCost.text = cost.ToString();
+        if (type == CardType.Attack)
+        {
+            CardFrame.sprite = _cardFrameImage[0];
+        }
+        else if (type == CardType.Special)
+        {
+            CardFrame.sprite = _cardFrameImage[1];
+        }
     }
 }
 

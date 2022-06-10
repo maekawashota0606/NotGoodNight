@@ -2,21 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/*public class Card : MonoBehaviour
+public class Card : CardData
 {
-    public draw drawGet;
     void Start()
     {
-        drawGet = GetComponent.Find<Button>;
-        drawmain = drawGet.GetComponent;
+        base.Init(1,1,CardData.CardType.Attack,"AAA");
     }
     void Update()
     {
-        int drawat = drawGet.Draw;
-
-        if (Input.GetKeyDown(KeyCode.LeftControl))
-        {
-            drawGet(3);
-        }
+        
     }
-}*/
+}

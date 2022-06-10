@@ -9,6 +9,8 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject cardPrefab = null;
     //手札置き場
     [SerializeField] private Transform playerHand = null;
+    //手札
+    public List<GameObject> hands = new List<GameObject>();
     //スコア
     public int Score = 0;
     //スコア表示テキスト
@@ -34,14 +36,16 @@ public class Player : MonoBehaviour
         //アクティブフェイズでのプレイヤーの行動としてのドロー
         if (GameDirector.Instance.gameState == GameDirector.GameState.active && GameDirector.Instance.CanPlayerControl == true)
         {
-            Instantiate(cardPrefab, playerHand);
+            GameObject newCard = Instantiate(cardPrefab, playerHand);
+            hands.Add(newCard);
             GameDirector.Instance.CanPlayerControl = false;
             GameDirector.Instance.IsPlayerSelectMove = true;
         }
         //ゲーム開始時の初期手札のドロー
         else if (GameDirector.Instance.gameState == GameDirector.GameState.standby)
         {
-            Instantiate(cardPrefab, playerHand);
+            GameObject newCard = Instantiate(cardPrefab, playerHand);
+            hands.Add(newCard);
         }
     }
 }
