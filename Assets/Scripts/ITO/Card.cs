@@ -3,27 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CardSelect : MonoBehaviour
+public class Card : CardData
 {
-    //カードイラスト
-    [SerializeField]
-    Image image_component = null;
+    [SerializeField, Header("カード選択フレーム")] private Image image_component = null;
     //マウスがカードの上に乗っているかどうか
     public bool IsMouseOver = false;
     //クリックされた状態なのかどうか
     public bool IsClick = false;
+    public bool IsCost = false;
 
     void Start()
     {
-        
+        base.Init(1,1,CardData.CardType.Attack,"AAA");
     }
 
     void Update()
     {
-        if (GameDirector.Instance.IsCardSelect == true && IsMouseOver == true && Input.GetMouseButtonDown(0))
+        if (GameDirector.Instance.PayedCost < GameDirector.Instance.NeedCost && GameDirector.Instance.IsCardSelect == true && IsMouseOver == true && Input.GetMouseButtonDown(0))
         {
             image_component.color = Color.green;
             IsClick = true;
+            IsCost = true;
+            GameDirector.Instance.PayedCost++;
         }
         //選択されていないカードをクリックしたら、そのカードの枠を赤色にする
         else if (GameDirector.Instance.IsCardSelect == false && IsMouseOver == true && Input.GetMouseButtonDown(0))
@@ -31,18 +32,41 @@ public class CardSelect : MonoBehaviour
             image_component.color = Color.red;
             IsClick = true;
             GameDirector.Instance.IsCardSelect = true;
-            Debug.Log(this.name + "Selected");
+            GameDirector.Instance.NeedCost = this.Cost;
+            if (this.Cost != 0)
+            {
+                GameDirector.Instance.NeedPayCost = true;
+            }
+            this.tag = "Selected";
         }
 
         //選択されたカードを右クリックしたら、そのカードの選択を解除し、枠を白色にする
-        if (IsMouseOver == true && Input.GetMouseButtonDown(1))
+        if (IsClick == true && IsMouseOver == true && Input.GetMouseButtonDown(1))
         {
             image_component.color = Color.white;
             IsClick = false;
-            GameDirector.Instance.IsCardSelect = false;
+            if (IsCost == true)
+            {
+                GameDirector.Instance.PayedCost--;
+            }
+            else
+            {
+                GameDirector.Instance.IsCardSelect = false;
+                GameDirector.Instance.NeedCost = 0;
+                GameDirector.Instance.NeedPayCost = false;
+                GameDirector.Instance.PayedCost = 0;
+                this.tag = "Untagged";
+            }
         }
 
-        //このカードが選択されたいない場合
+        if (IsCost == true && GameDirector.Instance.IsCardSelect == false)
+        {
+            image_component.color = Color.white;
+            IsClick = false;
+            IsCost = false;
+        }
+
+        //このカードが選択されていない場合
         if (IsClick == false)
         {
             //マウスが乗っていたら、カードの枠を黄色にする
@@ -70,7 +94,6 @@ public class CardSelect : MonoBehaviour
     void OnMouseOver()
     {
         IsMouseOver = true;
-        //Debug.Log("OnMouseOver");
     }
 
     /// <summary>
@@ -79,6 +102,5 @@ public class CardSelect : MonoBehaviour
     void OnMouseExit()
     {
         IsMouseOver = false;
-        //Debug.Log("OnMouseExit");
     }
 }

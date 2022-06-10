@@ -249,7 +249,6 @@ GameObject:
   - component: {fileID: 8407328101861546613}
   - component: {fileID: 5091186337394731272}
   - component: {fileID: 7713594398037349784}
-  - component: {fileID: 3278899135791107332}
   m_Layer: 5
   m_Name: Card
   m_TagString: Untagged
@@ -301,6 +300,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b3de94771e3ce14286655e15adaca74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ID: 0
+  Name: 
+  Cost: 0
+  CardTypeValue: 0
+  EffectText: 
+  CardName: {fileID: 529507584029948131}
+  CardCost: {fileID: 9131329955720828981}
+  CardFrame: {fileID: 1861803613554962528}
+  _cardFrameImage:
+  - {fileID: 21300000, guid: 14dc46251bbd9284082b686335c931a1, type: 3}
+  - {fileID: 21300000, guid: 80ab095d1b5402945a6db90b6d4d57c2, type: 3}
   image_component: {fileID: 1854021883026381432}
   IsMouseOver: 0
   IsClick: 0
@@ -342,29 +352,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 240, y: 270}
   m_EdgeRadius: 0
---- !u!114 &3278899135791107332
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6056595375295383613}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97013b31c14ec624e992ce7597aa63fa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ID: 0
-  Name: 
-  Cost: 0
-  CardTypeValue: 0
-  EffectText: 
-  CardName: {fileID: 529507584029948131}
-  CardCost: {fileID: 9131329955720828981}
-  CardFrame: {fileID: 1861803613554962528}
-  _cardFrameImage:
-  - {fileID: 21300000, guid: 14dc46251bbd9284082b686335c931a1, type: 3}
-  - {fileID: 21300000, guid: 80ab095d1b5402945a6db90b6d4d57c2, type: 3}
 --- !u!1 &9211369097019907146
 GameObject:
   m_ObjectHideFlags: 0

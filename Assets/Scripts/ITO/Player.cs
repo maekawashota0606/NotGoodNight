@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     //手札置き場
     [SerializeField] private Transform playerHand = null;
     //手札
-    public List<GameObject> hands = new List<GameObject>();
+    public List<Card> hands = new List<Card>();
     //スコア
     public int Score = 0;
     //スコア表示テキスト
@@ -36,7 +36,8 @@ public class Player : MonoBehaviour
         //アクティブフェイズでのプレイヤーの行動としてのドロー
         if (GameDirector.Instance.gameState == GameDirector.GameState.active && GameDirector.Instance.CanPlayerControl == true)
         {
-            GameObject newCard = Instantiate(cardPrefab, playerHand);
+            GameObject genCard = Instantiate(cardPrefab, playerHand);
+            Card newCard = genCard.GetComponent<Card>();
             hands.Add(newCard);
             GameDirector.Instance.CanPlayerControl = false;
             GameDirector.Instance.IsPlayerSelectMove = true;
@@ -44,7 +45,8 @@ public class Player : MonoBehaviour
         //ゲーム開始時の初期手札のドロー
         else if (GameDirector.Instance.gameState == GameDirector.GameState.standby)
         {
-            GameObject newCard = Instantiate(cardPrefab, playerHand);
+            GameObject genCard = Instantiate(cardPrefab, playerHand);
+            Card newCard = genCard.GetComponent<Card>();
             hands.Add(newCard);
         }
     }

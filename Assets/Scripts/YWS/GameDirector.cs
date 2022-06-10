@@ -31,6 +31,9 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     public bool IsCardSelect = false;
     public bool NeedSearch = false;
     public bool IsCardUsed = false;
+    public bool NeedPayCost = false;
+    public int NeedCost = 0;
+    public int PayedCost = 0;
     
     public enum GameState
     {
@@ -50,8 +53,12 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         IsPlayerSelectMove = false;
         CanMeteorGenerate = true;
         IsPlayerWin = false;
+        NeedPayCost = false;
         MeteorGenNum = 2;
         TurnCount = 0;
+        NeedCost = 0;
+        PayedCost = 0;
+        IsCardSelect = false;
         gameState = GameState.standby;
     }
 
@@ -240,15 +247,6 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 break;
             }
         }
-
-        /*for (int x = 0; x < 10; x++)
-        {
-            for (int z = 0; z < 10; z++)
-            {
-                Vector3 checkPos = _DEFAULT_POSITION + new Vector3(x, 0, -z);
-                _generator.Generate(checkPos);
-            }
-        }*/
     }
 
     public void MeteorDestory(int x, int z)
