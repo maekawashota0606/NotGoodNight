@@ -2,14 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Card : CardData
+/*public CardData CardData;
+
+void Start()
 {
-    void Start()
-    {
-        base.Init(1,1,CardData.CardType.Attack,"AAA");
-    }
-    void Update()
-    {
-        
-    }
+    int CardType = Defence;
+    int CardEffective = Draw;
+    int ID = 5;
+    int Cost = 1;
+    public string EffectText { get { return "カードを " + nDraw + " 枚引く"; } }
 }
+
+    {
+        for (int i = 0; i < nDraw; i++)
+        {
+            var C = IGC.DrawFromDeck();
+            Console.WriteLine(C.Name + " をドロー");
+            IGC.AddToHand(C);
+        }
+    }
+}*/
