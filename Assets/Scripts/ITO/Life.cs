@@ -7,16 +7,15 @@ public class Life : MonoBehaviour
 {
     public int life_num = 3;
     [SerializeField] private Text textComponent;
-
     void Start()
     {
         textComponent.text = "Life" + life_num;
-        
     }
 
     // çXêV
     void Update()
     {
+        
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             life_num -= 1;
