@@ -19,12 +19,13 @@ public class Card : CardData
 
     void Update()
     {
-        if (GameDirector.Instance.PayedCost < GameDirector.Instance.NeedCost && GameDirector.Instance.IsCardSelect == true && IsMouseOver == true && Input.GetMouseButtonDown(0))
+        if (GameDirector.Instance.PayedCost < GameDirector.Instance.NeedCost && GameDirector.Instance.IsCardSelect == true && IsClick == false && IsMouseOver == true && Input.GetMouseButtonDown(0))
         {
             image_component.color = Color.green;
             IsClick = true;
             IsCost = true;
             GameDirector.Instance.PayedCost++;
+            this.tag = "Selected";
         }
         //選択されていないカードをクリックしたら、そのカードの枠を赤色にする
         else if (GameDirector.Instance.IsCardSelect == false && IsMouseOver == true && Input.GetMouseButtonDown(0))
@@ -79,12 +80,6 @@ public class Card : CardData
             {
                 image_component.color = Color.white;
             }
-        }
-
-        if (IsClick == true && GameDirector.Instance.IsCardUsed == true)
-        {
-            Destroy(this);
-            GameDirector.Instance.IsCardUsed = false;
         }
     }
 

@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     //手札置き場
     [SerializeField] private Transform playerHand = null;
     //手札
-    public List<Card> hands = new List<Card>();
+    public List<GameObject> hands = new List<GameObject>();
     //スコア
     public int Score = 0;
     //スコア表示テキスト
@@ -22,6 +22,11 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        if (GameDirector.Instance.IsCardUsed == true)
+        {
+            DeleteUsedCard();
+        }
+
         if (Life <= 0)
         {
             Life = 0;
@@ -38,7 +43,7 @@ public class Player : MonoBehaviour
         {
             GameObject genCard = Instantiate(cardPrefab, playerHand);
             Card newCard = genCard.GetComponent<Card>();
-            hands.Add(newCard);
+            hands.Add(genCard);
             GameDirector.Instance.CanPlayerControl = false;
             GameDirector.Instance.IsPlayerSelectMove = true;
         }
@@ -47,7 +52,25 @@ public class Player : MonoBehaviour
         {
             GameObject genCard = Instantiate(cardPrefab, playerHand);
             Card newCard = genCard.GetComponent<Card>();
-            hands.Add(newCard);
+            hands.Add(genCard);
         }
+    }
+
+    public void DeleteUsedCard()
+    {
+        for (int i = 0; i < hands.Count; i++)
+        {
+            if (hands[i].tag == "Selected")
+            {
+                Destroy(hands[i]);
+                hands.RemoveAt(i);
+                i--;
+            }
+        }
+        GameDirector.Instance.IsCardUsed = false;
+        GameDirector.Instance.IsCardSelect = false;
+        GameDirector.Instance.NeedCost = 0;
+        GameDirector.Instance.NeedPayCost = false;
+        GameDirector.Instance.PayedCost = 0;
     }
 }

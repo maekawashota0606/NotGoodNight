@@ -314,6 +314,7 @@ MonoBehaviour:
   image_component: {fileID: 1854021883026381432}
   IsMouseOver: 0
   IsClick: 0
+  IsCost: 0
 --- !u!225 &5091186337394731272
 CanvasGroup:
   m_ObjectHideFlags: 0
