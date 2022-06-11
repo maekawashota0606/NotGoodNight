@@ -5,25 +5,25 @@ using UnityEngine.UI;
 
 public class CardData : MonoBehaviour
 {
-    //�??????
+    //カードタイプ
     public enum CardType
     {
-        Attack, //�????
-        Special, //????
+        Attack, //攻撃
+        Special, //特殊
     }
 
-    //????????
-    public int ID; //?????
-    public string Name; //????
-    public int Cost; //??????
-    public CardType CardTypeValue; //?????
-    public string EffectText; //??????
+    //カードステータス
+    public int ID; //カード番号
+    public string Name; //カード名
+    public int Cost; //カードコスト
+    public CardType CardTypeValue; //カードタイプ
+    public string EffectText; //効果テキスト
 
-    [SerializeField, Header("????")] private Text CardName = null;
-    [SerializeField, Header("??????")] private Text CardCost = null;
-    [SerializeField, Header("????")] private Image CardFrame = null;
-    [SerializeField, Header("???????")] private Sprite[] _cardFrameImage = new Sprite[2];
-    //[SerializeField, Header("??????")] private Text CardText = null;
+    [SerializeField, Header("カード名")] private Text CardName = null;
+    [SerializeField, Header("コスト")] private Text CardCost = null;
+    [SerializeField, Header("カード枠")] private Image CardFrame = null;
+    [SerializeField, Header("カード選択枠")] private Sprite[] _cardFrameImage = new Sprite[2];
+    //[SerializeField, Header("効果テキスト")] private Text CardText = null;
 
     public void Init(int id,int cost,CardType type, string name)
     {

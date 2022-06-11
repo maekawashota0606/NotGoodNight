@@ -28,11 +28,18 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     private int TurnCount = 0;
     //勝敗判定用フラグ
     public bool IsPlayerWin = false;
+    //カード使用関連のフラグ
+    //使用するカードが選択されているかどうか
     public bool IsCardSelect = false;
+    //隕石の検索を行うかどうか
     public bool NeedSearch = false;
+    //カード効果が処理されたのかどうか
     public bool IsCardUsed = false;
+    //コストを支払う必要があるかどうか
     public bool NeedPayCost = false;
+    //選択されているカードの使用に必要なコストの数
     public int NeedCost = 0;
+    //すでに選択されているコストの数
     public int PayedCost = 0;
     
     public enum GameState
@@ -49,6 +56,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
 
     void Start()
     {
+        //色々初期化
         CanPlayerControl = false;
         IsPlayerSelectMove = false;
         CanMeteorGenerate = true;
@@ -91,6 +99,8 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 {
                     gameState = GameState.fall;
                 }
+                //ここらへんα版用
+                /*
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
                     _player.Score += 10000;
@@ -111,6 +121,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                     }
                     gameState = GameState.judge;
                 }
+                */
                 break;
 
             case GameState.fall: //隕石落下フェイズ
@@ -249,6 +260,11 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         }
     }
 
+    /// <summary>
+    /// 隕石の破壊
+    /// </summary>
+    /// <param name="x">中心点のx座標</param>
+    /// <param name="z">中心点のz座標</param>
     public void MeteorDestory(int x, int z)
     {
         for (int i = 0; i < meteors.Count; i++)

@@ -22,16 +22,19 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        //カード効果の処理が終了したら、使用カードとコストとして使われたカードを削除する
         if (GameDirector.Instance.IsCardUsed == true)
         {
             DeleteUsedCard();
         }
 
+        //ライフがマイナスに行かないようにする
         if (Life <= 0)
         {
             Life = 0;
         }
 
+        //獲得スコアと現在ライフを随時更新で画面に表示させる
         scoreText.text = "Score / " + Score.ToString("d6");
         lifeText.text = "Life / " + Life.ToString();
     }
@@ -58,6 +61,7 @@ public class Player : MonoBehaviour
 
     public void DeleteUsedCard()
     {
+        //使用されたカードすべてにタグがついているので、それらを手札から見つけ出して削除する
         for (int i = 0; i < hands.Count; i++)
         {
             if (hands[i].tag == "Selected")

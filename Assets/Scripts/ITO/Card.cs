@@ -10,6 +10,7 @@ public class Card : CardData
     public bool IsMouseOver = false;
     //クリックされた状態なのかどうか
     public bool IsClick = false;
+    //このカードがコストとして選択されているのかどうか
     public bool IsCost = false;
 
     void Start()
@@ -19,37 +20,45 @@ public class Card : CardData
 
     void Update()
     {
+        //使用するカードが選択されており、それがこのカードではなく、かつ選択されているコストが必要コスト以下の場合、このカードがクリックされた時、枠を緑色にする
         if (GameDirector.Instance.PayedCost < GameDirector.Instance.NeedCost && GameDirector.Instance.IsCardSelect == true && IsClick == false && IsMouseOver == true && Input.GetMouseButtonDown(0))
         {
             image_component.color = Color.green;
             IsClick = true;
             IsCost = true;
+            //選択されているコストの数を加算する
             GameDirector.Instance.PayedCost++;
+            //コストとして使用された時に削除する用にタグを付けておく
             this.tag = "Selected";
         }
-        //選択されていないカードをクリックしたら、そのカードの枠を赤色にする
+        //カードが選択されていない場合、このカードがクリックされたら、枠を赤色にする
         else if (GameDirector.Instance.IsCardSelect == false && IsMouseOver == true && Input.GetMouseButtonDown(0))
         {
             image_component.color = Color.red;
             IsClick = true;
             GameDirector.Instance.IsCardSelect = true;
+            //このカードの使用に必要なコストの数を報告する
             GameDirector.Instance.NeedCost = this.Cost;
+            //コストが0ではない場合、コストが必要だとフラグを立てる
             if (this.Cost != 0)
             {
                 GameDirector.Instance.NeedPayCost = true;
             }
+            //効果が処理された後に削除するために、タグを付けておく
             this.tag = "Selected";
         }
 
-        //選択されたカードを右クリックしたら、そのカードの選択を解除し、枠を白色にする
+        //このカードが選択されている場合で右クリックしたら、選択を解除し、枠を白色にする
         if (IsClick == true && IsMouseOver == true && Input.GetMouseButtonDown(1))
         {
             image_component.color = Color.white;
             IsClick = false;
+            //コストとして選択されていた場合、すでに選択されているコストの数を減らす
             if (IsCost == true)
             {
                 GameDirector.Instance.PayedCost--;
             }
+            //使用カードとして選択されていた場合、色々とリセットする
             else
             {
                 GameDirector.Instance.IsCardSelect = false;
@@ -60,11 +69,13 @@ public class Card : CardData
             }
         }
 
+        //コストとして選択されている、かつ使用カードの選択が解除された時、このカードの選択も解除する
         if (IsCost == true && GameDirector.Instance.IsCardSelect == false)
         {
             image_component.color = Color.white;
             IsClick = false;
             IsCost = false;
+            this.tag = "Untagged";
         }
 
         //このカードが選択されていない場合
