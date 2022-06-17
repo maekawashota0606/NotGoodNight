@@ -992,14 +992,19 @@ MonoBehaviour:
   _player: {fileID: 2110949644}
   meteors: []
   gameState: 0
-  nextStateCue: 0
   CanPlayerControl: 0
   IsPlayerSelectMove: 0
   CanMeteorGenerate: 1
   IsPlayerWin: 0
   IsCardSelect: 0
+  SelectedCardNum: 0
+  IsTileNeedSearch: 0
+  IsMouseLeftTile: 0
   NeedSearch: 0
   IsCardUsed: 0
+  NeedPayCost: 0
+  NeedCost: 0
+  PayedCost: 0
 --- !u!4 &707400063
 Transform:
   m_ObjectHideFlags: 0
@@ -2573,7 +2578,7 @@ MonoBehaviour:
   hands: []
   Score: 0
   scoreText: {fileID: 1428903323}
-  Life: 3
+  Life: 99
   lifeText: {fileID: 1958270617}
 --- !u!1 &2119274711
 GameObject:

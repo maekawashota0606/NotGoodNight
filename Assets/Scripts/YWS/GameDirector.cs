@@ -15,7 +15,6 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     public List<GameObject> meteors = new List<GameObject>();
     //ゲームの進行状況
     public GameState gameState = GameState.none;
-    public GameState nextStateCue = GameState.none;
     //プレイヤーの行動を受け付けるかどうか
     public bool CanPlayerControl = false;
     //プレイヤーが行動を選択したかどうか
@@ -31,6 +30,12 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     //カード使用関連のフラグ
     //使用するカードが選択されているかどうか
     public bool IsCardSelect = false;
+    //選択されているカードの番号
+    public int SelectedCardNum = 0;
+    //盤面にマウスカーソルが乗っているか
+    public bool IsTileNeedSearch = false;
+    //カーソルがマス移動したかどうか
+    public bool IsMouseLeftTile = false;
     //隕石の検索を行うかどうか
     public bool NeedSearch = false;
     //カード効果が処理されたのかどうか
@@ -57,17 +62,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     void Start()
     {
         //色々初期化
-        CanPlayerControl = false;
-        IsPlayerSelectMove = false;
-        CanMeteorGenerate = true;
-        IsPlayerWin = false;
-        NeedPayCost = false;
-        MeteorGenNum = 2;
-        TurnCount = 0;
-        NeedCost = 0;
-        PayedCost = 0;
-        IsCardSelect = false;
-        gameState = GameState.standby;
+        Init();
     }
 
     void Update()
@@ -220,6 +215,26 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
             default:
                 break;
         }
+    }
+
+    private void Init()
+    {
+        gameState = GameState.standby;
+        CanPlayerControl = false;
+        IsPlayerSelectMove = false;
+        CanMeteorGenerate = true;
+        MeteorGenNum = 2;
+        TurnCount = 0;
+        IsPlayerWin = false;
+        IsCardSelect = false;
+        SelectedCardNum = 0;
+        IsTileNeedSearch = false;
+        IsMouseLeftTile = false;
+        NeedSearch = false;
+        IsCardUsed = false;
+        NeedPayCost = false;
+        NeedCost = 0;
+        PayedCost = 0;
     }
 
     /// <summary>

@@ -37,6 +37,8 @@ public class Card : CardData
             image_component.color = Color.red;
             IsClick = true;
             GameDirector.Instance.IsCardSelect = true;
+            //このカードの番号を報告する
+            GameDirector.Instance.SelectedCardNum = this.ID;
             //このカードの使用に必要なコストの数を報告する
             GameDirector.Instance.NeedCost = this.Cost;
             //コストが0ではない場合、コストが必要だとフラグを立てる
