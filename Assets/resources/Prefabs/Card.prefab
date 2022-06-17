@@ -219,10 +219,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b3de94771e3ce14286655e15adaca74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  i: 0
-  l: 0
-  r: 0
   image_component: {fileID: 1854021883026381432}
+  IsMouseOver: 0
+  IsClick: 0
+  TextFrame: {fileID: 0}
 --- !u!225 &5091186337394731272
 CanvasGroup:
   m_ObjectHideFlags: 0
