@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     public int Life = 3;
     //ライフ表示テキスト
     [SerializeField] private Text lifeText = null;
+    public bool IsEffect = false;
 
     private void Update()
     {
@@ -47,8 +48,11 @@ public class Player : MonoBehaviour
             GameObject genCard = Instantiate(cardPrefab, playerHand);
             Card newCard = genCard.GetComponent<Card>();
             hands.Add(genCard);
-            GameDirector.Instance.CanPlayerControl = false;
-            GameDirector.Instance.IsPlayerSelectMove = true;
+            if (IsEffect == false)
+            {
+                GameDirector.Instance.CanPlayerControl = false;
+                GameDirector.Instance.IsPlayerSelectMove = true;
+            }
         }
         //ゲーム開始時の初期手札のドロー
         else if (GameDirector.Instance.gameState == GameDirector.GameState.standby)
@@ -76,5 +80,29 @@ public class Player : MonoBehaviour
         GameDirector.Instance.NeedCost = 0;
         GameDirector.Instance.NeedPayCost = false;
         GameDirector.Instance.PayedCost = 0;
+    }
+
+    public void CardEffect()
+    {
+        if (GameDirector.Instance.CanPlayerControl == true && GameDirector.Instance.IsCardSelect == true && GameDirector.Instance.PayedCost == GameDirector.Instance.NeedCost)
+        {
+            switch(GameDirector.Instance.SelectedCardNum)
+            {
+            case 5: //アストラルリコール
+                for (int i = 0; i < 3; i++)
+                {
+                    IsEffect = true;
+                    DrawCard();
+                }
+                break;
+
+            default:
+                break;
+            }
+            IsEffect = false;
+            GameDirector.Instance.IsCardUsed = true;
+            GameDirector.Instance.CanPlayerControl = false;
+            GameDirector.Instance.IsPlayerSelectMove = true;
+        }
     }
 }

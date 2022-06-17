@@ -15,7 +15,7 @@ public class Card : CardData
 
     void Start()
     {
-        base.Init(3,1,CardData.CardType.Attack,"AAA");
+        base.Init(5,1,CardData.CardType.Attack,"AAA");
     }
 
     void Update()

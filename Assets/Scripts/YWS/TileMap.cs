@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TileMap : SingletonMonoBehaviour<TileMap>
 {
+    //タイル収納マップ
     public GameObject[,] map = new GameObject[10, 10];
 
     // Start is called before the first frame update
@@ -31,12 +32,14 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
             }
         }
 
+        //マウスが他のマスに移動した場合、一回全てのマスのタグを初期化する
         if (GameDirector.Instance.IsMouseLeaveTile == true)
         {
             ResetTileTag();
             GameDirector.Instance.IsMouseLeaveTile = false;
         }
 
+        //範囲が選択された場合、範囲内の隕石を検索する
         if (GameDirector.Instance.NeedSearch == true)
         {
             for (int i = 0; i < 10; i++)
@@ -46,6 +49,7 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
                     if ((GameDirector.Instance.IsBasePointInArea == true && map[j, i].tag == "Search") || map[j, i].tag == "Area")
                     {
                         Debug.Log("hit" + map[j, i].name);
+                        //見つけた範囲内の隕石を破壊する
                         GameDirector.Instance.MeteorDestory(j, i);
                         map[j, i].tag = "Untagged";
                     }
@@ -95,11 +99,23 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
                 map[basicPosX+1, basicPosZ].tag = "Area";
             break;
 
+        case 4: //ノーム・グレイブル
+            if (basicPosZ != 0)
+                map[basicPosX, basicPosZ-1].tag = "Area";
+            if (basicPosX != 9)
+                map[basicPosX+1, basicPosZ].tag = "Area";
+            if (basicPosX != 9 && basicPosZ != 0)
+                map[basicPosX+1, basicPosZ-1].tag = "Area";
+            break;
+
         default:
             break;
         }
     }
 
+    /// <summary>
+    /// 全てのタイルのタグを初期化する
+    /// </summary>
     public void ResetTileTag()
     {
         for (int i = 0; i < 10; i++)
