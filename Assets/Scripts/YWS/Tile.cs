@@ -38,7 +38,10 @@ public class Tile : MonoBehaviour
     /// </summary>
     private void OnMouseOver()
     {
-        tile.color = new Color(1, 1, 1, 0.5f);
+        if (GameDirector.Instance.IsBasePointInArea == true)
+        {
+            tile.color = new Color(1, 1, 1, 0.5f);
+        }
         this.tag = "Search";
         IsMouseOver = true;
         GameDirector.Instance.IsTileNeedSearch = true;
@@ -53,6 +56,6 @@ public class Tile : MonoBehaviour
         this.tag = "Untagged";
         IsMouseOver = false;
         GameDirector.Instance.IsTileNeedSearch = false;
-        GameDirector.Instance.IsMouseLeftTile = true;
+        GameDirector.Instance.IsMouseLeaveTile = true;
     }
 }

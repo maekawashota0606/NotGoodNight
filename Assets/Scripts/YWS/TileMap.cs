@@ -31,10 +31,10 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
             }
         }
 
-        if (GameDirector.Instance.IsMouseLeftTile == true)
+        if (GameDirector.Instance.IsMouseLeaveTile == true)
         {
             ResetTileTag();
-            GameDirector.Instance.IsMouseLeftTile = false;
+            GameDirector.Instance.IsMouseLeaveTile = false;
         }
 
         if (GameDirector.Instance.NeedSearch == true)
@@ -43,7 +43,7 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
             {
                 for (int j = 0; j < 10; j++)
                 {
-                    if (map[j, i].tag == "Search" || map[j, i].tag == "Area")
+                    if ((GameDirector.Instance.IsBasePointInArea == true && map[j, i].tag == "Search") || map[j, i].tag == "Area")
                     {
                         Debug.Log("hit" + map[j, i].name);
                         GameDirector.Instance.MeteorDestory(j, i);
@@ -62,26 +62,38 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
     /// <param name="basicPosZ">原点となるマスのz座標</param>
     public void DecideSearchArea(int basicPosX, int basicPosZ)
     {
+        //カードの種類に基づいて、範囲となるマスすべてにタグを付ける
         switch(GameDirector.Instance.SelectedCardNum)
         {
         case 1: //サラマンダーブレス
-        /*
-        □原点 o範囲 x範囲外
-        xxxxxx
-        xxxoxx
-        xxxoxx
-        xxx□xx
-        xxxoxx
-        xxxxxx
-        */
-        //範囲となるマスすべてにタグを付ける
-        if (basicPosZ > 1)
-            map[basicPosX, basicPosZ-2].tag = "Area";
-        if (basicPosZ != 0)
-            map[basicPosX, basicPosZ-1].tag = "Area";
-        if (basicPosZ != 9)
-            map[basicPosX, basicPosZ+1].tag = "Area";
-        break;
+            if (basicPosZ > 1)
+                map[basicPosX, basicPosZ-2].tag = "Area";
+            if (basicPosZ != 0)
+                map[basicPosX, basicPosZ-1].tag = "Area";
+            if (basicPosZ != 9)
+                map[basicPosX, basicPosZ+1].tag = "Area";
+            break;
+
+        case 2: //ウンディーネ・ウェイブ
+            if (basicPosX > 1)
+                map[basicPosX-2, basicPosZ].tag = "Area";
+            if (basicPosX != 0)
+                map[basicPosX-1, basicPosZ].tag = "Area";
+            if (basicPosX != 9)
+                map[basicPosX+1, basicPosZ].tag = "Area";
+            break;
+
+        case 3: //シルフ・ゲイル
+            GameDirector.Instance.IsBasePointInArea = false;
+            if (basicPosZ != 0)
+                map[basicPosX, basicPosZ-1].tag = "Area";
+            if (basicPosZ != 9)
+                map[basicPosX, basicPosZ+1].tag = "Area";
+            if (basicPosX != 0)
+                map[basicPosX-1, basicPosZ].tag = "Area";
+            if (basicPosX != 9)
+                map[basicPosX+1, basicPosZ].tag = "Area";
+            break;
 
         default:
             break;

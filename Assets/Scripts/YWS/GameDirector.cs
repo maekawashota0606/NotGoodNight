@@ -35,7 +35,9 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     //盤面にマウスカーソルが乗っているか
     public bool IsTileNeedSearch = false;
     //カーソルがマス移動したかどうか
-    public bool IsMouseLeftTile = false;
+    public bool IsMouseLeaveTile = false;
+    //基点マスに光って欲しいのかどうか
+    public bool IsBasePointInArea = true;
     //隕石の検索を行うかどうか
     public bool NeedSearch = false;
     //カード効果が処理されたのかどうか
@@ -120,6 +122,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 break;
 
             case GameState.fall: //隕石落下フェイズ
+                IsBasePointInArea = true;
                 IsPlayerSelectMove = false;
                 for (int num = 0; num < meteors.Count; num++)
                 {
@@ -229,7 +232,8 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         IsCardSelect = false;
         SelectedCardNum = 0;
         IsTileNeedSearch = false;
-        IsMouseLeftTile = false;
+        IsMouseLeaveTile = false;
+        IsBasePointInArea = true;
         NeedSearch = false;
         IsCardUsed = false;
         NeedPayCost = false;
