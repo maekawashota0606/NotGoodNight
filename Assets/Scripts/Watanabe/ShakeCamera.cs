@@ -8,15 +8,17 @@ public class ShakeCamera : MonoBehaviour
     public float shakeTime = 0.5f;
     public Vector3 shakeRange = new Vector3(0.2f, 0.2f, 0f);
 
+    //ƒJƒƒ‰‚ªU“®‚·‚éŠÔ
     private float _shakeTime;
+    //ƒJƒƒ‰‚ª—h‚ê‚é•
     private float _timer;
 
     private Vector3 _originPos;
     private bool _onShakeEnd;
 
+
     void Start()
     {
-        //init
         _shakeTime = -1f;
         _timer = 0f;
         _originPos = transform.position;

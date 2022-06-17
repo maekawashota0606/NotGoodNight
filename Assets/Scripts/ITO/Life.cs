@@ -18,7 +18,9 @@ public class Life : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
+            
             life_num -= 1;
+
         }
         textComponent.text = "Life" + life_num;
     }
