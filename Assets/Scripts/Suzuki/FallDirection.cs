@@ -18,7 +18,7 @@ public class FallDirection : MonoBehaviour
         {
             for(int a = 0; a <= 10; a++)
             {
-                this.transform.Translate(Vector2.left * -1);
+                this.transform.Translate(Vector3.back * 1);
             }
         }
     }
