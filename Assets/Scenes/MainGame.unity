@@ -579,6 +579,7 @@ GameObject:
   - component: {fileID: 283617212}
   - component: {fileID: 283617214}
   - component: {fileID: 283617215}
+  - component: {fileID: 283617216}
   m_Layer: 5
   m_Name: MapImage
   m_TagString: Untagged
@@ -694,6 +695,18 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!114 &283617216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 283617210}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a479aa542a79bf4d896ad0788c6f9ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -920,6 +933,7 @@ MonoBehaviour:
   CanMeteorGenerate: 1
   IsPlayerWin: 0
   IsCardSelect: 0
+  IsAttackCard: 0
   SelectedCardNum: 0
   IsTileNeedSearch: 0
   IsMouseLeaveTile: 0
