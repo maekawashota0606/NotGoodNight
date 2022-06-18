@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     //手札置き場
     [SerializeField] private Transform playerHand = null;
     //手札
-    public List<GameObject> hands = new List<GameObject>();
+    public List<Card> hands = new List<Card>();
     //スコア
     public int Score = 0;
     //スコア表示テキスト
@@ -20,6 +20,8 @@ public class Player : MonoBehaviour
     //ライフ表示テキスト
     [SerializeField] private Text lifeText = null;
     public bool IsEffect = false;
+    //効果の持続ターンカウント
+    public int EffectTurn_Card14 = 0;
 
     private void Update()
     {
@@ -47,7 +49,7 @@ public class Player : MonoBehaviour
         {
             GameObject genCard = Instantiate(cardPrefab, playerHand);
             Card newCard = genCard.GetComponent<Card>();
-            hands.Add(genCard);
+            hands.Add(newCard);
             if (IsEffect == false)
             {
                 GameDirector.Instance.CanPlayerControl = false;
@@ -59,7 +61,7 @@ public class Player : MonoBehaviour
         {
             GameObject genCard = Instantiate(cardPrefab, playerHand);
             Card newCard = genCard.GetComponent<Card>();
-            hands.Add(genCard);
+            hands.Add(newCard);
         }
     }
 
@@ -70,7 +72,7 @@ public class Player : MonoBehaviour
         {
             if (hands[i].tag == "Selected")
             {
-                Destroy(hands[i]);
+                Destroy(hands[i].gameObject);
                 hands.RemoveAt(i);
                 i--;
             }
@@ -84,7 +86,7 @@ public class Player : MonoBehaviour
 
     public void CardEffect()
     {
-        if (GameDirector.Instance.CanPlayerControl == true && GameDirector.Instance.IsCardSelect == true && GameDirector.Instance.PayedCost >= GameDirector.Instance.NeedCost)
+        if (GameDirector.Instance.CanPlayerControl == true && GameDirector.Instance.IsCardSelect == true && GameDirector.Instance.PayedCost >= GameDirector.Instance.NeedCost && GameDirector.Instance.IsAttackCard == false)
         {
             switch(GameDirector.Instance.SelectedCardNum)
             {
@@ -96,15 +98,59 @@ public class Player : MonoBehaviour
                 }
                 break;
 
+            case 13: //複製魔法
+
+                break;
+
+            case 14: //グラビトンリジェクト
+                EffectTurn_Card14 = 3;
+                GameDirector.Instance.DoMeteorFall = false;
+                GameDirector.Instance.CanMeteorGenerate = false;
+                break;
+
             default:
                 break;
             }
-            if (GameDirector.Instance.SelectedCardNum != 11)
+            
+            if (GameDirector.Instance.SelectedCardNum != 11 || GameDirector.Instance.SelectedCardNum == 15)
             {
                 IsEffect = false;
                 GameDirector.Instance.IsCardUsed = true;
                 GameDirector.Instance.CanPlayerControl = false;
                 GameDirector.Instance.IsPlayerSelectMove = true;
+            }
+        }
+    }
+
+    public void ExtraEffect()
+    {
+        switch(GameDirector.Instance.SelectedCardNum)
+        {
+        case 12: //コメットブロー
+            for (int i = 0; i < 3; i++)
+            {
+                IsEffect = true;
+                DrawCard();
+            }
+            break;
+
+        default:
+            break;
+        }
+        IsEffect = false;
+    }
+
+    public void CheckEffectTurn()
+    {
+        if (EffectTurn_Card14 > 0)
+        {
+            EffectTurn_Card14--;
+            if (EffectTurn_Card14 < 0)
+                EffectTurn_Card14 = 0;
+            if (EffectTurn_Card14 == 0)
+            {
+                GameDirector.Instance.DoMeteorFall = true;
+                GameDirector.Instance.CanMeteorGenerate = true;
             }
         }
     }

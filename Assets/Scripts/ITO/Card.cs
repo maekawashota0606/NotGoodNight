@@ -16,8 +16,9 @@ public class Card : CardData
 
     void Start()
     {
-        int GenID = Random.Range(1,12);
-        base.Init(GenID,2,CardData.CardType.Special,GenID.ToString());
+        //int GenID = Random.Range(1,36);
+        int ID = 14;
+        base.Init(ID,0,CardData.CardType.Special,ID.ToString());
     }
 
     void Update()

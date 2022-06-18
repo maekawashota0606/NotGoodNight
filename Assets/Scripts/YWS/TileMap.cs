@@ -72,39 +72,39 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
         case 1: //サラマンダーブレス
             if (basicPosZ > 1)
                 map[basicPosX, basicPosZ-2].tag = "Area";
-            if (basicPosZ != 0)
+            if (basicPosZ > 0)
                 map[basicPosX, basicPosZ-1].tag = "Area";
-            if (basicPosZ != 9)
+            if (basicPosZ < 9)
                 map[basicPosX, basicPosZ+1].tag = "Area";
             break;
 
         case 2: //ウンディーネ・ウェイブ
             if (basicPosX > 1)
                 map[basicPosX-2, basicPosZ].tag = "Area";
-            if (basicPosX != 0)
+            if (basicPosX > 0)
                 map[basicPosX-1, basicPosZ].tag = "Area";
-            if (basicPosX != 9)
+            if (basicPosX < 9)
                 map[basicPosX+1, basicPosZ].tag = "Area";
             break;
 
         case 3: //シルフ・ゲイル
             GameDirector.Instance.IsBasePointInArea = false;
-            if (basicPosZ != 0)
+            if (basicPosZ > 0)
                 map[basicPosX, basicPosZ-1].tag = "Area";
-            if (basicPosZ != 9)
+            if (basicPosZ < 9)
                 map[basicPosX, basicPosZ+1].tag = "Area";
-            if (basicPosX != 0)
+            if (basicPosX > 0)
                 map[basicPosX-1, basicPosZ].tag = "Area";
-            if (basicPosX != 9)
+            if (basicPosX < 9)
                 map[basicPosX+1, basicPosZ].tag = "Area";
             break;
 
         case 4: //ノーム・グレイブル
-            if (basicPosZ != 0)
+            if (basicPosZ > 0)
                 map[basicPosX, basicPosZ-1].tag = "Area";
-            if (basicPosX != 9)
+            if (basicPosX < 9)
                 map[basicPosX+1, basicPosZ].tag = "Area";
-            if (basicPosX != 9 && basicPosZ != 0)
+            if (basicPosX < 9 && basicPosZ > 0)
                 map[basicPosX+1, basicPosZ-1].tag = "Area";
             break;
 
@@ -120,7 +120,23 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
             break;
 
         case 12: //コメットブロー
-            
+            GameDirector.Instance.IsMultiEffect = true;
+            if (basicPosZ > 0 && basicPosX > 0)
+                map[basicPosX-1, basicPosZ-1].tag = "Area";
+            if (basicPosZ > 0)
+                map[basicPosX, basicPosZ-1].tag = "Area";
+            if (basicPosX < 9 && basicPosZ > 0)
+                map[basicPosX+1, basicPosZ-1].tag = "Area";
+            if (basicPosX < 9)
+                map[basicPosX+1, basicPosZ].tag = "Area";
+            if (basicPosX < 9 && basicPosZ < 9)
+                map[basicPosX+1, basicPosZ+1].tag = "Area";
+            if (basicPosZ < 9)
+                map[basicPosX, basicPosZ+1].tag = "Area";
+            if (basicPosX > 0 && basicPosZ < 9)
+                map[basicPosX-1, basicPosZ+1].tag = "Area";
+            if (basicPosX > 0)
+                map[basicPosX-1, basicPosZ].tag = "Area";
             break;
 
         default:
