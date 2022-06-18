@@ -27,7 +27,7 @@ public class Tile : MonoBehaviour
         }
 
         //アクティブフェイズでプレイヤーが行動可能な時、使用するカードが選択されている、かつ必要分のコストが選択されており、さらにこのマスがクリックされた場合
-        if (GameDirector.Instance.CanPlayerControl == true && IsMouseOver == true && GameDirector.Instance.IsCardSelect == true && GameDirector.Instance.PayedCost == GameDirector.Instance.NeedCost && Input.GetMouseButtonDown(0))
+        if (GameDirector.Instance.CanPlayerControl == true && GameDirector.Instance.IsCardSelect == true && GameDirector.Instance.IsAttackCard == true && GameDirector.Instance.PayedCost >= GameDirector.Instance.NeedCost && IsMouseOver == true && Input.GetMouseButtonDown(0))
         {
             GameDirector.Instance.NeedSearch = true;
         }

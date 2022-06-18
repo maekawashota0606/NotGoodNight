@@ -108,6 +108,21 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
                 map[basicPosX+1, basicPosZ-1].tag = "Area";
             break;
 
+        case 8: //彗星
+            for (int i = basicPosX; basicPosX > 0; basicPosX--)
+            {
+                map[basicPosX, basicPosZ].tag = "Area";
+            }
+            for (int i = basicPosX; basicPosX < 10; basicPosX++)
+            {
+                map[basicPosX, basicPosZ].tag = "Area";
+            }
+            break;
+
+        case 12: //コメットブロー
+            
+            break;
+
         default:
             break;
         }

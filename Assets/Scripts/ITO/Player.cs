@@ -84,7 +84,7 @@ public class Player : MonoBehaviour
 
     public void CardEffect()
     {
-        if (GameDirector.Instance.CanPlayerControl == true && GameDirector.Instance.IsCardSelect == true && GameDirector.Instance.PayedCost == GameDirector.Instance.NeedCost)
+        if (GameDirector.Instance.CanPlayerControl == true && GameDirector.Instance.IsCardSelect == true && GameDirector.Instance.PayedCost >= GameDirector.Instance.NeedCost)
         {
             switch(GameDirector.Instance.SelectedCardNum)
             {
@@ -99,10 +99,13 @@ public class Player : MonoBehaviour
             default:
                 break;
             }
-            IsEffect = false;
-            GameDirector.Instance.IsCardUsed = true;
-            GameDirector.Instance.CanPlayerControl = false;
-            GameDirector.Instance.IsPlayerSelectMove = true;
+            if (GameDirector.Instance.SelectedCardNum != 11)
+            {
+                IsEffect = false;
+                GameDirector.Instance.IsCardUsed = true;
+                GameDirector.Instance.CanPlayerControl = false;
+                GameDirector.Instance.IsPlayerSelectMove = true;
+            }
         }
     }
 }

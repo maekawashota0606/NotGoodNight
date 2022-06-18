@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class Card : CardData
 {
@@ -15,7 +16,8 @@ public class Card : CardData
 
     void Start()
     {
-        base.Init(5,1,CardData.CardType.Attack,"AAA");
+        int GenID = Random.Range(1,12);
+        base.Init(GenID,2,CardData.CardType.Special,GenID.ToString());
     }
 
     void Update()
@@ -27,7 +29,14 @@ public class Card : CardData
             IsClick = true;
             IsCost = true;
             //選択されているコストの数を加算する
-            GameDirector.Instance.PayedCost++;
+            if (this.ID == 11)
+            {
+                GameDirector.Instance.PayedCost += 2;
+            }
+            else
+            {
+                GameDirector.Instance.PayedCost++;
+            }
             //コストとして使用された時に削除する用にタグを付けておく
             this.tag = "Selected";
         }
@@ -45,6 +54,10 @@ public class Card : CardData
             if (this.Cost != 0)
             {
                 GameDirector.Instance.NeedPayCost = true;
+            }
+            if (this.CardTypeValue == CardType.Attack)
+            {
+                GameDirector.Instance.IsAttackCard = true;
             }
             //効果が処理された後に削除するために、タグを付けておく
             this.tag = "Selected";

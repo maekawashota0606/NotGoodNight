@@ -30,6 +30,8 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     //カード使用関連のフラグ
     //使用するカードが選択されているかどうか
     public bool IsCardSelect = false;
+    //選択されたカードが攻撃カードなのかどうか
+    public bool IsAttackCard = false;
     //選択されているカードの番号
     public int SelectedCardNum = 0;
     //盤面にマウスカーソルが乗っているか
@@ -230,6 +232,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         TurnCount = 0;
         IsPlayerWin = false;
         IsCardSelect = false;
+        IsAttackCard = false;
         SelectedCardNum = 0;
         IsTileNeedSearch = false;
         IsMouseLeaveTile = false;
