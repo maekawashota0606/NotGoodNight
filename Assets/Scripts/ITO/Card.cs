@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class Card : CardData
 {
@@ -127,7 +128,7 @@ public class Card : CardData
     /// <summary>
     /// マウスがカードの上に乗っている時
     /// </summary>
-    void OnMouseOver()
+    private void OnMouseOver()
     {
         IsMouseOver = true;
     }
@@ -135,8 +136,28 @@ public class Card : CardData
     /// <summary>
     /// マウスがカードの上から離れた時
     /// </summary>
-    void OnMouseExit()
+    private void OnMouseExit()
     {
         IsMouseOver = false;
+    }
+
+    private void OnDestroy()
+    {
+        //チェンジリング・マギアの効果
+        //コストとして使われた場合、ランダムに隕石を二個破壊する
+        if (this.ID == 15 && IsCost == true)
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                int DestoryNum = Random.Range(0,GameDirector.Instance.meteors.Count);
+                //隕石オブジェクトを削除する
+                Destroy(GameDirector.Instance.meteors[DestoryNum]);
+                //リストから削除
+                GameDirector.Instance.meteors.RemoveAt(DestoryNum);
+                //マップから削除
+                Map.Instance.map[(int)GameDirector.Instance.meteors[DestoryNum].transform.position.z*-1, (int)GameDirector.Instance.meteors[DestoryNum].transform.position.x] = Map.Instance.empty;
+                Debug.Log(this.name + DestoryNum + " Destroy");
+            }
+        }
     }
 }

@@ -333,6 +333,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
             if (meteors[i].transform.position.x == x && meteors[i].transform.position.z == z * -1)
             {
                 Debug.Log("Destory");
+                //隕石オブジェクトを削除する
                 Destroy(meteors[i]);
                 //リストから削除
                 meteors.RemoveAt(i);
@@ -343,9 +344,6 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 {
                     _player.ExtraEffect();
                 }
-                IsCardUsed = true;
-                CanPlayerControl = false;
-                IsPlayerSelectMove = true;
             }
         }
     }

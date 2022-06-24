@@ -60,7 +60,7 @@ public class Player : MonoBehaviour
         {
             GameObject genCard = Instantiate(cardPrefab, playerHand);
             Card newCard = genCard.GetComponent<Card>();
-            newCard.Init(ID,0,CardData.CardType.Special,ID.ToString());
+            newCard.Init(ID,1,CardData.CardType.Attack,ID.ToString());
             hands.Add(newCard);
             if (IsEffect == false)
             {
@@ -73,7 +73,7 @@ public class Player : MonoBehaviour
         {
             GameObject genCard = Instantiate(cardPrefab, playerHand);
             Card newCard = genCard.GetComponent<Card>();
-            newCard.Init(ID,0,CardData.CardType.Special,ID.ToString());
+            newCard.Init(ID,1,CardData.CardType.Attack,ID.ToString());
             hands.Add(newCard);
         }
     }

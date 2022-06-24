@@ -56,6 +56,9 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
                 }
             }
             GameDirector.Instance.NeedSearch = false;
+            GameDirector.Instance.IsCardUsed = true;
+            GameDirector.Instance.CanPlayerControl = false;
+            GameDirector.Instance.IsPlayerSelectMove = true;
         }
     }
 
