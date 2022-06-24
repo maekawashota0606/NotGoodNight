@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class Player : MonoBehaviour
 {
@@ -20,8 +21,13 @@ public class Player : MonoBehaviour
     //ライフ表示テキスト
     [SerializeField] private Text lifeText = null;
     public bool IsEffect = false;
+
+    #region カードごとの専用変数
+
     //効果の持続ターンカウント
     public int EffectTurn_Card14 = 0;
+
+    #endregion
 
     private void Update()
     {
@@ -42,13 +48,19 @@ public class Player : MonoBehaviour
         lifeText.text = "Life / " + Life.ToString();
     }
 
+    /// <summary>
+    /// カードドロー
+    /// </summary>
     public void DrawCard()
     {
+        int ID = Random.Range(1,36);
+        //int ID = 13;
         //アクティブフェイズでのプレイヤーの行動としてのドロー
         if (GameDirector.Instance.gameState == GameDirector.GameState.active && GameDirector.Instance.CanPlayerControl == true)
         {
             GameObject genCard = Instantiate(cardPrefab, playerHand);
             Card newCard = genCard.GetComponent<Card>();
+            newCard.Init(ID,0,CardData.CardType.Special,ID.ToString());
             hands.Add(newCard);
             if (IsEffect == false)
             {
@@ -61,10 +73,14 @@ public class Player : MonoBehaviour
         {
             GameObject genCard = Instantiate(cardPrefab, playerHand);
             Card newCard = genCard.GetComponent<Card>();
+            newCard.Init(ID,0,CardData.CardType.Special,ID.ToString());
             hands.Add(newCard);
         }
     }
 
+    /// <summary>
+    /// 使用カードとコストカードの削除
+    /// </summary>
     public void DeleteUsedCard()
     {
         //使用されたカードすべてにタグがついているので、それらを手札から見つけ出して削除する
@@ -77,13 +93,18 @@ public class Player : MonoBehaviour
                 i--;
             }
         }
+
         GameDirector.Instance.IsCardUsed = false;
         GameDirector.Instance.IsCardSelect = false;
         GameDirector.Instance.NeedCost = 0;
         GameDirector.Instance.NeedPayCost = false;
         GameDirector.Instance.PayedCost = 0;
+        GameDirector.Instance.IsMultiEffect = false;
     }
 
+    /// <summary>
+    /// 特殊カードの効果処理
+    /// </summary>
     public void CardEffect()
     {
         if (GameDirector.Instance.CanPlayerControl == true && GameDirector.Instance.IsCardSelect == true && GameDirector.Instance.PayedCost >= GameDirector.Instance.NeedCost && GameDirector.Instance.IsAttackCard == false)
@@ -99,7 +120,7 @@ public class Player : MonoBehaviour
                 break;
 
             case 13: //複製魔法
-
+                GameDirector.Instance.IsSpecialCardEffect = true;
                 break;
 
             case 14: //グラビトンリジェクト
@@ -122,6 +143,9 @@ public class Player : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 二個以上の効果を持つカードの効果処理
+    /// </summary>
     public void ExtraEffect()
     {
         switch(GameDirector.Instance.SelectedCardNum)
@@ -134,12 +158,19 @@ public class Player : MonoBehaviour
             }
             break;
 
+        case 13: //複製魔法
+            CopyCard_Card13(GameDirector.Instance.CopyNum);
+            break;
+
         default:
             break;
         }
         IsEffect = false;
     }
 
+    /// <summary>
+    /// 持続系の効果の効果終了チェック
+    /// </summary>
     public void CheckEffectTurn()
     {
         if (EffectTurn_Card14 > 0)
@@ -153,5 +184,15 @@ public class Player : MonoBehaviour
                 GameDirector.Instance.CanMeteorGenerate = true;
             }
         }
+    }
+
+    public void CopyCard_Card13(int cardID)
+    {
+        GameObject genCard = Instantiate(cardPrefab, playerHand);
+        Card newCard = genCard.GetComponent<Card>();
+        newCard.Init(cardID,0,CardData.CardType.Special,cardID.ToString());
+        hands.Add(newCard);
+        GameDirector.Instance.CopyNum = 0;
+        GameDirector.Instance.IsSpecialCardEffect = false;
     }
 }

@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Random = UnityEngine.Random;
 
 public class Card : CardData
 {
@@ -13,13 +12,6 @@ public class Card : CardData
     public bool IsClick = false;
     //このカードがコストとして選択されているのかどうか
     public bool IsCost = false;
-
-    void Start()
-    {
-        //int GenID = Random.Range(1,36);
-        int ID = 14;
-        base.Init(ID,0,CardData.CardType.Special,ID.ToString());
-    }
 
     void Update()
     {
@@ -42,7 +34,7 @@ public class Card : CardData
             this.tag = "Selected";
         }
         //カードが選択されていない場合、このカードがクリックされたら、枠を赤色にする
-        else if (GameDirector.Instance.IsCardSelect == false && IsMouseOver == true && Input.GetMouseButtonDown(0))
+        else if (GameDirector.Instance.gameState != GameDirector.GameState.effect && GameDirector.Instance.IsCardSelect == false && IsMouseOver == true && Input.GetMouseButtonDown(0))
         {
             image_component.color = Color.red;
             IsClick = true;
@@ -62,6 +54,12 @@ public class Card : CardData
             }
             //効果が処理された後に削除するために、タグを付けておく
             this.tag = "Selected";
+        }
+
+        if (GameDirector.Instance.gameState == GameDirector.GameState.effect && IsMouseOver == true && Input.GetMouseButtonDown(0))
+        {
+            GameDirector.Instance.IsMultiEffect = true;
+            GameDirector.Instance.CopyNum = this.ID;
         }
 
         //このカードが選択されている場合で右クリックしたら、選択を解除し、枠を白色にする
@@ -97,15 +95,31 @@ public class Card : CardData
         //このカードが選択されていない場合
         if (IsClick == false)
         {
-            //マウスが乗っていたら、カードの枠を黄色にする
-            if (IsMouseOver == true)
+            if (GameDirector.Instance.gameState == GameDirector.GameState.effect)
             {
-                image_component.color = Color.yellow;
+                //マウスが乗っていたら、カードの枠をマゼンタにする
+                if (IsMouseOver == true)
+                {
+                    image_component.color = Color.magenta;
+                }
+                //乗っていない場合、白色にする
+                else
+                {
+                    image_component.color = Color.white;
+                }
             }
-            //乗っていない場合、白色にする
             else
             {
-                image_component.color = Color.white;
+                //マウスが乗っていたら、カードの枠を黄色にする
+                if (IsMouseOver == true)
+                {
+                    image_component.color = Color.yellow;
+                }
+                //乗っていない場合、白色にする
+                else
+                {
+                    image_component.color = Color.white;
+                }
             }
         }
     }

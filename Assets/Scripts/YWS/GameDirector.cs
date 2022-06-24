@@ -9,6 +9,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     [SerializeField, Header("基本獲得スコア")] public int point = 0;
     [SerializeField, Header("隕石の初期位置")] public Vector3 _DEFAULT_POSITION = Vector3.zero;
     [SerializeField, Header("隕石生成オブジェクト")] MeteorGenerator _generator = null;
+    [SerializeField, Header("画面を振動させるオブジェクト")] ShakeByRandom _shaker = null;
     [SerializeField] Player _player = null;
     
     // 隕石用リストを宣言
@@ -29,7 +30,9 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     public bool DoMeteorFall = true;
     //勝敗判定用フラグ
     public bool IsPlayerWin = false;
-    //カード使用関連のフラグ
+
+    #region カード使用関連の変数
+
     //使用するカードが選択されているかどうか
     public bool IsCardSelect = false;
     //選択されたカードが攻撃カードなのかどうか
@@ -54,13 +57,19 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     public int NeedCost = 0;
     //すでに選択されているコストの数
     public int PayedCost = 0;
+    //カード効果で特定のカードを生成するかどうか
+    public bool IsSpecialCardEffect = false;
+    //
+    public int CopyNum = 0;
+
+    #endregion
     
     public enum GameState
     {
         none,
         standby,
         active,
-        confirmed,
+        effect,
         fall,
         judge,
         end,
@@ -97,8 +106,12 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
             case GameState.active: //アクティブフェイズ
                 //プレイヤーの操作を受け付ける
                 CanPlayerControl = true;
+                if (IsSpecialCardEffect == true)
+                {
+                    gameState = GameState.effect;
+                }
                 //プレイヤーの行動を受け付けたら、隕石落下フェイズに移行する
-                if (IsPlayerSelectMove == true)
+                else if (IsSpecialCardEffect == false && IsPlayerSelectMove == true)
                 {
                     gameState = GameState.fall;
                 }
@@ -125,6 +138,19 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                     gameState = GameState.judge;
                 }
                 */
+                break;
+
+            case GameState.effect: //カード効果処理フェイズ
+                if (IsMultiEffect == true)
+                {
+                    _player.ExtraEffect();
+                }
+                //効果処理が終了したら、隕石落下フェイズに移行する
+                if (IsSpecialCardEffect == false)
+                {
+                    IsMultiEffect = false;
+                    gameState = GameState.fall;
+                }
                 break;
 
             case GameState.fall: //隕石落下フェイズ
@@ -158,6 +184,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                             Map.Instance.map[z, x] = Map.Instance.empty;
                             //プレイヤーのライフを減らす
                             _player.Life--;
+                            _shaker.StartShake(1f,20f,20f);
                             num--;
                         }
                     }

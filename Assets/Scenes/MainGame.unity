@@ -925,12 +925,14 @@ MonoBehaviour:
   point: 1000
   _DEFAULT_POSITION: {x: 0, y: 0, z: 0}
   _generator: {fileID: 23861880}
+  _shaker: {fileID: 283617216}
   _player: {fileID: 2110949644}
   meteors: []
   gameState: 0
   CanPlayerControl: 0
   IsPlayerSelectMove: 0
   CanMeteorGenerate: 1
+  DoMeteorFall: 1
   IsPlayerWin: 0
   IsCardSelect: 0
   IsAttackCard: 0
@@ -938,11 +940,13 @@ MonoBehaviour:
   IsTileNeedSearch: 0
   IsMouseLeaveTile: 0
   IsBasePointInArea: 1
+  IsMultiEffect: 0
   NeedSearch: 0
   IsCardUsed: 0
   NeedPayCost: 0
   NeedCost: 0
   PayedCost: 0
+  NeedCreateSpecialCard: 0
 --- !u!4 &707400063
 Transform:
   m_ObjectHideFlags: 0
@@ -2707,6 +2711,7 @@ MonoBehaviour:
   Life: 99
   lifeText: {fileID: 1958270617}
   IsEffect: 0
+  EffectTurn_Card14: 0
 --- !u!1 &2119274711
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,12 +4,12 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 /// <summary>
-/// ƒ‰ƒ“ƒ_ƒ€’l‚ğg—p‚µ‚½—h‚ê
+/// ãƒ©ãƒ³ãƒ€ãƒ å€¤ã‚’ä½¿ç”¨ã—ãŸæºã‚Œ
 /// </summary>
 public class ShakeByRandom : MonoBehaviour
 {
     /// <summary>
-    /// —h‚êî•ñ
+    /// æºã‚Œæƒ…å ±
     /// </summary>
     private struct ShakeInfo
     {
@@ -19,82 +19,84 @@ public class ShakeByRandom : MonoBehaviour
             Strength = strength;
             Vibrato = vibrato;
         }
-        public float Duration { get; } // ŠÔ
-        public float Strength { get; } // —h‚ê‚Ì‹­‚³
-        public float Vibrato { get; }  // ‚Ç‚Ì‚­‚ç‚¢U“®‚·‚é‚©
+        public float Duration { get; } // æ™‚é–“
+        public float Strength { get; } // æºã‚Œã®å¼·ã•
+        public float Vibrato { get; }  // ã©ã®ãã‚‰ã„æŒ¯å‹•ã™ã‚‹ã‹
     }
-    private ShakeInfo _shakeInfo;
 
-    private Vector3 _initPosition; // ‰ŠúˆÊ’u
-    private bool _isDoShake;       // —h‚êÀs’†‚©H
-    private float _totalShakeTime; // —h‚êŒo‰ßŠÔ
+    private ShakeInfo _shakeInfo;
+    private Vector3 _initPosition; // åˆæœŸä½ç½®
+    private bool _isDoShake;       // æºã‚Œå®Ÿè¡Œä¸­ã‹ï¼Ÿ
+    private float _totalShakeTime; // æºã‚ŒçµŒéæ™‚é–“
 
     private void Start()
     {
-        // ‰ŠúˆÊ’u‚ğ•Û
+        // åˆæœŸä½ç½®ã‚’ä¿æŒ
         _initPosition = gameObject.transform.position;
     }
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.B))
-        {
-            StartShake(1f,20f,20f);
-        }
+        //if (Input.GetKey(KeyCode.B))
+        //{
+            //StartShake(1f,20f,20f);
+        //}
+        
         if (!_isDoShake) return;
 
-        // —h‚êˆÊ’uî•ñXV
+        // æºã‚Œä½ç½®æƒ…å ±æ›´æ–°
         gameObject.transform.position = UpdateShakePosition(
             gameObject.transform.position,
             _shakeInfo,
             _totalShakeTime,
             _initPosition);
 
-        // duration•ª‚ÌŠÔ‚ªŒo‰ß‚µ‚½‚ç—h‚ç‚·‚Ì‚ğ~‚ß‚é
+        // durationåˆ†ã®æ™‚é–“ãŒçµŒéã—ãŸã‚‰æºã‚‰ã™ã®ã‚’æ­¢ã‚ã‚‹
         _totalShakeTime += Time.deltaTime;
         if (_totalShakeTime >= _shakeInfo.Duration)
         {
             _isDoShake = false;
             _totalShakeTime = 0.5f;
-            // ‰ŠúˆÊ’u‚É–ß‚·
+            // åˆæœŸä½ç½®ã«æˆ»ã™
             gameObject.transform.position = _initPosition;
         }
     }
 
     /// <summary>
-    /// XVŒã‚Ì—h‚êˆÊ’u‚ğæ“¾
+    /// æ›´æ–°å¾Œã®æºã‚Œä½ç½®ã‚’å–å¾—
     /// </summary>
-    /// <param name="currentPosition">Œ»İ‚ÌˆÊ’u</param>
-    /// <param name="shakeInfo">—h‚êî•ñ</param>
-    /// <param name="totalTime">Œo‰ßŠÔ</param>
-    /// <param name="initPosition">‰ŠúˆÊ’u</param>
-    /// <returns>XVŒã‚Ì—h‚êˆÊ’u</returns>>
+    /// <param name="currentPosition">ç¾åœ¨ã®ä½ç½®</param>
+    /// <param name="shakeInfo">æºã‚Œæƒ…å ±</param>
+    /// <param name="totalTime">çµŒéæ™‚é–“</param>
+    /// <param name="initPosition">åˆæœŸä½ç½®</param>
+    /// <returns>æ›´æ–°å¾Œã®æºã‚Œä½ç½®</returns>>
     private Vector3 UpdateShakePosition(Vector3 currentPosition, ShakeInfo shakeInfo, float totalTime, Vector3 initPosition)
     {
-    // -strength ~ strength ‚Ì’l‚Å—h‚ê‚Ì‹­‚³‚ğæ“¾
+    // -strength ~ strength ã®å€¤ã§æºã‚Œã®å¼·ã•ã‚’å–å¾—
     var strength = shakeInfo.Strength;
         var randomX = Random.Range(-1.0f * strength, strength);
         var randomY = Random.Range(-1.0f * strength, strength);
 
-        // Œ»İ‚ÌˆÊ’u‚É‰Á‚¦‚é
+        // ç¾åœ¨ã®ä½ç½®ã«åŠ ãˆã‚‹
         var position = currentPosition;
         position.x += randomX;
         position.y += randomY;
 
-        // ‰ŠúˆÊ’u-vibrato ~ ‰ŠúˆÊ’u+vibrato ‚ÌŠÔ‚Éû‚ß‚é
+        // åˆæœŸä½ç½®-vibrato ~ åˆæœŸä½ç½®+vibrato ã®é–“ã«åã‚ã‚‹
         var vibrato = shakeInfo.Vibrato;
         var ratio = 1.0f - totalTime / shakeInfo.Duration;
-        vibrato *= ratio; // ƒtƒF[ƒhƒAƒEƒg‚³‚¹‚é‚½‚ßAŒo‰ßŠÔ‚É‚æ‚è—h‚ê‚Ì—Ê‚ğŒ¸Š
+        vibrato *= ratio; // ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆã•ã›ã‚‹ãŸã‚ã€çµŒéæ™‚é–“ã«ã‚ˆã‚Šæºã‚Œã®é‡ã‚’æ¸›è¡°
         position.x = Mathf.Clamp(position.x, initPosition.x - vibrato, initPosition.x + vibrato);
         position.y = Mathf.Clamp(position.y, initPosition.y - vibrato, initPosition.y + vibrato);
         return position;
     }
+    
     /// <summary>
-    /// —h‚êŠJn
+    /// æºã‚Œé–‹å§‹
     /// </summary>
-    /// <param name="duration">ŠÔ</param>
-    /// <param name="strength">—h‚ê‚Ì‹­‚³</param>
-    /// <param name="vibrato">‚Ç‚Ì‚­‚ç‚¢U“®‚·‚é‚©</param>
+    /// <param name="duration">æ™‚é–“</param>
+    /// <param name="strength">æºã‚Œã®å¼·ã•</param>
+    /// <param name="vibrato">ã©ã®ãã‚‰ã„æŒ¯å‹•ã™ã‚‹ã‹</param>
     public void StartShake(float duration, float strength, float vibrato)
     {
         _shakeInfo = new ShakeInfo(duration, strength, vibrato);
