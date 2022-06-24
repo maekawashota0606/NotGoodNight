@@ -101,6 +101,7 @@ public class Card : CardData
             if (IsMouseOver == true)
             {
                 image_component.color = Color.yellow;
+
             }
             //乗っていない場合、白色にする
             else
