@@ -15,7 +15,6 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     public List<GameObject> meteors = new List<GameObject>();
     //ゲームの進行状況
     public GameState gameState = GameState.none;
-    public GameState nextStateCue = GameState.none;
     //プレイヤーの行動を受け付けるかどうか
     public bool CanPlayerControl = false;
     //プレイヤーが行動を選択したかどうか
@@ -26,11 +25,35 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     private int MeteorGenNum = 2;
     //ターンカウント
     private int TurnCount = 0;
+    //隕石の落下を行うかどうか
+    public bool DoMeteorFall = true;
     //勝敗判定用フラグ
     public bool IsPlayerWin = false;
+    //カード使用関連のフラグ
+    //使用するカードが選択されているかどうか
     public bool IsCardSelect = false;
+    //選択されたカードが攻撃カードなのかどうか
+    public bool IsAttackCard = false;
+    //選択されているカードの番号
+    public int SelectedCardNum = 0;
+    //盤面にマウスカーソルが乗っているか
+    public bool IsTileNeedSearch = false;
+    //カーソルがマス移動したかどうか
+    public bool IsMouseLeaveTile = false;
+    //基点マスに光って欲しいのかどうか
+    public bool IsBasePointInArea = true;
+    //使用カードに複数の効果が存在しているかどうか
+    public bool IsMultiEffect = false;
+    //隕石の検索を行うかどうか
     public bool NeedSearch = false;
+    //カード効果が処理されたのかどうか
     public bool IsCardUsed = false;
+    //コストを支払う必要があるかどうか
+    public bool NeedPayCost = false;
+    //選択されているカードの使用に必要なコストの数
+    public int NeedCost = 0;
+    //すでに選択されているコストの数
+    public int PayedCost = 0;
     
     public enum GameState
     {
@@ -46,13 +69,8 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
 
     void Start()
     {
-        CanPlayerControl = false;
-        IsPlayerSelectMove = false;
-        CanMeteorGenerate = true;
-        IsPlayerWin = false;
-        MeteorGenNum = 2;
-        TurnCount = 0;
-        gameState = GameState.standby;
+        //色々初期化
+        Init();
     }
 
     void Update()
@@ -84,6 +102,8 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 {
                     gameState = GameState.fall;
                 }
+                //ここらへんα版用
+                /*
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
                     _player.Score += 10000;
@@ -104,37 +124,42 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                     }
                     gameState = GameState.judge;
                 }
+                */
                 break;
 
             case GameState.fall: //隕石落下フェイズ
+                IsBasePointInArea = true;
                 IsPlayerSelectMove = false;
-                for (int num = 0; num < meteors.Count; num++)
+                if (DoMeteorFall == true)
                 {
-                    var x = (int)meteors[num].transform.position.x;
-                    var z = (int)meteors[num].transform.position.z * -1;
-                    //隕石の下１マスが空白だった場合
-                    if (z < 9)
+                    for (int num = 0; num < meteors.Count; num++)
                     {
-                        //隕石オブジェクトを１マス下に移動
-                        meteors[num].transform.position += Vector3.back;
-                        //マップの元居た場所の記録を削除し
-                        Map.Instance.map[z, x] = Map.Instance.empty;
-                        //マップの移動先に新たに記録を書き込む
-                        Map.Instance.map[z+1, x] = Map.Instance.meteor;
-                    }
-                    //隕石の下１マスが空白ではなかった場合
-                    //下から順に処理を行っているため、隕石の下に他の隕石が存在する事はありえない
-                    else if (z == 9)
-                    {
-                        //隕石オブジェクトを削除する
-                        Destroy(meteors[num]);
-                        //リストから削除
-                        meteors.RemoveAt(num);
-                        //マップから削除
-                        Map.Instance.map[z, x] = Map.Instance.empty;
-                        //プレイヤーのライフを減らす
-                        _player.Life--;
-                        num--;
+                        var x = (int)meteors[num].transform.position.x;
+                        var z = (int)meteors[num].transform.position.z * -1;
+                        //隕石の下１マスが空白だった場合
+                        if (z < 9)
+                        {
+                            //隕石オブジェクトを１マス下に移動
+                            meteors[num].transform.position += Vector3.back;
+                            //マップの元居た場所の記録を削除し
+                            Map.Instance.map[z, x] = Map.Instance.empty;
+                            //マップの移動先に新たに記録を書き込む
+                            Map.Instance.map[z+1, x] = Map.Instance.meteor;
+                        }
+                        //隕石の下１マスが空白ではなかった場合
+                        //下から順に処理を行っているため、隕石の下に他の隕石が存在する事はありえない
+                        else if (z == 9)
+                        {
+                            //隕石オブジェクトを削除する
+                            Destroy(meteors[num]);
+                            //リストから削除
+                            meteors.RemoveAt(num);
+                            //マップから削除
+                            Map.Instance.map[z, x] = Map.Instance.empty;
+                            //プレイヤーのライフを減らす
+                            _player.Life--;
+                            num--;
+                        }
                     }
                 }
                 gameState = GameState.judge;
@@ -180,6 +205,8 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                     {
                         MeteorGenNum++;
                     }
+                    //持続系のカード効果のターンカウントを進める、効果が切れたら効果の処理を元に戻す
+                    _player.CheckEffectTurn();
                     //アクティブフェイズに戻る
                     gameState = GameState.active;
                 }
@@ -202,6 +229,30 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
             default:
                 break;
         }
+    }
+
+    private void Init()
+    {
+        gameState = GameState.standby;
+        CanPlayerControl = false;
+        IsPlayerSelectMove = false;
+        CanMeteorGenerate = true;
+        MeteorGenNum = 2;
+        TurnCount = 0;
+        DoMeteorFall = true;
+        IsPlayerWin = false;
+        IsCardSelect = false;
+        IsAttackCard = false;
+        SelectedCardNum = 0;
+        IsTileNeedSearch = false;
+        IsMouseLeaveTile = false;
+        IsBasePointInArea = true;
+        IsMultiEffect = false;
+        NeedSearch = false;
+        IsCardUsed = false;
+        NeedPayCost = false;
+        NeedCost = 0;
+        PayedCost = 0;
     }
 
     /// <summary>
@@ -240,17 +291,13 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 break;
             }
         }
-
-        /*for (int x = 0; x < 10; x++)
-        {
-            for (int z = 0; z < 10; z++)
-            {
-                Vector3 checkPos = _DEFAULT_POSITION + new Vector3(x, 0, -z);
-                _generator.Generate(checkPos);
-            }
-        }*/
     }
 
+    /// <summary>
+    /// 隕石の破壊
+    /// </summary>
+    /// <param name="x">中心点のx座標</param>
+    /// <param name="z">中心点のz座標</param>
     public void MeteorDestory(int x, int z)
     {
         for (int i = 0; i < meteors.Count; i++)
@@ -265,6 +312,10 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 //マップから削除
                 Map.Instance.map[z, x] = Map.Instance.empty;
                 _player.Score += 1000;
+                if (IsMultiEffect == true)
+                {
+                    _player.ExtraEffect();
+                }
                 IsCardUsed = true;
                 CanPlayerControl = false;
                 IsPlayerSelectMove = true;

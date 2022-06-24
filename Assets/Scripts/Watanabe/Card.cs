@@ -2,21 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/*public class Card : MonoBehaviour
-{
-    public draw drawGet;
-    void Start()
-    {
-        drawGet = GetComponent.Find<Button>;
-        drawmain = drawGet.GetComponent;
-    }
-    void Update()
-    {
-        int drawat = drawGet.Draw;
+/*public CardData CardData;
 
-        if (Input.GetKeyDown(KeyCode.LeftControl))
+void Start()
+{
+    int CardType = Defence;
+    int CardEffective = Draw;
+    int ID = 5;
+    int Cost = 1;
+    public string EffectText { get { return "カードを " + nDraw + " 枚引く"; } }
+}
+
+    {
+        for (int i = 0; i < nDraw; i++)
         {
-            drawGet(3);
+            var C = IGC.DrawFromDeck();
+            Console.WriteLine(C.Name + " をドロー");
+            IGC.AddToHand(C);
         }
     }
 }*/

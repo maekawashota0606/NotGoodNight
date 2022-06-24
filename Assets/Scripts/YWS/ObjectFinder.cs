@@ -13,7 +13,7 @@ public class ObjectFinder : EditorWindow
     private static Dictionary<string, List<AssetData>> results         = new Dictionary<string, List<AssetData>>();
     private static Dictionary<string, bool>            foldOuts        = new Dictionary<string, bool>();
     private        Vector2                             ScrollPosition  = Vector2.zero;
-    private static string                              _searchFileName = "";
+    //private static string                              _searchFileName = "";
     private const  float                               WINDOW_W        = 500f;
     private const  float                               WINDOW_H        = 500f;
 

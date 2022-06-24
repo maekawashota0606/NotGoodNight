@@ -1,44 +1,47 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-[System.Serializable]
-public class CardData
+public class CardData : MonoBehaviour
 {
-    //í—Ş
+    //ã‚«ãƒ¼ãƒ‰ã‚¿ã‚¤ãƒ—
     public enum CardType
     {
-        Attack,     //UŒ‚i”j‰óô•¶j
-        Defence    //–hŒäi‰‡Œìô•¶j
+        Attack, //æ”»æ’ƒ
+        Special, //ç‰¹æ®Š
     }
-    //Œø‰Ê
-    public enum CardEffective
-    {
-        Destroy,    //”j‰ó
-        Draw,       //ƒhƒ[
-        Move,       //ˆÚ“®
-        Stop,        //’â‘Ø
-        Dump,      //Ì‚Ä‚é
-        Create,     //¶¬
-        Heel,        //‰ñ•œ 
-        Trump,     //Ø‚èD
-        Border,     //ƒ{[ƒ_[
-        Up,          // ˆø‚«ã‚°iè¦Î‚ğã‚É‚ ‚°‚éj
-        Copy,       //ƒRƒs[
-        Reduse,   //ƒRƒXƒgŒyŒ¸
-        Extra,      //ŠO•”Š±Â
-    }
-    public int ID = 0;
-    public int Cost = 1;
-    public CardType CardTypeValue = CardData.CardType.Attack;
-    public CardEffective CardEffectiveValue = CardData.CardEffective.Destroy;
 
-    public void Init(int id,int cost,CardType type,CardEffective effective)
+    //ã‚«ãƒ¼ãƒ‰ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
+    public int ID; //ã‚«ãƒ¼ãƒ‰ç•ªå·
+    public string Name; //ã‚«ãƒ¼ãƒ‰å
+    public int Cost; //ã‚«ãƒ¼ãƒ‰ã‚³ã‚¹ãƒˆ
+    public CardType CardTypeValue; //ã‚«ãƒ¼ãƒ‰ã‚¿ã‚¤ãƒ—
+    public string EffectText; //åŠ¹æœãƒ†ã‚­ã‚¹ãƒˆ
+
+    [SerializeField, Header("ã‚«ãƒ¼ãƒ‰å")] private Text CardName = null;
+    [SerializeField, Header("ã‚³ã‚¹ãƒˆ")] private Text CardCost = null;
+    [SerializeField, Header("ã‚«ãƒ¼ãƒ‰æ ")] private Image CardFrame = null;
+    [SerializeField, Header("ã‚«ãƒ¼ãƒ‰é¸æŠæ ")] private Sprite[] _cardFrameImage = new Sprite[2];
+    //[SerializeField, Header("åŠ¹æœãƒ†ã‚­ã‚¹ãƒˆ")] private Text CardText = null;
+
+    public void Init(int id,int cost,CardType type, string name)
     {
         this.ID = id;
         this.Cost = cost;
         this.CardTypeValue = type;
-        this.CardEffectiveValue = effective;
+        this.Name = name;
+
+        CardName.text = name;
+        CardCost.text = cost.ToString();
+        if (type == CardType.Attack)
+        {
+            CardFrame.sprite = _cardFrameImage[0];
+        }
+        else if (type == CardType.Special)
+        {
+            CardFrame.sprite = _cardFrameImage[1];
+        }
     }
 }
 

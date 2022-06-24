@@ -5,8 +5,7 @@ using UnityEngine;
 public class Tile : MonoBehaviour
 {
     [SerializeField, Header("点滅させるオブジェクト")] private SpriteRenderer tile = null;
-    private float alpha_Sin = 0.0f;
-    private bool ShouldBlink = false;
+    //マウスが乗っているかどうか
     private bool IsMouseOver = false;
     
     private void Start()
@@ -17,22 +16,46 @@ public class Tile : MonoBehaviour
 
     void Update()
     {
-        if (GameDirector.Instance.CanPlayerControl == true && IsMouseOver == true && GameDirector.Instance.IsCardSelect == true && Input.GetMouseButtonDown(0))
+        //このマスがカード範囲内に含まれている場合、光らせる
+        if (this.tag == "Area")
         {
-            this.tag = "Selected";
+            tile.color = new Color(1, 1, 1, 0.5f);
+        }
+        else if (this.tag == "Untagged")
+        {
+            tile.color = new Color(1, 1, 1, 0);
+        }
+
+        //アクティブフェイズでプレイヤーが行動可能な時、使用するカードが選択されている、かつ必要分のコストが選択されており、さらにこのマスがクリックされた場合
+        if (GameDirector.Instance.CanPlayerControl == true && GameDirector.Instance.IsCardSelect == true && GameDirector.Instance.IsAttackCard == true && GameDirector.Instance.PayedCost >= GameDirector.Instance.NeedCost && IsMouseOver == true && Input.GetMouseButtonDown(0))
+        {
             GameDirector.Instance.NeedSearch = true;
         }
     }
 
+    /// <summary>
+    /// マウスがマスの上に乗っている時
+    /// </summary>
     private void OnMouseOver()
     {
-        tile.color = new Color(1, 1, 1, 0.5f);
+        if (GameDirector.Instance.IsBasePointInArea == true)
+        {
+            tile.color = new Color(1, 1, 1, 0.5f);
+        }
+        this.tag = "Search";
         IsMouseOver = true;
+        GameDirector.Instance.IsTileNeedSearch = true;
     }
 
+    /// <summary>
+    /// マウスがマスの上から離れた時
+    /// </summary>
     private void OnMouseExit()
     {
         tile.color = new Color(1, 1, 1, 0);
+        this.tag = "Untagged";
         IsMouseOver = false;
+        GameDirector.Instance.IsTileNeedSearch = false;
+        GameDirector.Instance.IsMouseLeaveTile = true;
     }
 }

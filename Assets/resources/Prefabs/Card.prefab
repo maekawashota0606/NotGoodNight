@@ -1,5 +1,85 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &23450840153614166
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8352138961181283867}
+  - component: {fileID: 3252655064685552297}
+  - component: {fileID: 9131329955720828981}
+  m_Layer: 5
+  m_Name: CardCost
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8352138961181283867
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 23450840153614166}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 123496456342194506}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -51.8143, y: 82.35952}
+  m_SizeDelta: {x: 40.6307, y: 40.6609}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &3252655064685552297
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 23450840153614166}
+  m_CullTransparentMesh: 1
+--- !u!114 &9131329955720828981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 23450840153614166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 30
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 0
+    m_MaxSize: 50
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 0
 --- !u!1 &390083257768244365
 GameObject:
   m_ObjectHideFlags: 0
@@ -12,7 +92,7 @@ GameObject:
   - component: {fileID: 7330276328776393053}
   - component: {fileID: 1854021883026381432}
   m_Layer: 5
-  m_Name: Image
+  m_Name: SelectImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -88,7 +168,7 @@ GameObject:
   - component: {fileID: 7843003007714706394}
   - component: {fileID: 529507584029948131}
   m_Layer: 5
-  m_Name: Name
+  m_Name: CardName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -111,8 +191,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 85}
-  m_SizeDelta: {x: 136, y: 42}
+  m_AnchoredPosition: {x: 13.1233, y: 85.63092}
+  m_SizeDelta: {x: 96.1253, y: 25.5958}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7843003007714706394
 CanvasRenderer:
@@ -191,6 +271,7 @@ RectTransform:
   - {fileID: 4192074970732238071}
   - {fileID: 325706648649857247}
   - {fileID: 6994692317898782632}
+  - {fileID: 8352138961181283867}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -219,10 +300,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b3de94771e3ce14286655e15adaca74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ID: 0
+  Name: 
+  Cost: 0
+  CardTypeValue: 0
+  EffectText: 
+  CardName: {fileID: 529507584029948131}
+  CardCost: {fileID: 9131329955720828981}
+  CardFrame: {fileID: 1861803613554962528}
+  _cardFrameImage:
+  - {fileID: 21300000, guid: 14dc46251bbd9284082b686335c931a1, type: 3}
+  - {fileID: 21300000, guid: 80ab095d1b5402945a6db90b6d4d57c2, type: 3}
   image_component: {fileID: 1854021883026381432}
   IsMouseOver: 0
   IsClick: 0
-  TextFrame: {fileID: 0}
+  IsCost: 0
 --- !u!225 &5091186337394731272
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -273,7 +365,7 @@ GameObject:
   - component: {fileID: 8113975005854642322}
   - component: {fileID: 1861803613554962528}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: CardFrame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -320,14 +412,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.6375005, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a7433e3c11273024789834c1e99f6448, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 80ab095d1b5402945a6db90b6d4d57c2, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
