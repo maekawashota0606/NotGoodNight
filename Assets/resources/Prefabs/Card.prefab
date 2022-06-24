@@ -300,6 +300,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b3de94771e3ce14286655e15adaca74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _csvFile: {fileID: 4900000, guid: 63c822431d736854e8aa139c9369a38d, type: 3}
   ID: 0
   Name: 
   Cost: 0
@@ -386,10 +387,10 @@ RectTransform:
   m_Father: {fileID: 123496456342194506}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 150, y: 210}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8113975005854642322
 CanvasRenderer:

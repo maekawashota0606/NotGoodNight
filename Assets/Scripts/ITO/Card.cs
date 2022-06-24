@@ -77,6 +77,7 @@ public class Card : CardData
             else
             {
                 GameDirector.Instance.IsCardSelect = false;
+                GameDirector.Instance.SelectedCardNum = 0;
                 GameDirector.Instance.NeedCost = 0;
                 GameDirector.Instance.NeedPayCost = false;
                 GameDirector.Instance.PayedCost = 0;

@@ -61,6 +61,10 @@ public class Player : MonoBehaviour
             GameObject genCard = Instantiate(cardPrefab, playerHand);
             Card newCard = genCard.GetComponent<Card>();
             newCard.Init(ID,1,CardData.CardType.Attack,ID.ToString());
+            if (GameDirector.Instance.SelectedCardNum == 18)
+            {
+                newCard.Cost--;
+            }
             hands.Add(newCard);
             if (IsEffect == false)
             {
@@ -127,6 +131,14 @@ public class Player : MonoBehaviour
                 EffectTurn_Card14 = 3;
                 GameDirector.Instance.DoMeteorFall = false;
                 GameDirector.Instance.CanMeteorGenerate = false;
+                break;
+
+            case 18: //詮索するはばたき
+                for (int i = 0; i < 3; i++)
+                {
+                    IsEffect = true;
+                    DrawCard();
+                }
                 break;
 
             default:

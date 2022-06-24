@@ -2,9 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
 
 public class CardData : MonoBehaviour
 {
+    //csvファイル用変数
+    public TextAsset _csvFile;
+    //並び順
+    //｜番号｜名前｜コスト｜カードタイプ｜効果テキスト｜
+    public List<string[]> _cardData = new List<string[]>();
+
     //カードタイプ
     public enum CardType
     {
@@ -24,6 +31,22 @@ public class CardData : MonoBehaviour
     [SerializeField, Header("カード枠")] private Image CardFrame = null;
     [SerializeField, Header("カード選択枠")] private Sprite[] _cardFrameImage = new Sprite[2];
     //[SerializeField, Header("効果テキスト")] private Text CardText = null;
+
+    private void Start()
+    {
+        
+    }
+
+    private void SetCsv()
+    {
+        StringReader reader = new StringReader(_csvFile.text);
+        
+        while (reader.Peek() != -1)
+        {
+            string line = reader.ReadLine();
+            _cardData.Add(line.Split(','));
+        }
+    }
 
     public void Init(int id,int cost,CardType type, string name)
     {

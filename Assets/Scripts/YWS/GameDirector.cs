@@ -227,6 +227,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                     }
                     //ターンカウントを１つ増やす
                     TurnCount++;
+                    SelectedCardNum = 0;
                     //１０ターンごとに生成する隕石の数を１個増やす（上限は６個）
                     if (TurnCount % 10 == 0 && MeteorGenNum < 6)
                     {
