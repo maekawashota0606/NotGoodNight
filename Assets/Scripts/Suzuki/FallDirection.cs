@@ -5,6 +5,9 @@ using UnityEngine;
 public class FallDirection : MonoBehaviour
 {
     public List<GameObject> meteors = new List<GameObject>();
+
+    private float Times;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -16,10 +19,19 @@ public class FallDirection : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.N))
         {
-            for(int a = 0; a <= 10; a++)
+            Transform Trans = this.transform;
+
+            Times = Time.deltaTime;
+
+
+            Vector3 pos = Trans.position;
+            pos.z -= 0.1f;
+            Trans.position = pos;
+
+            /*for(int a = 0; a <= 10; a++)
             {
-                this.transform.Translate(Vector3.back * 1);
-            }
+                this.transform.position();
+            }*/
         }
     }
 }
