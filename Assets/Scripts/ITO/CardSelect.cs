@@ -65,7 +65,6 @@ public class CardSelect : MonoBehaviour
             if (IsMouseOver == true)
             {
                 image_component.color = Color.yellow;
-                TextFrame.text = string.Format("frame");
             }
             //乗っていない場合、白色にする
             else
