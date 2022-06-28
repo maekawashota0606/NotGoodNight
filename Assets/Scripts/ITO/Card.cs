@@ -157,7 +157,6 @@ public class Card : CardData
                 GameDirector.Instance.meteors.RemoveAt(DestoryNum);
                 //マップから削除
                 Map.Instance.map[(int)GameDirector.Instance.meteors[DestoryNum].transform.position.z*-1, (int)GameDirector.Instance.meteors[DestoryNum].transform.position.x] = Map.Instance.empty;
-                Debug.Log(this.name + DestoryNum + " Destroy");
             }
         }
     }

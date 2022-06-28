@@ -6,12 +6,6 @@ using System.IO;
 
 public class CardData : MonoBehaviour
 {
-    //csvファイル用変数
-    public TextAsset _csvFile;
-    //並び順
-    //｜番号｜名前｜コスト｜カードタイプ｜効果テキスト｜
-    public List<string[]> _cardData = new List<string[]>();
-
     //カードタイプ
     public enum CardType
     {
@@ -32,39 +26,25 @@ public class CardData : MonoBehaviour
     [SerializeField, Header("カード選択枠")] private Sprite[] _cardFrameImage = new Sprite[2];
     //[SerializeField, Header("効果テキスト")] private Text CardText = null;
 
-    private void Start()
-    {
-        
-    }
-
-    private void SetCsv()
-    {
-        StringReader reader = new StringReader(_csvFile.text);
-        
-        while (reader.Peek() != -1)
-        {
-            string line = reader.ReadLine();
-            _cardData.Add(line.Split(','));
-        }
-    }
-
-    public void Init(int id,int cost,CardType type, string name)
+    public void Init(int id,string name,string cost,string type, string effectText)
     {
         this.ID = id;
-        this.Cost = cost;
-        this.CardTypeValue = type;
         this.Name = name;
-
-        CardName.text = name;
-        CardCost.text = cost.ToString();
-        if (type == CardType.Attack)
+        this.Cost = int.Parse(cost);
+        if (type == "0")
         {
+            this.CardTypeValue = CardType.Attack;
             CardFrame.sprite = _cardFrameImage[0];
         }
-        else if (type == CardType.Special)
+        else if (type == "1")
         {
+            this.CardTypeValue = CardType.Special;
             CardFrame.sprite = _cardFrameImage[1];
         }
+        this.EffectText = effectText;
+
+        CardName.text = name;
+        CardCost.text = cost;
     }
 }
 

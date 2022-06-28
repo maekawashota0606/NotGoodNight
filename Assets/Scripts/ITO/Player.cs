@@ -2,10 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
 using Random = UnityEngine.Random;
 
 public class Player : MonoBehaviour
 {
+    //csvファイル用変数
+    public TextAsset _csvFile;
+    //並び順
+    //｜番号｜名前｜コスト｜カードタイプ｜効果テキスト｜
+    public List<string[]> _cardData = new List<string[]>();
+
     //カードプレハブ
     [SerializeField] private GameObject cardPrefab = null;
     //手札置き場
@@ -28,6 +35,17 @@ public class Player : MonoBehaviour
     public int EffectTurn_Card14 = 0;
 
     #endregion
+
+    public void SetCsv()
+    {
+        StringReader reader = new StringReader(_csvFile.text);
+        
+        while (reader.Peek() != -1)
+        {
+            string line = reader.ReadLine();
+            _cardData.Add(line.Split(','));
+        }
+    }
 
     private void Update()
     {
@@ -60,7 +78,7 @@ public class Player : MonoBehaviour
         {
             GameObject genCard = Instantiate(cardPrefab, playerHand);
             Card newCard = genCard.GetComponent<Card>();
-            newCard.Init(ID,1,CardData.CardType.Attack,ID.ToString());
+            newCard.Init(ID,_cardData[ID][1],_cardData[ID][2],_cardData[ID][3],_cardData[ID][4]);
             if (GameDirector.Instance.SelectedCardNum == 18)
             {
                 newCard.Cost--;
@@ -77,7 +95,7 @@ public class Player : MonoBehaviour
         {
             GameObject genCard = Instantiate(cardPrefab, playerHand);
             Card newCard = genCard.GetComponent<Card>();
-            newCard.Init(ID,1,CardData.CardType.Attack,ID.ToString());
+            newCard.Init(ID,_cardData[ID][1],_cardData[ID][2],_cardData[ID][3],_cardData[ID][4]);
             hands.Add(newCard);
         }
     }
@@ -202,7 +220,7 @@ public class Player : MonoBehaviour
     {
         GameObject genCard = Instantiate(cardPrefab, playerHand);
         Card newCard = genCard.GetComponent<Card>();
-        newCard.Init(cardID,0,CardData.CardType.Special,cardID.ToString());
+        newCard.Init(cardID,_cardData[cardID][1],_cardData[cardID][2],_cardData[cardID][3],_cardData[cardID][4]);
         hands.Add(newCard);
         GameDirector.Instance.CopyNum = 0;
         GameDirector.Instance.IsSpecialCardEffect = false;

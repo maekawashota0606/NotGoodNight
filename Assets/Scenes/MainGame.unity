@@ -946,7 +946,8 @@ MonoBehaviour:
   NeedPayCost: 0
   NeedCost: 0
   PayedCost: 0
-  NeedCreateSpecialCard: 0
+  IsSpecialCardEffect: 0
+  CopyNum: 0
 --- !u!4 &707400063
 Transform:
   m_ObjectHideFlags: 0
@@ -2703,6 +2704,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9b7e7ec94cbd384689fa39d71770972, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _csvFile: {fileID: 4900000, guid: 63c822431d736854e8aa139c9369a38d, type: 3}
   cardPrefab: {fileID: 6056595375295383613, guid: 5096e3dc965a7714b85c0baea891d2a0, type: 3}
   playerHand: {fileID: 677792873}
   hands: []

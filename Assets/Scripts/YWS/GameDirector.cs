@@ -80,6 +80,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     {
         //色々初期化
         Init();
+        _player.SetCsv();
     }
 
     void Update()
@@ -330,10 +331,8 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     {
         for (int i = 0; i < meteors.Count; i++)
         {
-            Debug.Log("searching meteor" + x + z);
             if (meteors[i].transform.position.x == x && meteors[i].transform.position.z == z * -1)
             {
-                Debug.Log("Destory");
                 //隕石オブジェクトを削除する
                 Destroy(meteors[i]);
                 //リストから削除

@@ -48,7 +48,6 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
                 {
                     if ((GameDirector.Instance.IsBasePointInArea == true && map[j, i].tag == "Search") || map[j, i].tag == "Area")
                     {
-                        Debug.Log("hit" + map[j, i].name);
                         //見つけた範囲内の隕石を破壊する
                         GameDirector.Instance.MeteorDestory(j, i);
                         map[j, i].tag = "Untagged";
