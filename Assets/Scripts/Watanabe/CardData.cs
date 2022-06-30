@@ -24,7 +24,7 @@ public class CardData : MonoBehaviour
     [SerializeField, Header("コスト")] private Text CardCost = null;
     [SerializeField, Header("カード枠")] private Image CardFrame = null;
     [SerializeField, Header("カード選択枠")] private Sprite[] _cardFrameImage = new Sprite[2];
-    //[SerializeField, Header("効果テキスト")] private Text CardText = null;
+    [SerializeField, Header("効果テキスト")] private Text CardEffectText = null;
 
     public void Init(int id,string name,string cost,string type, string effectText)
     {
@@ -34,18 +34,25 @@ public class CardData : MonoBehaviour
         if (type == "0")
         {
             this.CardTypeValue = CardType.Attack;
-            CardFrame.sprite = _cardFrameImage[0];
         }
         else if (type == "1")
         {
             this.CardTypeValue = CardType.Special;
-            CardFrame.sprite = _cardFrameImage[1];
         }
         this.EffectText = effectText;
+    }
 
-        CardName.text = name;
-        CardCost.text = cost;
+    public void ShowCardStatus()
+    {
+        CardName.text = Name;
+        CardCost.text = Cost.ToString();
+        if (CardTypeValue == CardType.Attack)
+        {
+            CardFrame.sprite = _cardFrameImage[0];
+        }
+        else if (CardTypeValue == CardType.Special)
+        {
+            CardFrame.sprite = _cardFrameImage[1];
+        }
     }
 }
-
-

@@ -16,6 +16,8 @@ public class Card : CardData
 
     void Update()
     {
+        base.ShowCardStatus();
+
         //使用するカードが選択されており、それがこのカードではなく、かつ選択されているコストが必要コスト以下の場合、このカードがクリックされた時、枠を緑色にする
         if (GameDirector.Instance.PayedCost < GameDirector.Instance.NeedCost && GameDirector.Instance.IsCardSelect == true && IsClick == false && IsMouseOver == true && Input.GetMouseButtonDown(0))
         {
@@ -71,7 +73,14 @@ public class Card : CardData
             //コストとして選択されていた場合、すでに選択されているコストの数を減らす
             if (IsCost == true)
             {
-                GameDirector.Instance.PayedCost--;
+                if (this.ID == 11)
+                {
+                    GameDirector.Instance.PayedCost -= 2;
+                }
+                else
+                {
+                    GameDirector.Instance.PayedCost--;
+                }
             }
             //使用カードとして選択されていた場合、色々とリセットする
             else

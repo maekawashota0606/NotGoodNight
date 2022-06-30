@@ -235,7 +235,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u30AB\u30FC\u30C9"
+  m_Text: "\u30AB\u30FC\u30C9\u540D"
 --- !u!1 &6056595375295383613
 GameObject:
   m_ObjectHideFlags: 0
@@ -300,7 +300,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b3de94771e3ce14286655e15adaca74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _csvFile: {fileID: 4900000, guid: 63c822431d736854e8aa139c9369a38d, type: 3}
   ID: 0
   Name: 
   Cost: 0
@@ -312,6 +311,7 @@ MonoBehaviour:
   _cardFrameImage:
   - {fileID: 21300000, guid: 14dc46251bbd9284082b686335c931a1, type: 3}
   - {fileID: 21300000, guid: 80ab095d1b5402945a6db90b6d4d57c2, type: 3}
+  CardEffectText: {fileID: 0}
   image_component: {fileID: 1854021883026381432}
   IsMouseOver: 0
   IsClick: 0

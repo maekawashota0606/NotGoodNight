@@ -107,6 +107,12 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
             case GameState.active: //アクティブフェイズ
                 //プレイヤーの操作を受け付ける
                 CanPlayerControl = true;
+                if (IsMultiEffect == true && IsCardUsed == true)
+                {
+                    Debug.Log(SelectedCardNum);
+                    _player.ExtraEffect();
+                    IsPlayerSelectMove = true;
+                }
                 if (IsSpecialCardEffect == true)
                 {
                     gameState = GameState.effect;
@@ -340,10 +346,6 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 //マップから削除
                 Map.Instance.map[z, x] = Map.Instance.empty;
                 _player.Score += 1000;
-                if (IsMultiEffect == true)
-                {
-                    _player.ExtraEffect();
-                }
             }
         }
     }

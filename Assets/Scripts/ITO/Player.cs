@@ -50,7 +50,7 @@ public class Player : MonoBehaviour
     private void Update()
     {
         //カード効果の処理が終了したら、使用カードとコストとして使われたカードを削除する
-        if (GameDirector.Instance.IsCardUsed == true)
+        if (GameDirector.Instance.IsCardUsed == true && GameDirector.Instance.IsMultiEffect == false)
         {
             DeleteUsedCard();
         }
@@ -79,11 +79,14 @@ public class Player : MonoBehaviour
             GameObject genCard = Instantiate(cardPrefab, playerHand);
             Card newCard = genCard.GetComponent<Card>();
             newCard.Init(ID,_cardData[ID][1],_cardData[ID][2],_cardData[ID][3],_cardData[ID][4]);
+
             if (GameDirector.Instance.SelectedCardNum == 18)
             {
                 newCard.Cost--;
             }
+
             hands.Add(newCard);
+            
             if (IsEffect == false)
             {
                 GameDirector.Instance.CanPlayerControl = false;
@@ -117,11 +120,11 @@ public class Player : MonoBehaviour
         }
 
         GameDirector.Instance.IsCardUsed = false;
+        GameDirector.Instance.IsAttackCard = false;
         GameDirector.Instance.IsCardSelect = false;
         GameDirector.Instance.NeedCost = 0;
         GameDirector.Instance.NeedPayCost = false;
         GameDirector.Instance.PayedCost = 0;
-        GameDirector.Instance.IsMultiEffect = false;
     }
 
     /// <summary>
@@ -196,6 +199,7 @@ public class Player : MonoBehaviour
             break;
         }
         IsEffect = false;
+        GameDirector.Instance.IsMultiEffect = false;
     }
 
     /// <summary>
