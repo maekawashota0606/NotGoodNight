@@ -59,10 +59,14 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     public int NeedCost = 0;
     //すでに選択されているコストの数
     public int PayedCost = 0;
-    //カード効果で特定のカードを生成するかどうか
-    public bool IsSpecialCardEffect = false;
-    //
-    public int CopyNum = 0;
+    //コストとして使われた時に発揮する効果があるかどうか
+    public bool IsCostEffect = false;
+    //複製魔法用フラグ
+    public bool DoCopy_Card13 = false;
+    //複製魔法用のコピー元の番号
+    public int CopyNum_Card13 = 0;
+    //魔力障壁用効果適用中フラグ
+    public bool IsEffect_Card19 = false;
 
     #endregion
     
@@ -115,12 +119,12 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                     _player.ExtraEffect();
                     IsPlayerSelectMove = true;
                 }
-                if (IsSpecialCardEffect == true)
+                if (DoCopy_Card13 == true)
                 {
                     gameState = GameState.effect;
                 }
                 //プレイヤーの行動を受け付けたら、隕石落下フェイズに移行する
-                else if (IsSpecialCardEffect == false && IsPlayerSelectMove == true)
+                else if (IsCostEffect == false && DoCopy_Card13 == false && IsPlayerSelectMove == true)
                 {
                     gameState = GameState.fall;
                 }
@@ -156,7 +160,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                     _player.ExtraEffect();
                 }
                 //効果処理が終了したら、隕石落下フェイズに移行する
-                if (IsSpecialCardEffect == false)
+                if (DoCopy_Card13 == false)
                 {
                     IsMultiEffect = false;
                     gameState = GameState.fall;
@@ -292,6 +296,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         NeedPayCost = false;
         NeedCost = 0;
         PayedCost = 0;
+        IsCostEffect = false;
     }
 
     /// <summary>
@@ -324,11 +329,11 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 break;
             }
             
-            if (tryNum == 10)
+            /*if (tryNum == 10)
             {
                 Debug.Log("生成できる場所が存在しない");
                 break;
-            }
+            }*/
         }
     }
 
@@ -357,9 +362,9 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     public void AddScore()
     {
         Debug.Log(DestroyedNum);
-        var GetScore = 1000 * DestroyedNum * (1 + DestroyedNum * 1/10);
+        var GetScore = 1000 * DestroyedNum * (1 + DestroyedNum * 0.1f);
         Debug.Log(GetScore);
-        _player.Score += GetScore;
+        _player.Score += (int)GetScore;
         Debug.Log(_player.Score);
         DestroyedNum = 0;
     }

@@ -145,7 +145,7 @@ public class Player : MonoBehaviour
                 break;
 
             case 13: //複製魔法
-                GameDirector.Instance.IsSpecialCardEffect = true;
+                GameDirector.Instance.DoCopy_Card13 = true;
                 break;
 
             case 14: //グラビトンリジェクト
@@ -172,11 +172,15 @@ public class Player : MonoBehaviour
                 }
                 break;
 
+            case 35: //ラスト・ショット
+            
+                break;
+
             default:
                 break;
             }
             
-            if (GameDirector.Instance.SelectedCardNum != 11 || GameDirector.Instance.SelectedCardNum == 15)
+            if (GameDirector.Instance.SelectedCardNum != 11 || GameDirector.Instance.SelectedCardNum != 15 && GameDirector.Instance.SelectedCardNum != 19)
             {
                 IsEffect = false;
                 GameDirector.Instance.IsCardUsed = true;
@@ -202,7 +206,7 @@ public class Player : MonoBehaviour
             break;
 
         case 13: //複製魔法
-            CopyCard_Card13(GameDirector.Instance.CopyNum);
+            CopyCard_Card13(GameDirector.Instance.CopyNum_Card13);
             break;
 
         default:
@@ -228,6 +232,12 @@ public class Player : MonoBehaviour
                 GameDirector.Instance.CanMeteorGenerate = true;
             }
         }
+
+        if (GameDirector.Instance.IsEffect_Card19)
+        {
+            GameDirector.Instance.DoMeteorFall = true;
+            GameDirector.Instance.IsEffect_Card19 = false;
+        }
     }
 
     public void CopyCard_Card13(int cardID)
@@ -236,7 +246,7 @@ public class Player : MonoBehaviour
         Card newCard = genCard.GetComponent<Card>();
         newCard.Init(cardID,_cardData[cardID][1],_cardData[cardID][2],_cardData[cardID][3],_cardData[cardID][4]);
         hands.Add(newCard);
-        GameDirector.Instance.CopyNum = 0;
-        GameDirector.Instance.IsSpecialCardEffect = false;
+        GameDirector.Instance.CopyNum_Card13 = 0;
+        GameDirector.Instance.DoCopy_Card13 = false;
     }
 }

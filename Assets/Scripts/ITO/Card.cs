@@ -25,13 +25,23 @@ public class Card : CardData
             IsClick = true;
             IsCost = true;
             //選択されているコストの数を加算する
-            if (this.ID == 11)
+            switch(this.ID)
             {
+            case 11: //サクリファイス・レプリカ
                 GameDirector.Instance.PayedCost += 2;
-            }
-            else
-            {
+                break;
+
+            case 15: //チェンジリング・マギア
+                GameDirector.Instance.IsCostEffect = true;
+                break;
+            
+            case 19: //魔力障壁
+                GameDirector.Instance.IsCostEffect = true;
+                break;
+
+            default:
                 GameDirector.Instance.PayedCost++;
+                break;
             }
             //コストとして使用された時に削除する用にタグを付けておく
             this.tag = "Selected";
@@ -62,7 +72,7 @@ public class Card : CardData
         if (GameDirector.Instance.gameState == GameDirector.GameState.effect && IsMouseOver == true && Input.GetMouseButtonDown(0))
         {
             GameDirector.Instance.IsMultiEffect = true;
-            GameDirector.Instance.CopyNum = this.ID;
+            GameDirector.Instance.CopyNum_Card13 = this.ID;
         }
 
         //このカードが選択されている場合で右クリックしたら、選択を解除し、枠を白色にする
@@ -73,13 +83,23 @@ public class Card : CardData
             //コストとして選択されていた場合、すでに選択されているコストの数を減らす
             if (IsCost == true)
             {
-                if (this.ID == 11)
+                switch(this.ID)
                 {
+                case 11: //サクリファイス・レプリカ
                     GameDirector.Instance.PayedCost -= 2;
-                }
-                else
-                {
+                    break;
+
+                case 15: //チェンジリング・マギア
+                    GameDirector.Instance.IsCostEffect = false;
+                    break;
+            
+                case 19: //魔力障壁
+                    GameDirector.Instance.IsCostEffect = false;
+                    break;
+
+                default:
                     GameDirector.Instance.PayedCost--;
+                    break;
                 }
             }
             //使用カードとして選択されていた場合、色々とリセットする
@@ -157,18 +177,32 @@ public class Card : CardData
     {
         //チェンジリング・マギアの効果
         //コストとして使われた場合、ランダムに隕石を二個破壊する
-        if (this.ID == 15 && IsCost == true)
+        if (IsCost == true)
         {
-            for (int i = 0; i < 2; i++)
+            switch(this.ID)
             {
-                int DestoryNum = Random.Range(0,GameDirector.Instance.meteors.Count);
-                //隕石オブジェクトを削除する
-                Destroy(GameDirector.Instance.meteors[DestoryNum]);
-                //リストから削除
-                GameDirector.Instance.meteors.RemoveAt(DestoryNum);
-                //マップから削除
-                Map.Instance.map[(int)GameDirector.Instance.meteors[DestoryNum].transform.position.z*-1, (int)GameDirector.Instance.meteors[DestoryNum].transform.position.x] = Map.Instance.empty;
+            case 15: //チェンジリング・マギア
+                for (int i = 0; i < 2; i++)
+                {
+                    int DestoryNum = Random.Range(0,GameDirector.Instance.meteors.Count);
+                    //隕石オブジェクトを削除する
+                    Destroy(GameDirector.Instance.meteors[DestoryNum]);
+                    //リストから削除
+                    GameDirector.Instance.meteors.RemoveAt(DestoryNum);
+                    //マップから削除
+                    Map.Instance.map[(int)GameDirector.Instance.meteors[DestoryNum].transform.position.z*-1, (int)GameDirector.Instance.meteors[DestoryNum].transform.position.x] = Map.Instance.empty;
+                }
+                break;
+            
+            case 19: //魔力障壁
+                GameDirector.Instance.DoMeteorFall = false;
+                GameDirector.Instance.IsEffect_Card19 = true;
+                break;
+
+            default:
+                break;
             }
+            GameDirector.Instance.IsCostEffect = false;
         }
     }
 }
