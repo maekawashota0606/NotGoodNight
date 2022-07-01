@@ -1,21 +1,17 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
-using System.Collections.Generic;
 
-[System.Serializable]
 public class FlashController : MonoBehaviour
 {
     private Image img;
-    public float color;
-    public Color clear;
-    public float deltaTime;
+
     void Start()
     {
         img = GetComponent<Image>();
         img.color = Color.clear;
     }
-
+    [SerializeField, Range(0f, 1f)]
+    public float FlashTime = 1f;
     void Update()
     {
         if (Input.GetKey(KeyCode.N))
@@ -24,7 +20,7 @@ public class FlashController : MonoBehaviour
         }
         else
         {
-            img.color = Color.Lerp(img.color, Color.clear, Time.deltaTime);
+            img.color = Color.Lerp(img.color, Color.clear, Time.deltaTime * FlashTime);
         }
     }
 }

@@ -28,7 +28,6 @@ public class ShakeByRandom : MonoBehaviour
     private Vector3 _initPosition; // 初期位置
     private bool _isDoShake;       // 揺れ実行中か？
     private float _totalShakeTime; // 揺れ経過時間
-
     private void Start()
     {
         // 初期位置を保持
