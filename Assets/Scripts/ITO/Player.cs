@@ -71,6 +71,12 @@ public class Player : MonoBehaviour
     /// </summary>
     public void DrawCard()
     {
+        //手札は10枚が上限なので、10枚の状態でドローは行えない
+        if (hands.Count == 10)
+        {
+            return;
+        }
+
         int ID = Random.Range(1,36);
         //int ID = 13;
         //アクティブフェイズでのプレイヤーの行動としてのドロー
@@ -83,6 +89,10 @@ public class Player : MonoBehaviour
             if (GameDirector.Instance.SelectedCardNum == 18 && newCard.Cost > 0)
             {
                 newCard.Cost--;
+            }
+            else if (GameDirector.Instance.SelectedCardNum == 22)
+            {
+                newCard.Cost = 0;
             }
 
             hands.Add(newCard);
@@ -154,6 +164,23 @@ public class Player : MonoBehaviour
                 GameDirector.Instance.CanMeteorGenerate = false;
                 break;
 
+            case 16: //不破の城塞
+                Debug.Log("hands num " + hands.Count);
+                for (int i = 0; i < hands.Count; i++)
+                {
+                    Debug.Log("Total " + GameDirector.Instance.meteors.Count);
+                    int DestoryNum = Random.Range(0,GameDirector.Instance.meteors.Count);
+                    Debug.Log("Hit " + DestoryNum);
+                    Debug.Log("Destroy " + GameDirector.Instance.meteors[DestoryNum]);
+                    //隕石オブジェクトを削除する
+                    Destroy(GameDirector.Instance.meteors[DestoryNum]);
+                    //リストから削除
+                    GameDirector.Instance.meteors.RemoveAt(DestoryNum);
+                    //マップから削除
+                    Map.Instance.map[(int)GameDirector.Instance.meteors[DestoryNum].transform.position.z*-1, (int)GameDirector.Instance.meteors[DestoryNum].transform.position.x] = Map.Instance.empty;
+                }
+                break;
+
             case 18: //詮索するはばたき
                 for (int i = 0; i < 3; i++)
                 {
@@ -172,8 +199,32 @@ public class Player : MonoBehaviour
                 }
                 break;
 
+            case 22: //至高天の顕現
+                for (int i = 0; i < 2; i++)
+                {
+                    IsEffect = true;
+                    DrawCard();
+                }
+                break;
+
+            case 27: //復興の灯
+                Life++;
+                break;
+
             case 35: //ラスト・ショット
-            
+                //手札がこのカード一枚じゃないとこのカードは使えない
+                if (hands.Count != 1)
+                {
+                    return;
+                }
+                else
+                {
+                    for (int i = 0; i < 7; i++)
+                    {
+                        IsEffect = true;
+                        DrawCard();
+                    }
+                }
                 break;
 
             default:

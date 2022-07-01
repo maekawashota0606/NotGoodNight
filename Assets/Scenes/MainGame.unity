@@ -888,7 +888,7 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 155, y: 185}
+  m_CellSize: {x: 168, y: 200}
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
@@ -946,8 +946,10 @@ MonoBehaviour:
   NeedPayCost: 0
   NeedCost: 0
   PayedCost: 0
-  IsSpecialCardEffect: 0
-  CopyNum: 0
+  IsCostEffect: 0
+  DoCopy_Card13: 0
+  CopyNum_Card13: 0
+  IsEffect_Card19: 0
 --- !u!4 &707400063
 Transform:
   m_ObjectHideFlags: 0
@@ -1338,7 +1340,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
