@@ -85,6 +85,7 @@ public class Card : CardData
             //使用カードとして選択されていた場合、色々とリセットする
             else
             {
+                GameDirector.Instance.IsBasePointInArea = true;
                 GameDirector.Instance.IsCardSelect = false;
                 GameDirector.Instance.SelectedCardNum = 0;
                 GameDirector.Instance.NeedCost = 0;

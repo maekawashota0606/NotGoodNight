@@ -54,6 +54,8 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
                     }
                 }
             }
+
+            GameDirector.Instance.AddScore();
             GameDirector.Instance.NeedSearch = false;
             GameDirector.Instance.IsCardUsed = true;
             GameDirector.Instance.CanPlayerControl = false;
@@ -142,6 +144,60 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
                 map[basicPosX-1, basicPosZ+1].tag = "Area";
             if (basicPosX > 0)
                 map[basicPosX-1, basicPosZ].tag = "Area";
+            break;
+
+        case 29: //ドラゴニックブレス
+            if (basicPosZ > 1)
+                map[basicPosX, basicPosZ-2].tag = "Area";
+            if (basicPosZ > 0)
+                map[basicPosX, basicPosZ-1].tag = "Area";
+            if (basicPosZ < 9)
+                map[basicPosX, basicPosZ+1].tag = "Area";
+            if (basicPosX < 9 && basicPosZ > 1)
+                map[basicPosX+1, basicPosZ-2].tag = "Area";
+            if (basicPosX < 9 && basicPosZ > 0)
+                map[basicPosX+1, basicPosZ-1].tag = "Area";
+            if (basicPosX < 9)
+                map[basicPosX+1, basicPosZ].tag = "Area";
+            if (basicPosX < 9 && basicPosZ < 9)
+                map[basicPosX+1, basicPosZ+1].tag = "Area";
+            break;
+
+        case 30: //タイダルウェーブ
+            if (basicPosX > 1)
+                map[basicPosX-2, basicPosZ].tag = "Area";
+            if (basicPosX > 0)
+                map[basicPosX-1, basicPosZ].tag = "Area";
+            if (basicPosX < 9)
+                map[basicPosX+1, basicPosZ].tag = "Area";
+            if (basicPosX > 1 && basicPosZ > 0)
+                map[basicPosX-2, basicPosZ-1].tag = "Area";
+            if (basicPosX > 0 && basicPosZ > 0)
+                map[basicPosX-1, basicPosZ-1].tag = "Area";
+            if (basicPosZ > 0)
+                map[basicPosX, basicPosZ-1].tag = "Area";
+            if (basicPosX < 9 && basicPosZ > 0)
+                map[basicPosX+1, basicPosZ-1].tag = "Area";
+            break; 
+
+        case 31: //シルフ・サイクロン
+            GameDirector.Instance.IsBasePointInArea = false;
+            if (basicPosZ > 1)
+                map[basicPosX, basicPosZ-2].tag = "Area";
+            if (basicPosZ > 0)
+                map[basicPosX, basicPosZ-1].tag = "Area";
+            if (basicPosZ < 8)
+                map[basicPosX, basicPosZ+2].tag = "Area";
+            if (basicPosZ < 9)
+                map[basicPosX, basicPosZ+1].tag = "Area";
+            if (basicPosX > 1)
+                map[basicPosX-2, basicPosZ].tag = "Area";
+            if (basicPosX > 0)
+                map[basicPosX-1, basicPosZ].tag = "Area";
+            if (basicPosX < 8)
+                map[basicPosX+2, basicPosZ].tag = "Area";
+            if (basicPosX < 9)
+                map[basicPosX+1, basicPosZ].tag = "Area";
             break;
 
         default:

@@ -80,7 +80,7 @@ public class Player : MonoBehaviour
             Card newCard = genCard.GetComponent<Card>();
             newCard.Init(ID,_cardData[ID][1],_cardData[ID][2],_cardData[ID][3],_cardData[ID][4]);
 
-            if (GameDirector.Instance.SelectedCardNum == 18)
+            if (GameDirector.Instance.SelectedCardNum == 18 && newCard.Cost > 0)
             {
                 newCard.Cost--;
             }
@@ -163,7 +163,6 @@ public class Player : MonoBehaviour
                 break;
 
             case 21: //残光のアストラル
-                //カードを2枚引く スコア30000点ごとに引く枚数を2枚増やす
                 int DrawNum = 2;
                 DrawNum += Score / 30000 * 2;
                 for (int i = 0; i < DrawNum; i++)

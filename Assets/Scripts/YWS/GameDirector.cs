@@ -26,6 +26,8 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     private int MeteorGenNum = 2;
     //ターンカウント
     private int TurnCount = 0;
+    //このターン破壊した隕石の数
+    private int DestroyedNum = 0;
     //隕石の落下を行うかどうか
     public bool DoMeteorFall = true;
     //勝敗判定用フラグ
@@ -275,6 +277,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         CanMeteorGenerate = true;
         MeteorGenNum = 2;
         TurnCount = 0;
+        DestroyedNum = 0;
         DoMeteorFall = true;
         IsPlayerWin = false;
         IsCardSelect = false;
@@ -346,8 +349,18 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 meteors.RemoveAt(i);
                 //マップから削除
                 Map.Instance.map[z, x] = Map.Instance.empty;
-                _player.Score += 1000;
+                DestroyedNum++;
             }
         }
+    }
+
+    public void AddScore()
+    {
+        Debug.Log(DestroyedNum);
+        var GetScore = 1000 * DestroyedNum * (1 + DestroyedNum * 1/10);
+        Debug.Log(GetScore);
+        _player.Score += GetScore;
+        Debug.Log(_player.Score);
+        DestroyedNum = 0;
     }
 }
