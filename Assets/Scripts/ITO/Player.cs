@@ -162,6 +162,17 @@ public class Player : MonoBehaviour
                 }
                 break;
 
+            case 21: //残光のアストラル
+                //カードを2枚引く スコア30000点ごとに引く枚数を2枚増やす
+                int DrawNum = 2;
+                DrawNum += Score / 30000 * 2;
+                for (int i = 0; i < DrawNum; i++)
+                {
+                    IsEffect = true;
+                    DrawCard();
+                }
+                break;
+
             default:
                 break;
             }

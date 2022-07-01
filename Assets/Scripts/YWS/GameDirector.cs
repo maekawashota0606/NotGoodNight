@@ -123,11 +123,12 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                     gameState = GameState.fall;
                 }
                 //ここらへんα版用
-                /*
+                
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
                     _player.Score += 10000;
                 }
+                /*
                 if (Input.GetKeyDown(KeyCode.Delete))
                 {
                     for (int num = 0; num < meteors.Count; num++)

@@ -141,6 +141,7 @@ public class Card : CardData
     private void OnMouseOver()
     {
         IsMouseOver = true;
+        Debug.Log(this.ID + " " + this.Name);
     }
 
     /// <summary>
