@@ -128,6 +128,7 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
 	/// 現在流れている曲をフェードアウトさせる
 	/// fadeSpeedRateに指定した割合でフェードアウトするスピードが変わる
 	/// </summary>
+	/// <param name="fadeSpeedRate"></param>
 	public void FadeOutBGM(float fadeSpeedRate = BGM_FADE_SPEED_RATE_LOW)
 	{
 		_bgmFadeSpeedRate = fadeSpeedRate;
