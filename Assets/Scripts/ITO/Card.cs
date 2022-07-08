@@ -236,7 +236,8 @@ public class Card : CardData
             
             case 19: //魔力障壁
                 GameDirector.Instance.DoMeteorFall = false;
-                GameDirector.Instance.IsEffect_Card19 = true;
+                GameDirector.Instance.CanMeteorGenerate = false;
+                Player.EffectTurn_Card19 = 1;
                 break;
 
             default:

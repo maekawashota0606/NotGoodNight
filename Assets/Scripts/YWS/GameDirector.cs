@@ -48,8 +48,6 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     public bool WaitCopy_Card13 = false;
     //複製魔法用のコピー元の番号
     public int CopyNum_Card13 = 0;
-    //魔力障壁用効果適用中フラグ
-    public bool IsEffect_Card19 = false;
 
     #endregion
     

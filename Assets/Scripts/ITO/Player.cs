@@ -32,6 +32,7 @@ public class Player : MonoBehaviour
 
     //効果の持続ターンカウント
     public int EffectTurn_Card14 = 0;
+    public static int EffectTurn_Card19 = 0;
 
     #endregion
 
@@ -223,18 +224,10 @@ public class Player : MonoBehaviour
                 break;
 
             case 35: //ラスト・ショット
-                //手札がこのカード一枚じゃないとこのカードは使えない
-                /*if (hands.Count != 1)
+                for (int i = 0; i < 7; i++)
                 {
-                    return;
+                    DrawCard();
                 }
-                else
-                {*/
-                    for (int i = 0; i < 7; i++)
-                    {
-                        DrawCard();
-                    }
-                //}
                 break;
 
             default:
@@ -271,8 +264,6 @@ public class Player : MonoBehaviour
         if (EffectTurn_Card14 > 0)
         {
             EffectTurn_Card14--;
-            if (EffectTurn_Card14 < 0)
-                EffectTurn_Card14 = 0;
             if (EffectTurn_Card14 == 0)
             {
                 GameDirector.Instance.DoMeteorFall = true;
@@ -280,10 +271,14 @@ public class Player : MonoBehaviour
             }
         }
 
-        if (GameDirector.Instance.IsEffect_Card19)
+        if (EffectTurn_Card19 > 0)
         {
-            GameDirector.Instance.DoMeteorFall = true;
-            GameDirector.Instance.IsEffect_Card19 = false;
+            EffectTurn_Card19--;
+            if (EffectTurn_Card19 == 0)
+            {
+                GameDirector.Instance.DoMeteorFall = true;
+                GameDirector.Instance.CanMeteorGenerate = true;
+            }
         }
     }
 
