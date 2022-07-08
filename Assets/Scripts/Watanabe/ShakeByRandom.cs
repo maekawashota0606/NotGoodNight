@@ -39,7 +39,7 @@ public class ShakeByRandom : MonoBehaviour
         if (Input.GetKey(KeyCode.B))
         {
             //—h‚ê“xİ’è
-            StartShake(1f,20f,20f);
+            StartShake(1f,20f,30f);
         }
         if (!_isDoShake) return;
 
