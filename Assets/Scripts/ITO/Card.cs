@@ -18,11 +18,12 @@ public class Card : CardData
     {
         base.ShowCardStatus();
 
+        ConfirmUsing();
         WaitForSelect();
         SelectingUseCard();
         PayingCost();
         UnChoosing();
-        ConfirmUsing();
+        
         
         /*
         if (GameDirector.Instance.gameState == GameDirector.GameState.effect && IsMouseOver == true && Input.GetMouseButtonDown(0))
@@ -197,7 +198,7 @@ public class Card : CardData
         {
             if (GameDirector.Instance.gameState == GameDirector.GameState.active && GameDirector.Instance.PayedCost >= GameDirector.Instance.SelectedCardObject.Cost && IsClick == true && IsCost == false && IsMouseOver == true && Input.GetMouseButtonDown(0))
             {
-                if (GameDirector.Instance.SelectedCardObject.ID == 11 || GameDirector.Instance.SelectedCardObject.ID == 15 && GameDirector.Instance.SelectedCardObject.ID == 19)
+                if (GameDirector.Instance.SelectedCardObject.ID == 11 || GameDirector.Instance.SelectedCardObject.ID == 15 && GameDirector.Instance.SelectedCardObject.ID == 19 || (GameDirector.Instance.SelectedCardObject.ID == 35 && Player.hands.Count != 1))
                 {
                     return;
                 }

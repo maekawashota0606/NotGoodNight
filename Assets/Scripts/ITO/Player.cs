@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
     //手札置き場
     [SerializeField] private Transform playerHand = null;
     //手札
-    public List<Card> hands = new List<Card>();
+    public static List<Card> hands = new List<Card>();
     //スコア
     public int Score = 0;
     //スコア表示テキスト
@@ -214,17 +214,17 @@ public class Player : MonoBehaviour
 
             case 35: //ラスト・ショット
                 //手札がこのカード一枚じゃないとこのカードは使えない
-                if (hands.Count != 1)
+                /*if (hands.Count != 1)
                 {
                     return;
                 }
                 else
-                {
+                {*/
                     for (int i = 0; i < 7; i++)
                     {
                         DrawCard();
                     }
-                }
+                //}
                 break;
 
             default:

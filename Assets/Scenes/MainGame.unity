@@ -930,23 +930,16 @@ MonoBehaviour:
   _player: {fileID: 2110949644}
   meteors: []
   gameState: 0
-  CanPlayerControl: 0
   IsPlayerSelectMove: 0
   CanMeteorGenerate: 1
   DoMeteorFall: 1
   IsPlayerWin: 0
   SelectedCardObject: {fileID: 0}
-  IsCardSelect: 0
-  IsAttackCard: 0
-  SelectedCardNum: 0
   IsMouseOnTile: 0
-  IsMouseLeaveTile: 0
   IsBasePointInArea: 1
   IsMultiEffect: 0
-  NeedSearch: 0
-  IsCardUsed: 0
-  NeedPayCost: 0
-  NeedCost: 0
+  IsCardUsingConfirm: 0
+  IsMeteorDestroyed: 0
   PayedCost: 0
   IsCostEffect: 0
   DoCopy_Card13: 0
@@ -2802,12 +2795,10 @@ MonoBehaviour:
   _csvFile: {fileID: 4900000, guid: 63c822431d736854e8aa139c9369a38d, type: 3}
   cardPrefab: {fileID: 6056595375295383613, guid: 5096e3dc965a7714b85c0baea891d2a0, type: 3}
   playerHand: {fileID: 677792873}
-  hands: []
   Score: 0
   scoreText: {fileID: 1428903323}
   Life: 99
   lifeText: {fileID: 1958270617}
-  IsEffect: 0
   EffectTurn_Card14: 0
 --- !u!1 &2119274711
 GameObject:
