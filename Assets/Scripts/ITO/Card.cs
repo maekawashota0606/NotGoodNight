@@ -18,20 +18,17 @@ public class Card : CardData
     {
         base.ShowCardStatus();
 
+        if (GameDirector.Instance.WaitCopy_Card13 == true && IsMouseOver == true && Input.GetMouseButtonDown(0))
+        {
+            GameDirector.Instance.CopyNum_Card13 = this.ID;
+            image_component.color = Color.white;
+        }
+
         ConfirmUsing();
         WaitForSelect();
         SelectingUseCard();
         PayingCost();
         UnChoosing();
-        
-        
-        /*
-        if (GameDirector.Instance.gameState == GameDirector.GameState.effect && IsMouseOver == true && Input.GetMouseButtonDown(0))
-        {
-            GameDirector.Instance.IsMultiEffect = true;
-            GameDirector.Instance.CopyNum_Card13 = this.ID;
-        }
-        */
     }
 
     /// <summary>
@@ -42,21 +39,8 @@ public class Card : CardData
         //このカードが選択されていない場合
         if (IsClick == false)
         {
-            //if (GameDirector.Instance.gameState == GameDirector.GameState.effect)
-            //{
-                //マウスが乗っていたら、カードの枠をマゼンタにする
-                //if (IsMouseOver == true)
-                //{
-                    //image_component.color = Color.magenta;
-                //}
-                //乗っていない場合、白色にする
-                //else
-                //{
-                    //image_component.color = Color.white;
-                //}
-            //}
-            //else
-            //{
+            if (GameDirector.Instance.WaitCopy_Card13 == false)
+            {
                 //マウスが乗っていたら、カードの枠を黄色にする
                 if (IsMouseOver == true)
                 {
@@ -67,7 +51,21 @@ public class Card : CardData
                 {
                     image_component.color = Color.white;
                 }
-            //}
+            }
+            //複製魔法の対象の選択
+            else if (GameDirector.Instance.WaitCopy_Card13 == true)
+            {
+                //マウスが乗っていたら、カードの枠をマゼンタにする
+                if (IsMouseOver == true)
+                {
+                    image_component.color = Color.magenta;
+                }
+                //乗っていない場合、白色にする
+                else
+                {
+                    image_component.color = Color.white;
+                }
+            }
         }
     }
 
@@ -115,14 +113,6 @@ public class Card : CardData
                     GameDirector.Instance.PayedCost += 2;
                     break;
 
-                case 15: //チェンジリング・マギア
-                    GameDirector.Instance.IsCostEffect = true;
-                    break;
-                
-                case 19: //魔力障壁
-                    GameDirector.Instance.IsCostEffect = true;
-                    break;
-
                 default:
                     GameDirector.Instance.PayedCost++;
                     break;
@@ -138,6 +128,10 @@ public class Card : CardData
     /// </summary>
     private void UnChoosing()
     {
+        if (GameDirector.Instance.IsCardUsingConfirm == true)
+        {
+            return;
+        }
         //このカードが選択されている場合で右クリックしたら、選択を解除し、枠を白色にする
         if (IsClick == true && IsMouseOver == true && Input.GetMouseButtonDown(1))
         {
@@ -150,14 +144,6 @@ public class Card : CardData
                 {
                 case 11: //サクリファイス・レプリカ
                     GameDirector.Instance.PayedCost -= 2;
-                    break;
-
-                case 15: //チェンジリング・マギア
-                    GameDirector.Instance.IsCostEffect = false;
-                    break;
-            
-                case 19: //魔力障壁
-                    GameDirector.Instance.IsCostEffect = false;
                     break;
 
                 default:
@@ -256,7 +242,6 @@ public class Card : CardData
             default:
                 break;
             }
-            GameDirector.Instance.IsCostEffect = false;
         }
     }
 }

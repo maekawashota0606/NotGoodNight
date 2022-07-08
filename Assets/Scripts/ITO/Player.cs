@@ -57,6 +57,11 @@ public class Player : MonoBehaviour
         //獲得スコアと現在ライフを随時更新で画面に表示させる
         scoreText.text = "Score / " + Score.ToString("d6");
         lifeText.text = "Life / " + Life.ToString();
+
+        if (GameDirector.Instance.WaitCopy_Card13 == true && GameDirector.Instance.CopyNum_Card13 != 0)
+        {
+            CopyCard_Card13(GameDirector.Instance.CopyNum_Card13);
+        }
     }
 
     /// <summary>
@@ -140,6 +145,11 @@ public class Player : MonoBehaviour
             }
         }
         GameDirector.Instance.PayedCost = 0;
+
+        if (GameDirector.Instance.WaitCopy_Card13 == true && GameDirector.Instance.CopyNum_Card13 != 0)
+        {
+            CopyCard_Card13(GameDirector.Instance.CopyNum_Card13);
+        }
     }
 
     /// <summary>
@@ -159,7 +169,7 @@ public class Player : MonoBehaviour
                 break;
 
             case 13: //複製魔法
-                GameDirector.Instance.DoCopy_Card13 = true;
+                GameDirector.Instance.WaitCopy_Card13 = true;
                 break;
 
             case 14: //グラビトンリジェクト
@@ -247,10 +257,6 @@ public class Player : MonoBehaviour
             }
             break;
 
-        case 13: //複製魔法
-            //CopyCard_Card13(GameDirector.Instance.CopyNum_Card13);
-            break;
-
         default:
             break;
         }
@@ -288,6 +294,7 @@ public class Player : MonoBehaviour
         newCard.Init(cardID,_cardData[cardID][1],_cardData[cardID][2],_cardData[cardID][3],_cardData[cardID][4]);
         hands.Add(newCard);
         GameDirector.Instance.CopyNum_Card13 = 0;
-        GameDirector.Instance.DoCopy_Card13 = false;
+        GameDirector.Instance.WaitCopy_Card13 = false;
+        GameDirector.Instance.IsPlayerSelectMove = true;
     }
 }

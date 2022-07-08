@@ -44,10 +44,8 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     public bool IsMeteorDestroyed = false;
     //すでに選択されているコストの数
     public int PayedCost = 0;
-    //コストとして使われた時に発揮する効果があるかどうか
-    public bool IsCostEffect = false;
     //複製魔法用フラグ
-    public bool DoCopy_Card13 = false;
+    public bool WaitCopy_Card13 = false;
     //複製魔法用のコピー元の番号
     public int CopyNum_Card13 = 0;
     //魔力障壁用効果適用中フラグ
@@ -77,7 +75,6 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     void Update()
     {
         Debug.Log(gameState);
-        Debug.Log(Player.hands.Count);
         switch (gameState)
         {
             case GameState.standby: //スタンバイフェイズ
@@ -130,14 +127,19 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                     else if (SelectedCardObject.CardTypeValue == CardData.CardType.Special)
                     {
                         _player.SpecialCardEffect();
-                        IsPlayerSelectMove = true;
+                        if (WaitCopy_Card13 == false)
+                        {
+                            IsPlayerSelectMove = true;
+                        }
                     }
                 }
 
                 if (IsPlayerSelectMove == true)
                 {
                     _player.DeleteUsedCard();
+                    SelectedCardObject = null;
                     TileMap.Instance.ResetTileTag();
+                    IsMeteorDestroyed = false;
                     //効果処理が終了したら、隕石落下フェイズに移行する
                     gameState = GameState.fall;
                 }
@@ -217,7 +219,6 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                     }
                     //ターンカウントを１つ増やす
                     TurnCount++;
-                    SelectedCardObject = null;
                     IsCardUsingConfirm = false;
                     //１０ターンごとに生成する隕石の数を１個増やす（上限は６個）
                     if (TurnCount % 10 == 0 && MeteorGenNum < 6)
@@ -266,7 +267,6 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         IsCardUsingConfirm = false;
         IsMeteorDestroyed = false;
         PayedCost = 0;
-        IsCostEffect = false;
     }
 
     /// <summary>
