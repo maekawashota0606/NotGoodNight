@@ -7,17 +7,10 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
     //タイル収納マップ
     public GameObject[,] map = new GameObject[10, 10];
 
-    // Start is called before the first frame update
-    void Start()
+    public void FindBasePoint()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //プレイヤーが行動可能、かつ使用カードが選択されていおり、マウスカーソルが盤面の上にいる場合
-        if (GameDirector.Instance.CanPlayerControl == true && GameDirector.Instance.IsCardSelect == true && GameDirector.Instance.IsTileNeedSearch == true)
+        //効果処理フェイズで使用カードが選択されていおり、マウスカーソルが盤面の上にいる場合
+        if (GameDirector.Instance.SelectedCardObject != null && GameDirector.Instance.IsMouseOnTile == true)
         {
             //マウスカーソルがいるマスが探す
             for (int i = 0; i < 10; i++)
@@ -27,41 +20,12 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
                     if (map[j, i].tag == "Search")
                     {
                         DecideSearchArea(j, i);
+                        if (GameDirector.Instance.IsBasePointInArea == false)
+                        {
+                            map[j, i].tag = "Untagged";
+                        }
                     }
                 }
-            }
-        }
-
-        //マウスが他のマスに移動した場合、一回全てのマスのタグを初期化する
-        if (GameDirector.Instance.IsMouseLeaveTile == true)
-        {
-            ResetTileTag();
-            GameDirector.Instance.IsMouseLeaveTile = false;
-        }
-
-        //範囲が選択された場合、範囲内の隕石を検索する
-        if (GameDirector.Instance.NeedSearch == true)
-        {
-            for (int i = 0; i < 10; i++)
-            {
-                for (int j = 0; j < 10; j++)
-                {
-                    if ((GameDirector.Instance.IsBasePointInArea == true && map[j, i].tag == "Search") || map[j, i].tag == "Area")
-                    {
-                        //見つけた範囲内の隕石を破壊する
-                        GameDirector.Instance.MeteorDestory(j, i);
-                        map[j, i].tag = "Untagged";
-                    }
-                }
-            }
-
-            GameDirector.Instance.AddScore();
-            GameDirector.Instance.NeedSearch = false;
-            GameDirector.Instance.IsCardUsed = true;
-            GameDirector.Instance.CanPlayerControl = false;
-            if (GameDirector.Instance.IsMultiEffect == false)
-            {
-                GameDirector.Instance.IsPlayerSelectMove = true;
             }
         }
     }
@@ -74,7 +38,7 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
     public void DecideSearchArea(int basicPosX, int basicPosZ)
     {
         //カードの種類に基づいて、範囲となるマスすべてにタグを付ける
-        switch(GameDirector.Instance.SelectedCardNum)
+        switch(GameDirector.Instance.SelectedCardObject.ID)
         {
         case 1: //サラマンダーブレス
             if (basicPosZ > 1)
@@ -95,7 +59,6 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
             break;
 
         case 3: //シルフ・ゲイル
-            GameDirector.Instance.IsBasePointInArea = false;
             if (basicPosZ > 0)
                 map[basicPosX, basicPosZ-1].tag = "Area";
             if (basicPosZ < 9)
@@ -181,7 +144,6 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
             break; 
 
         case 31: //シルフ・サイクロン
-            GameDirector.Instance.IsBasePointInArea = false;
             if (basicPosZ > 1)
                 map[basicPosX, basicPosZ-2].tag = "Area";
             if (basicPosZ > 0)
@@ -202,6 +164,47 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
 
         default:
             break;
+        }
+    }
+
+    /// <summary>
+    /// 隕石の破壊
+    /// </summary>
+    public void MeteorDestory()
+    {
+        int DestroyedNum = 0;
+        for (int z = 0; z < 10; z++)
+        {
+            for (int x = 0; x < 10; x++)
+            {
+                if ((GameDirector.Instance.IsBasePointInArea == true && map[x, z].tag == "Search") || map[x, z].tag == "Area")
+                {
+                    //見つけた範囲内の隕石を破壊する
+                    for (int targetNum = 0; targetNum < GameDirector.Instance.meteors.Count; targetNum++)
+                    {
+                        if (GameDirector.Instance.meteors[targetNum].transform.position.x == x && GameDirector.Instance.meteors[targetNum].transform.position.z == z * -1)
+                        {
+                            //隕石オブジェクトを削除する
+                            Destroy(GameDirector.Instance.meteors[targetNum]);
+                            //リストから削除
+                            GameDirector.Instance.meteors.RemoveAt(targetNum);
+                            //マップから削除
+                            Map.Instance.map[z, x] = Map.Instance.empty;
+                            DestroyedNum++;
+                        }
+                    }
+                    map[x, z].tag = "Untagged";
+                }
+            }
+        }
+        if (DestroyedNum != 0)
+        {
+            GameDirector.Instance.AddScore(DestroyedNum);
+            GameDirector.Instance.IsMeteorDestroyed = true;
+            if (GameDirector.Instance.IsMultiEffect == false)
+            {
+                GameDirector.Instance.IsPlayerSelectMove = true;
+            }
         }
     }
 

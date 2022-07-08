@@ -935,10 +935,11 @@ MonoBehaviour:
   CanMeteorGenerate: 1
   DoMeteorFall: 1
   IsPlayerWin: 0
+  SelectedCardObject: {fileID: 0}
   IsCardSelect: 0
   IsAttackCard: 0
   SelectedCardNum: 0
-  IsTileNeedSearch: 0
+  IsMouseOnTile: 0
   IsMouseLeaveTile: 0
   IsBasePointInArea: 1
   IsMultiEffect: 0
@@ -2671,19 +2672,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2061268542}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2110949644}
-        m_TargetAssemblyTypeName: Player, Assembly-CSharp
-        m_MethodName: CardEffect
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &2061268542
 MonoBehaviour:
   m_ObjectHideFlags: 0

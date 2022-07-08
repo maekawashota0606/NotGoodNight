@@ -10,7 +10,7 @@ public class Tile : MonoBehaviour
     
     private void Start()
     {
-        // 値を初期化
+        //値を初期化
         tile.color = new Color(255,255,255,0);
     }
 
@@ -26,10 +26,11 @@ public class Tile : MonoBehaviour
             tile.color = new Color(1, 1, 1, 0);
         }
 
-        //アクティブフェイズでプレイヤーが行動可能な時、使用するカードが選択されている、かつ必要分のコストが選択されており、さらにこのマスがクリックされた場合
-        if (GameDirector.Instance.CanPlayerControl == true && GameDirector.Instance.IsCardSelect == true && GameDirector.Instance.IsAttackCard == true && GameDirector.Instance.PayedCost >= GameDirector.Instance.NeedCost && IsMouseOver == true && Input.GetMouseButtonDown(0))
+        //効果処理フェイズで使用するカードが選択されている、かつ必要分のコストが選択されており、さらにこのマスがクリックされた場合
+        if (GameDirector.Instance.gameState == GameDirector.GameState.effect && GameDirector.Instance.SelectedCardObject != null && GameDirector.Instance.SelectedCardObject.CardTypeValue == CardData.CardType.Attack && GameDirector.Instance.IsCardUsingConfirm == true && IsMouseOver == true && Input.GetMouseButtonDown(0))
         {
-            GameDirector.Instance.NeedSearch = true;
+            //範囲が選択された場合、範囲内の隕石を検索する
+            TileMap.Instance.MeteorDestory();
         }
     }
 
@@ -44,7 +45,7 @@ public class Tile : MonoBehaviour
         }
         this.tag = "Search";
         IsMouseOver = true;
-        GameDirector.Instance.IsTileNeedSearch = true;
+        GameDirector.Instance.IsMouseOnTile = true;
     }
 
     /// <summary>
@@ -55,7 +56,8 @@ public class Tile : MonoBehaviour
         tile.color = new Color(1, 1, 1, 0);
         this.tag = "Untagged";
         IsMouseOver = false;
-        GameDirector.Instance.IsTileNeedSearch = false;
-        GameDirector.Instance.IsMouseLeaveTile = true;
+        GameDirector.Instance.IsMouseOnTile = false;
+        //マウスが他のマスに移動した場合、一回全てのマスのタグを初期化する
+        TileMap.Instance.ResetTileTag();
     }
 }

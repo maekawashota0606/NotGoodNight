@@ -27,7 +27,6 @@ public class Player : MonoBehaviour
     public int Life = 3;
     //ライフ表示テキスト
     [SerializeField] private Text lifeText = null;
-    public bool IsEffect = false;
 
     #region カードごとの専用変数
 
@@ -49,12 +48,6 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        //カード効果の処理が終了したら、使用カードとコストとして使われたカードを削除する
-        if (GameDirector.Instance.IsCardUsed == true && GameDirector.Instance.IsMultiEffect == false)
-        {
-            DeleteUsedCard();
-        }
-
         //ライフがマイナスに行かないようにする
         if (Life <= 0)
         {
@@ -78,43 +71,61 @@ public class Player : MonoBehaviour
         }
 
         int ID = Random.Range(1,36);
-        //int ID = 13;
-        //アクティブフェイズでのプレイヤーの行動としてのドロー
-        if (GameDirector.Instance.gameState == GameDirector.GameState.active && GameDirector.Instance.CanPlayerControl == true)
+        //ゲーム開始時の初期手札のドロー
+        if (GameDirector.Instance.gameState == GameDirector.GameState.standby)
         {
             GameObject genCard = Instantiate(cardPrefab, playerHand);
             Card newCard = genCard.GetComponent<Card>();
             newCard.Init(ID,_cardData[ID][1],_cardData[ID][2],_cardData[ID][3],_cardData[ID][4]);
-
-            if (GameDirector.Instance.SelectedCardNum == 18 && newCard.Cost > 0)
+            //カードオブジェクトをリストに入れる
+            hands.Add(newCard);
+        }
+        //アクティブフェイズでのプレイヤーの行動としてのドロー
+        else if (GameDirector.Instance.gameState == GameDirector.GameState.active)
+        {
+            GameObject genCard = Instantiate(cardPrefab, playerHand);
+            Card newCard = genCard.GetComponent<Card>();
+            newCard.Init(ID,_cardData[ID][1],_cardData[ID][2],_cardData[ID][3],_cardData[ID][4]);
+            //カードオブジェクトをリストに入れる
+            hands.Add(newCard);
+            //カードを引いたら隕石落下フェイズに移行する
+            GameDirector.Instance.gameState = GameDirector.GameState.fall;
+        }
+        //効果によるドロー
+        else if (GameDirector.Instance.gameState == GameDirector.GameState.effect)
+        {
+            GameObject genCard = Instantiate(cardPrefab, playerHand);
+            Card newCard = genCard.GetComponent<Card>();
+            newCard.Init(ID,_cardData[ID][1],_cardData[ID][2],_cardData[ID][3],_cardData[ID][4]);
+            if (GameDirector.Instance.SelectedCardObject.ID == 18 && newCard.Cost > 0)
             {
                 newCard.Cost--;
             }
-            else if (GameDirector.Instance.SelectedCardNum == 22)
+            else if (GameDirector.Instance.SelectedCardObject.ID == 22)
             {
                 newCard.Cost = 0;
             }
-
-            hands.Add(newCard);
-            
-            if (IsEffect == false)
-            {
-                GameDirector.Instance.CanPlayerControl = false;
-                GameDirector.Instance.IsPlayerSelectMove = true;
-            }
-        }
-        //ゲーム開始時の初期手札のドロー
-        else if (GameDirector.Instance.gameState == GameDirector.GameState.standby)
-        {
-            GameObject genCard = Instantiate(cardPrefab, playerHand);
-            Card newCard = genCard.GetComponent<Card>();
-            newCard.Init(ID,_cardData[ID][1],_cardData[ID][2],_cardData[ID][3],_cardData[ID][4]);
+            //カードオブジェクトをリストに入れる
             hands.Add(newCard);
         }
     }
 
+    public void DeleteUsedCost()
+    {
+        //使用されたカードすべてにタグがついているので、それらを手札から見つけ出して削除する
+        for (int i = 0; i < hands.Count; i++)
+        {
+            if (hands[i].tag == "Cost")
+            {
+                Destroy(hands[i].gameObject);
+                hands.RemoveAt(i);
+                i--;
+            }
+        }
+    }
+
     /// <summary>
-    /// 使用カードとコストカードの削除
+    /// 使用カードの削除
     /// </summary>
     public void DeleteUsedCard()
     {
@@ -128,28 +139,21 @@ public class Player : MonoBehaviour
                 i--;
             }
         }
-
-        GameDirector.Instance.IsCardUsed = false;
-        GameDirector.Instance.IsAttackCard = false;
-        GameDirector.Instance.IsCardSelect = false;
-        GameDirector.Instance.NeedCost = 0;
-        GameDirector.Instance.NeedPayCost = false;
         GameDirector.Instance.PayedCost = 0;
     }
 
     /// <summary>
     /// 特殊カードの効果処理
     /// </summary>
-    public void CardEffect()
+    public void SpecialCardEffect()
     {
-        if (GameDirector.Instance.CanPlayerControl == true && GameDirector.Instance.IsCardSelect == true && GameDirector.Instance.PayedCost >= GameDirector.Instance.NeedCost && GameDirector.Instance.IsAttackCard == false)
-        {
-            switch(GameDirector.Instance.SelectedCardNum)
+        //if (GameDirector.Instance.SelectedCardObject != null)
+        //{
+            switch(GameDirector.Instance.SelectedCardObject.ID)
             {
             case 5: //アストラルリコール
                 for (int i = 0; i < 3; i++)
                 {
-                    IsEffect = true;
                     DrawCard();
                 }
                 break;
@@ -184,7 +188,6 @@ public class Player : MonoBehaviour
             case 18: //詮索するはばたき
                 for (int i = 0; i < 3; i++)
                 {
-                    IsEffect = true;
                     DrawCard();
                 }
                 break;
@@ -194,7 +197,6 @@ public class Player : MonoBehaviour
                 DrawNum += Score / 30000 * 2;
                 for (int i = 0; i < DrawNum; i++)
                 {
-                    IsEffect = true;
                     DrawCard();
                 }
                 break;
@@ -202,7 +204,6 @@ public class Player : MonoBehaviour
             case 22: //至高天の顕現
                 for (int i = 0; i < 2; i++)
                 {
-                    IsEffect = true;
                     DrawCard();
                 }
                 break;
@@ -221,7 +222,6 @@ public class Player : MonoBehaviour
                 {
                     for (int i = 0; i < 7; i++)
                     {
-                        IsEffect = true;
                         DrawCard();
                     }
                 }
@@ -230,15 +230,7 @@ public class Player : MonoBehaviour
             default:
                 break;
             }
-            
-            if (GameDirector.Instance.SelectedCardNum != 11 || GameDirector.Instance.SelectedCardNum != 15 && GameDirector.Instance.SelectedCardNum != 19)
-            {
-                IsEffect = false;
-                GameDirector.Instance.IsCardUsed = true;
-                GameDirector.Instance.CanPlayerControl = false;
-                GameDirector.Instance.IsPlayerSelectMove = true;
-            }
-        }
+        //}
     }
 
     /// <summary>
@@ -246,24 +238,22 @@ public class Player : MonoBehaviour
     /// </summary>
     public void ExtraEffect()
     {
-        switch(GameDirector.Instance.SelectedCardNum)
+        switch(GameDirector.Instance.SelectedCardObject.ID)
         {
         case 12: //コメットブロー
             for (int i = 0; i < 3; i++)
             {
-                IsEffect = true;
                 DrawCard();
             }
             break;
 
         case 13: //複製魔法
-            CopyCard_Card13(GameDirector.Instance.CopyNum_Card13);
+            //CopyCard_Card13(GameDirector.Instance.CopyNum_Card13);
             break;
 
         default:
             break;
         }
-        IsEffect = false;
         GameDirector.Instance.IsMultiEffect = false;
     }
 

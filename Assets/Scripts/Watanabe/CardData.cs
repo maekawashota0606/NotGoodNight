@@ -19,6 +19,7 @@ public class CardData : MonoBehaviour
     public int Cost; //カードコスト
     public CardType CardTypeValue; //カードタイプ
     public string EffectText; //効果テキスト
+    public bool IsBasePointInArea = true;
 
     [SerializeField, Header("カード名")] private Text CardName = null;
     [SerializeField, Header("コスト")] private Text CardCost = null;
@@ -28,6 +29,14 @@ public class CardData : MonoBehaviour
     [SerializeField, Header("カードイラスト")] private Image CardIllustration = null;
     [SerializeField, Header("カードイラスト")] private Sprite[] _illustrationImage = new Sprite[35];
 
+    /// <summary>
+    /// カード情報の初期化
+    /// </summary>
+    /// <param name="id">カード番号</param>
+    /// <param name="name">カード名</param>
+    /// <param name="cost">カードコスト</param>
+    /// <param name="type">カードタイプ</param>
+    /// <param name="effectText">カード効果</param>
     public void Init(int id,string name,string cost,string type, string effectText)
     {
         this.ID = id;
@@ -42,8 +51,16 @@ public class CardData : MonoBehaviour
             this.CardTypeValue = CardType.Special;
         }
         this.EffectText = effectText;
+
+        if (this.ID == 3 || this.ID == 31)
+        {
+            IsBasePointInArea = false;
+        }
     }
 
+    /// <summary>
+    /// カードオブジェクトに情報を反映する
+    /// </summary>
     public void ShowCardStatus()
     {
         CardName.text = Name;
