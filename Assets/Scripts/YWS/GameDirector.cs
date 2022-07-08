@@ -32,6 +32,8 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     public bool DoMeteorFall = true;
     //勝敗判定用フラグ
     public bool IsPlayerWin = false;
+    public Card SelectedCardObject = null;
+    [SerializeField]private EffectText2 e = null;
 
     #region カード使用関連の変数
 
@@ -91,6 +93,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
 
     void Update()
     {
+        
         switch (gameState)
         {
             case GameState.standby: //スタンバイフェイズ

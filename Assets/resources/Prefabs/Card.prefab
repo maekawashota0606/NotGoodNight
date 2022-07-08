@@ -355,6 +355,7 @@ MonoBehaviour:
   IsMouseOver: 0
   IsClick: 0
   IsCost: 0
+  TextFrame: {fileID: 0}
 --- !u!225 &5091186337394731272
 CanvasGroup:
   m_ObjectHideFlags: 0

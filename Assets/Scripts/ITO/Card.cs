@@ -56,6 +56,7 @@ public class Card : CardData
             GameDirector.Instance.SelectedCardNum = this.ID;
             //このカードの使用に必要なコストの数を報告する
             GameDirector.Instance.NeedCost = this.Cost;
+           
             //コストが0ではない場合、コストが必要だとフラグを立てる
             if (this.Cost != 0)
             {
@@ -164,6 +165,8 @@ public class Card : CardData
     {
         IsMouseOver = true;
         Debug.Log(this.ID + " " + this.Name);
+        GameDirector.Instance.SelectedCardObject = this;
+        Debug.Log(GameDirector.Instance.SelectedCardObject.EffectText);
     }
 
     /// <summary>
@@ -205,5 +208,10 @@ public class Card : CardData
             }
             GameDirector.Instance.IsCostEffect = false;
         }
+    }
+
+    public static implicit operator Card(EffectText2 v)
+    {
+        throw new System.NotImplementedException();
     }
 }
