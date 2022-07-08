@@ -225,12 +225,12 @@ public class Card : CardData
                 for (int i = 0; i < 2; i++)
                 {
                     int DestoryNum = Random.Range(0,GameDirector.Instance.meteors.Count);
+                    //マップから削除
+                    Map.Instance.map[(int)GameDirector.Instance.meteors[DestoryNum].transform.position.z*-1, (int)GameDirector.Instance.meteors[DestoryNum].transform.position.x] = Map.Instance.empty;
                     //隕石オブジェクトを削除する
                     Destroy(GameDirector.Instance.meteors[DestoryNum]);
                     //リストから削除
                     GameDirector.Instance.meteors.RemoveAt(DestoryNum);
-                    //マップから削除
-                    Map.Instance.map[(int)GameDirector.Instance.meteors[DestoryNum].transform.position.z*-1, (int)GameDirector.Instance.meteors[DestoryNum].transform.position.x] = Map.Instance.empty;
                 }
                 break;
             

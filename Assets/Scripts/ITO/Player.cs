@@ -183,16 +183,13 @@ public class Player : MonoBehaviour
                 Debug.Log("hands num " + hands.Count);
                 for (int i = 0; i < hands.Count; i++)
                 {
-                    Debug.Log("Total " + GameDirector.Instance.meteors.Count);
                     int DestoryNum = Random.Range(0,GameDirector.Instance.meteors.Count);
-                    Debug.Log("Hit " + DestoryNum);
-                    Debug.Log("Destroy " + GameDirector.Instance.meteors[DestoryNum]);
+                    //マップから削除
+                    Map.Instance.map[(int)GameDirector.Instance.meteors[DestoryNum].transform.position.z*-1, (int)GameDirector.Instance.meteors[DestoryNum].transform.position.x] = Map.Instance.empty;
                     //隕石オブジェクトを削除する
                     Destroy(GameDirector.Instance.meteors[DestoryNum]);
                     //リストから削除
                     GameDirector.Instance.meteors.RemoveAt(DestoryNum);
-                    //マップから削除
-                    Map.Instance.map[(int)GameDirector.Instance.meteors[DestoryNum].transform.position.z*-1, (int)GameDirector.Instance.meteors[DestoryNum].transform.position.x] = Map.Instance.empty;
                 }
                 break;
 

@@ -72,7 +72,6 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
 
     void Update()
     {
-        Debug.Log(gameState);
         switch (gameState)
         {
             case GameState.standby: //スタンバイフェイズ
@@ -249,6 +248,9 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         }
     }
 
+    /// <summary>
+    /// 初期化
+    /// </summary>
     private void Init()
     {
         gameState = GameState.standby;
@@ -305,8 +307,10 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         }
     }
 
-    
-
+    /// <summary>
+    /// スコアの加算
+    /// </summary>
+    /// <param name="DestroyedNum">このターンに破壊した隕石の数</param>
     public void AddScore(int DestroyedNum)
     {
         var GetScore = 1000 * DestroyedNum * (1 + DestroyedNum * 0.1f);
