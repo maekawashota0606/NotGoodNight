@@ -20,6 +20,7 @@ public class FallDirection : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //テスト用
         if (Input.GetKeyDown(KeyCode.N))
         {
 
@@ -35,12 +36,13 @@ public class FallDirection : MonoBehaviour
 
         }
 
+        //テスト　呼び出し
         if (Input.GetKeyDown(KeyCode.S))
         {
             DoNextTurn = true;
         }
 
-
+        //落下の演出
         if (DoNextTurn)
         {
             Times += Time.deltaTime;

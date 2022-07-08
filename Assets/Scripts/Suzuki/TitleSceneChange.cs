@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class TitleSceneChange : MonoBehaviour
 {
+    //タイトルシーンからゲームシーンへの遷移
     public void SwitchScene()
     {
         SceneManager.LoadScene("MainGame");
