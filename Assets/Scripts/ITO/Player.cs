@@ -27,6 +27,8 @@ public class Player : MonoBehaviour
     public int Life = 3;
     //ライフ表示テキスト
     [SerializeField] private Text lifeText = null;
+    //ボタンのダブルクリック防止用フラグ
+    private bool IsClick = false;
 
     #region カードごとの専用変数
 
@@ -65,6 +67,11 @@ public class Player : MonoBehaviour
         {
             CopyCard_Card13(GameDirector.Instance.CopyNum_Card13);
         }
+
+        if (GameDirector.Instance.gameState == GameDirector.GameState.active)
+        {
+            IsClick = false;
+        }
     }
 
     /// <summary>
@@ -73,7 +80,7 @@ public class Player : MonoBehaviour
     public void DrawCard()
     {
         //手札は10枚が上限なので、10枚の状態でドローは行えない
-        if (hands.Count == 10)
+        if (hands.Count == 10 || IsClick == true)
         {
             return;
         }
@@ -91,6 +98,7 @@ public class Player : MonoBehaviour
         //アクティブフェイズでのプレイヤーの行動としてのドロー
         else if (GameDirector.Instance.gameState == GameDirector.GameState.active)
         {
+            IsClick = true;
             GameObject genCard = Instantiate(cardPrefab, playerHand);
             Card newCard = genCard.GetComponent<Card>();
             newCard.Init(ID,_cardData[ID][1],_cardData[ID][2],_cardData[ID][3],_cardData[ID][4]);

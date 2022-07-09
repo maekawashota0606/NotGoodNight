@@ -152,7 +152,6 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 {
                     for (int num = 0; num < meteors.Count; num++)
                     {
-                        Debug.Log("NowMeteor: " + meteors.Count);
                         var x = (int)meteors[num].transform.position.x;
                         var z = (int)meteors[num].transform.position.z * -1;
                         //隕石の下１マスが空白だった場合
