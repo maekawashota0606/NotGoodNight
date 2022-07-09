@@ -74,7 +74,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
 
     void Update()
     {
-        
+        Map.Instance.CheckMapData();
         switch (gameState)
         {
             case GameState.standby: //スタンバイフェイズ
@@ -159,14 +159,10 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                         {
                             //隕石オブジェクトを１マス下に移動
                             meteors[num].StartFall();
-                            //マップの元居た場所の記録を削除し
-                            Map.Instance.map[z, x] = Map.Instance.empty;
-                            //マップの移動先に新たに記録を書き込む
-                            Map.Instance.map[z+1, x] = Map.Instance.meteor;
                         }
                         //隕石の下１マスが空白ではなかった場合
                         //下から順に処理を行っているため、隕石の下に他の隕石が存在する事はありえない
-                        else if (z == 9)
+                        else if (z == 9 && meteors[num].FallFinished == false)
                         {
                             //隕石オブジェクトを削除する
                             Destroy(meteors[num].gameObject);
@@ -181,7 +177,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                         }
                     }
                 }
-                if (meteors[meteors.Count-1].FallFinished == true && DoMeteorFall == false)
+                if (meteors[meteors.Count-1].FallFinished == true || DoMeteorFall == false)
                 {
                     gameState = GameState.judge;
                 }
