@@ -10,7 +10,7 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
     public void FindBasePoint()
     {
         //効果処理フェイズで使用カードが選択されていおり、マウスカーソルが盤面の上にいる場合
-        if (GameDirector.Instance.SelectedCardObject != null && GameDirector.Instance.IsMouseOnTile == true)
+        if (GameDirector.Instance.SelectedCard != null && GameDirector.Instance.IsMouseOnTile == true)
         {
             //マウスカーソルがいるマスが探す
             for (int i = 0; i < 10; i++)
@@ -38,7 +38,7 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
     public void DecideSearchArea(int basicPosX, int basicPosZ)
     {
         //カードの種類に基づいて、範囲となるマスすべてにタグを付ける
-        switch(GameDirector.Instance.SelectedCardObject.ID)
+        switch(GameDirector.Instance.SelectedCard.ID)
         {
         case 1: //サラマンダーブレス
             if (basicPosZ > 1)
@@ -185,7 +185,7 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
                         if (GameDirector.Instance.meteors[targetNum].transform.position.x == x && GameDirector.Instance.meteors[targetNum].transform.position.z == z * -1)
                         {
                             //隕石オブジェクトを削除する
-                            Destroy(GameDirector.Instance.meteors[targetNum]);
+                            Destroy(GameDirector.Instance.meteors[targetNum].gameObject);
                             //リストから削除
                             GameDirector.Instance.meteors.RemoveAt(targetNum);
                             //マップから削除

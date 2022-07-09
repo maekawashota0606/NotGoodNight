@@ -13,7 +13,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     [SerializeField] Player _player = null;
     
     // 隕石用リストを宣言
-    public List<GameObject> meteors = new List<GameObject>();
+    public List<Meteorite> meteors = new List<Meteorite>();
     //ゲームの進行状況
     public GameState gameState = GameState.none;
     //プレイヤーが行動を選択したかどうか
@@ -30,8 +30,10 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     public bool IsPlayerWin = false;
 
     #region カード使用関連の変数
+    //カーソルが合っているカードオブジェクト
+    public Card WatchingCard = null;
     //使用カードとして選択されているカードオブジェクト
-    public Card SelectedCardObject = null;
+    public Card SelectedCard = null;
     //盤面にマウスカーソルが乗っているか
     public bool IsMouseOnTile = false;
     //基点マスに光って欲しいのかどうか
@@ -111,10 +113,10 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 break;
 
             case GameState.effect: //カード効果処理フェイズ
-                if (SelectedCardObject != null)
+                if (SelectedCard != null)
                 {
                     TileMap.Instance.FindBasePoint();
-                    if (SelectedCardObject.CardTypeValue == CardData.CardType.Attack)
+                    if (SelectedCard.CardTypeValue == CardData.CardType.Attack)
                     {
                         if (IsMeteorDestroyed == true && IsMultiEffect == true)
                         {
@@ -122,7 +124,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                             IsPlayerSelectMove = true;
                         }
                     }
-                    else if (SelectedCardObject.CardTypeValue == CardData.CardType.Special)
+                    else if (SelectedCard.CardTypeValue == CardData.CardType.Special)
                     {
                         _player.SpecialCardEffect();
                         if (WaitCopy_Card13 == false)
@@ -135,7 +137,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 if (IsPlayerSelectMove == true)
                 {
                     _player.DeleteUsedCard();
-                    SelectedCardObject = null;
+                    SelectedCard = null;
                     TileMap.Instance.ResetTileTag();
                     IsMeteorDestroyed = false;
                     //効果処理が終了したら、隕石落下フェイズに移行する
@@ -150,13 +152,14 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 {
                     for (int num = 0; num < meteors.Count; num++)
                     {
+                        Debug.Log("NowMeteor: " + meteors.Count);
                         var x = (int)meteors[num].transform.position.x;
                         var z = (int)meteors[num].transform.position.z * -1;
                         //隕石の下１マスが空白だった場合
                         if (z < 9)
                         {
                             //隕石オブジェクトを１マス下に移動
-                            meteors[num].transform.position += Vector3.back;
+                            meteors[num].StartFall();
                             //マップの元居た場所の記録を削除し
                             Map.Instance.map[z, x] = Map.Instance.empty;
                             //マップの移動先に新たに記録を書き込む
@@ -167,7 +170,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                         else if (z == 9)
                         {
                             //隕石オブジェクトを削除する
-                            Destroy(meteors[num]);
+                            Destroy(meteors[num].gameObject);
                             //リストから削除
                             meteors.RemoveAt(num);
                             //マップから削除
@@ -179,7 +182,10 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                         }
                     }
                 }
-                gameState = GameState.judge;
+                if (meteors[meteors.Count-1].FallFinished == true)
+                {
+                    gameState = GameState.judge;
+                }
                 break;
 
             case GameState.judge: //ゲーム終了判定
@@ -261,7 +267,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         TurnCount = 0;
         DoMeteorFall = true;
         IsPlayerWin = false;
-        SelectedCardObject = null;
+        SelectedCard = null;
         IsMouseOnTile = false;
         IsBasePointInArea = true;
         IsMultiEffect = false;

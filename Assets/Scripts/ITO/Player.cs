@@ -30,6 +30,8 @@ public class Player : MonoBehaviour
 
     #region カードごとの専用変数
 
+    //効果によるドローが発生するかどうか
+    private bool IsDrawEffect = false;
     //効果の持続ターンカウント
     public int EffectTurn_Card14 = 0;
     public static int EffectTurn_Card19 = 0;
@@ -98,16 +100,16 @@ public class Player : MonoBehaviour
             GameDirector.Instance.gameState = GameDirector.GameState.fall;
         }
         //効果によるドロー
-        else if (GameDirector.Instance.gameState == GameDirector.GameState.effect)
+        else if (GameDirector.Instance.gameState == GameDirector.GameState.effect && IsDrawEffect == true)
         {
             GameObject genCard = Instantiate(cardPrefab, playerHand);
             Card newCard = genCard.GetComponent<Card>();
             newCard.Init(ID,_cardData[ID][1],_cardData[ID][2],_cardData[ID][3],_cardData[ID][4]);
-            if (GameDirector.Instance.SelectedCardObject.ID == 18 && newCard.Cost > 0)
+            if (GameDirector.Instance.SelectedCard.ID == 18 && newCard.Cost > 0)
             {
                 newCard.Cost--;
             }
-            else if (GameDirector.Instance.SelectedCardObject.ID == 22)
+            else if (GameDirector.Instance.SelectedCard.ID == 22)
             {
                 newCard.Cost = 0;
             }
@@ -146,11 +148,6 @@ public class Player : MonoBehaviour
             }
         }
         GameDirector.Instance.PayedCost = 0;
-
-        if (GameDirector.Instance.WaitCopy_Card13 == true && GameDirector.Instance.CopyNum_Card13 != 0)
-        {
-            CopyCard_Card13(GameDirector.Instance.CopyNum_Card13);
-        }
     }
 
     /// <summary>
@@ -158,79 +155,81 @@ public class Player : MonoBehaviour
     /// </summary>
     public void SpecialCardEffect()
     {
-        //if (GameDirector.Instance.SelectedCardObject != null)
-        //{
-            switch(GameDirector.Instance.SelectedCardObject.ID)
+        switch(GameDirector.Instance.SelectedCard.ID)
+        {
+        case 5: //アストラルリコール
+            IsDrawEffect = true;
+            for (int i = 0; i < 3; i++)
             {
-            case 5: //アストラルリコール
-                for (int i = 0; i < 3; i++)
-                {
-                    DrawCard();
-                }
-                break;
-
-            case 13: //複製魔法
-                GameDirector.Instance.WaitCopy_Card13 = true;
-                break;
-
-            case 14: //グラビトンリジェクト
-                EffectTurn_Card14 = 3;
-                GameDirector.Instance.DoMeteorFall = false;
-                GameDirector.Instance.CanMeteorGenerate = false;
-                break;
-
-            case 16: //不破の城塞
-                Debug.Log("hands num " + hands.Count);
-                for (int i = 0; i < hands.Count; i++)
-                {
-                    int DestoryNum = Random.Range(0,GameDirector.Instance.meteors.Count);
-                    //マップから削除
-                    Map.Instance.map[(int)GameDirector.Instance.meteors[DestoryNum].transform.position.z*-1, (int)GameDirector.Instance.meteors[DestoryNum].transform.position.x] = Map.Instance.empty;
-                    //隕石オブジェクトを削除する
-                    Destroy(GameDirector.Instance.meteors[DestoryNum]);
-                    //リストから削除
-                    GameDirector.Instance.meteors.RemoveAt(DestoryNum);
-                }
-                break;
-
-            case 18: //詮索するはばたき
-                for (int i = 0; i < 3; i++)
-                {
-                    DrawCard();
-                }
-                break;
-
-            case 21: //残光のアストラル
-                int DrawNum = 2;
-                DrawNum += Score / 30000 * 2;
-                for (int i = 0; i < DrawNum; i++)
-                {
-                    DrawCard();
-                }
-                break;
-
-            case 22: //至高天の顕現
-                for (int i = 0; i < 2; i++)
-                {
-                    DrawCard();
-                }
-                break;
-
-            case 27: //復興の灯
-                Life++;
-                break;
-
-            case 35: //ラスト・ショット
-                for (int i = 0; i < 7; i++)
-                {
-                    DrawCard();
-                }
-                break;
-
-            default:
-                break;
+                DrawCard();
             }
-        //}
+            break;
+
+        case 13: //複製魔法
+            GameDirector.Instance.WaitCopy_Card13 = true;
+            break;
+
+        case 14: //グラビトンリジェクト
+            EffectTurn_Card14 = 3;
+            GameDirector.Instance.DoMeteorFall = false;
+            GameDirector.Instance.CanMeteorGenerate = false;
+            break;
+
+        case 16: //不破の城塞
+            for (int i = 0; i < hands.Count; i++)
+            {
+                int DestoryNum = Random.Range(0,GameDirector.Instance.meteors.Count);
+                //マップから削除
+                Map.Instance.map[(int)GameDirector.Instance.meteors[DestoryNum].transform.position.z*-1, (int)GameDirector.Instance.meteors[DestoryNum].transform.position.x] = Map.Instance.empty;
+                //隕石オブジェクトを削除する
+                Destroy(GameDirector.Instance.meteors[DestoryNum].gameObject);
+                //リストから削除
+                GameDirector.Instance.meteors.RemoveAt(DestoryNum);
+            }
+            break;
+
+        case 18: //詮索するはばたき
+            IsDrawEffect = true;
+            for (int i = 0; i < 3; i++)
+            {
+                DrawCard();
+            }
+            break;
+
+        case 21: //残光のアストラル
+            IsDrawEffect = true;
+            int DrawNum = 2;
+            DrawNum += Score / 30000 * 2;
+            for (int i = 0; i < DrawNum; i++)
+            {
+                DrawCard();
+            }
+            break;
+
+        case 22: //至高天の顕現
+            IsDrawEffect = true;
+            for (int i = 0; i < 2; i++)
+            {
+                DrawCard();
+            }
+            break;
+
+        case 27: //復興の灯
+            Life++;
+            break;
+
+        case 35: //ラスト・ショット
+            IsDrawEffect = true;
+            for (int i = 0; i < 7; i++)
+            {
+                DrawCard();
+            }
+            break;
+
+        default:
+            break;
+        }
+        IsDrawEffect = false;
     }
 
     /// <summary>
@@ -238,9 +237,10 @@ public class Player : MonoBehaviour
     /// </summary>
     public void ExtraEffect()
     {
-        switch(GameDirector.Instance.SelectedCardObject.ID)
+        switch(GameDirector.Instance.SelectedCard.ID)
         {
         case 12: //コメットブロー
+            IsDrawEffect = true;
             for (int i = 0; i < 3; i++)
             {
                 DrawCard();

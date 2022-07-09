@@ -75,11 +75,11 @@ public class Card : CardData
     private void SelectingUseCard()
     {
         //カードが選択されていない場合、このカードがクリックされたら、枠を赤色にする
-        if (GameDirector.Instance.SelectedCardObject == null && GameDirector.Instance.gameState != GameDirector.GameState.effect && IsMouseOver == true && Input.GetMouseButtonDown(0))
+        if (GameDirector.Instance.SelectedCard == null && GameDirector.Instance.gameState != GameDirector.GameState.effect && IsMouseOver == true && Input.GetMouseButtonDown(0))
         {
             image_component.color = Color.red;
             IsClick = true;
-            GameDirector.Instance.SelectedCardObject = this;
+            GameDirector.Instance.SelectedCard = this;
             if (this.IsBasePointInArea == false)
             {
                 GameDirector.Instance.IsBasePointInArea = false;
@@ -94,14 +94,14 @@ public class Card : CardData
     /// </summary>
     private void PayingCost()
     {
-        if (GameDirector.Instance.SelectedCardObject == null)
+        if (GameDirector.Instance.SelectedCard == null)
         {
             return;
         }
         else
         {
             //使用するカードが選択されており、それがこのカードではなく、かつ選択されているコストが必要コスト以下の場合、このカードがクリックされた時、枠を緑色にする
-            if (GameDirector.Instance.PayedCost < GameDirector.Instance.SelectedCardObject.Cost && IsClick == false && IsMouseOver == true && Input.GetMouseButtonDown(0))
+            if (GameDirector.Instance.PayedCost < GameDirector.Instance.SelectedCard.Cost && IsClick == false && IsMouseOver == true && Input.GetMouseButtonDown(0))
             {
                 image_component.color = Color.green;
                 IsClick = true;
@@ -154,7 +154,7 @@ public class Card : CardData
             //使用カードとして選択されていた場合、色々とリセットする
             else
             {
-                GameDirector.Instance.SelectedCardObject = null;
+                GameDirector.Instance.SelectedCard = null;
                 GameDirector.Instance.IsBasePointInArea = true;
                 GameDirector.Instance.PayedCost = 0;
             }
@@ -162,7 +162,7 @@ public class Card : CardData
         }
 
         //コストとして選択されている、かつ使用カードの選択が解除された時、このカードの選択も解除する
-        if (IsCost == true && GameDirector.Instance.SelectedCardObject == null)
+        if (IsCost == true && GameDirector.Instance.SelectedCard == null)
         {
             image_component.color = Color.white;
             IsClick = false;
@@ -176,15 +176,15 @@ public class Card : CardData
     /// </summary>
     private void ConfirmUsing()
     {
-        if (GameDirector.Instance.SelectedCardObject == null)
+        if (GameDirector.Instance.SelectedCard == null)
         {
             return;
         }
         else
         {
-            if (GameDirector.Instance.gameState == GameDirector.GameState.active && GameDirector.Instance.PayedCost >= GameDirector.Instance.SelectedCardObject.Cost && IsClick == true && IsCost == false && IsMouseOver == true && Input.GetMouseButtonDown(0))
+            if (GameDirector.Instance.gameState == GameDirector.GameState.active && GameDirector.Instance.PayedCost >= GameDirector.Instance.SelectedCard.Cost && IsClick == true && IsCost == false && IsMouseOver == true && Input.GetMouseButtonDown(0))
             {
-                if (GameDirector.Instance.SelectedCardObject.ID == 11 || GameDirector.Instance.SelectedCardObject.ID == 15 && GameDirector.Instance.SelectedCardObject.ID == 19 || (GameDirector.Instance.SelectedCardObject.ID == 35 && Player.hands.Count != 1))
+                if (GameDirector.Instance.SelectedCard.ID == 11 || GameDirector.Instance.SelectedCard.ID == 15 && GameDirector.Instance.SelectedCard.ID == 19 || (GameDirector.Instance.SelectedCard.ID == 35 && Player.hands.Count != 1))
                 {
                     return;
                 }
@@ -202,7 +202,7 @@ public class Card : CardData
     private void OnMouseOver()
     {
         IsMouseOver = true;
-        Debug.Log(this.ID + " " + this.Name);
+        GameDirector.Instance.WatchingCard = this;
     }
 
     /// <summary>
@@ -228,7 +228,7 @@ public class Card : CardData
                     //マップから削除
                     Map.Instance.map[(int)GameDirector.Instance.meteors[DestoryNum].transform.position.z*-1, (int)GameDirector.Instance.meteors[DestoryNum].transform.position.x] = Map.Instance.empty;
                     //隕石オブジェクトを削除する
-                    Destroy(GameDirector.Instance.meteors[DestoryNum]);
+                    Destroy(GameDirector.Instance.meteors[DestoryNum].gameObject);
                     //リストから削除
                     GameDirector.Instance.meteors.RemoveAt(DestoryNum);
                 }

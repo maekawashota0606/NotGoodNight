@@ -721,11 +721,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 30
+    m_Font: {fileID: 12800000, guid: cbf3f1852d82d35468e97f0c2356c022, type: 3}
+    m_FontSize: 27
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 3
+    m_MinSize: 2
     m_MaxSize: 40
     m_Alignment: 4
     m_AlignByGeometry: 0
@@ -1186,7 +1186,8 @@ MonoBehaviour:
   CanMeteorGenerate: 1
   DoMeteorFall: 1
   IsPlayerWin: 0
-  SelectedCardObject: {fileID: 0}
+  WatchingCard: {fileID: 0}
+  SelectedCard: {fileID: 0}
   IsMouseOnTile: 0
   IsBasePointInArea: 1
   IsMultiEffect: 0
@@ -1359,7 +1360,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: cbf3f1852d82d35468e97f0c2356c022, type: 3}
-    m_FontSize: 36
+    m_FontSize: 25
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -1438,7 +1439,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: cbf3f1852d82d35468e97f0c2356c022, type: 3}
     m_FontSize: 50
     m_FontStyle: 0
     m_BestFit: 0
@@ -1653,11 +1654,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a384e9f29d673a4c948cde58ed76f08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TextEffect: {fileID: 947302479}
-  TextName: {fileID: 119479206}
-  TextCost: {fileID: 1346601849}
-  Illustration: {fileID: 87200403}
-  IllustrationCards:
+  costText: {fileID: 1346601849}
+  nameText: {fileID: 119479206}
+  effectText: {fileID: 947302479}
+  displayIllustration: {fileID: 87200403}
+  Illustration:
   - {fileID: 21300000, guid: 5bd97cb98a54b684b88af0094e3d6fe7, type: 3}
   - {fileID: 21300000, guid: 1c70bcecea6bb434ba81cf119bce0f7f, type: 3}
   - {fileID: 21300000, guid: 80e6c4580116f7842ae084f77df6a089, type: 3}
@@ -1798,7 +1799,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: cbf3f1852d82d35468e97f0c2356c022, type: 3}
     m_FontSize: 50
     m_FontStyle: 0
     m_BestFit: 0
@@ -1934,8 +1935,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 272, y: 70}
-  m_SizeDelta: {x: 300, y: 100}
+  m_AnchoredPosition: {x: 268.9, y: 70}
+  m_SizeDelta: {x: 343.8, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1334337373
 MonoBehaviour:
@@ -2090,8 +2091,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 35
+    m_Font: {fileID: 12800000, guid: 30c038b66d879d9449f69be4edc7f025, type: 3}
+    m_FontSize: 40
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
@@ -2102,7 +2103,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 3
+  m_Text: '0
+
+'
 --- !u!222 &1346601850
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2170,7 +2173,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: cbf3f1852d82d35468e97f0c2356c022, type: 3}
     m_FontSize: 25
     m_FontStyle: 0
     m_BestFit: 0
@@ -2420,7 +2423,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: cbf3f1852d82d35468e97f0c2356c022, type: 3}
     m_FontSize: 50
     m_FontStyle: 0
     m_BestFit: 0
@@ -2625,7 +2628,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: cbf3f1852d82d35468e97f0c2356c022, type: 3}
     m_FontSize: 25
     m_FontStyle: 0
     m_BestFit: 0
