@@ -72,6 +72,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
 
     void Update()
     {
+        
         switch (gameState)
         {
             case GameState.standby: //スタンバイフェイズ

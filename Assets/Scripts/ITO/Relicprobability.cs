@@ -100,7 +100,7 @@ public class Relicprobability : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKey(KeyCode.A))
         {
             GetDropItem();
         }

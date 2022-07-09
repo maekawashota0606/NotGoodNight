@@ -26,7 +26,7 @@ public class CardData : MonoBehaviour
     [SerializeField, Header("カード枠")] private Image CardFrame = null;
     [SerializeField, Header("カード選択枠")] private Sprite[] _cardFrameImage = new Sprite[2];
     [SerializeField, Header("効果テキスト")] private Text CardEffectText = null;
-    [SerializeField, Header("カードイラスト")] private Image CardIllustration = null;
+    [SerializeField, Header("カードイラスト")] public Image CardIllustration = null;
     [SerializeField, Header("カードイラスト")] private Sprite[] _illustrationImage = new Sprite[35];
 
     /// <summary>
