@@ -23,7 +23,7 @@ public class GridManager : MonoBehaviour
                 spawnedTile.transform.SetParent(root);
                 spawnedTile.transform.position = new Vector3(x,y);
                 spawnedTile.name = $"tile {x} {y}";
-                TileMap.Instance.map[y,x] = spawnedTile;
+                TileMap.Instance.tileMap[y,x] = spawnedTile;
             }
         }
     }

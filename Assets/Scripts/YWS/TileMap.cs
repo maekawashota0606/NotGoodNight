@@ -5,7 +5,7 @@ using UnityEngine;
 public class TileMap : SingletonMonoBehaviour<TileMap>
 {
     //タイル収納マップ
-    public GameObject[,] map = new GameObject[10, 10];
+    public GameObject[,] tileMap = new GameObject[10, 10];
 
     public void FindBasePoint()
     {
@@ -17,12 +17,12 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
             {
                 for (int j = 0; j < 10; j++)
                 {
-                    if (map[j, i].tag == "Search")
+                    if (tileMap[j, i].tag == "Search")
                     {
                         DecideSearchArea(j, i);
                         if (GameDirector.Instance.IsBasePointInArea == false)
                         {
-                            map[j, i].tag = "Untagged";
+                            tileMap[j, i].tag = "Untagged";
                         }
                     }
                 }
@@ -42,141 +42,177 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
         {
         case 1: //サラマンダーブレス
             if (basicPosZ > 1)
-                map[basicPosX, basicPosZ-2].tag = "Area";
+                tileMap[basicPosX, basicPosZ-2].tag = "Area"; //↑↑
             if (basicPosZ > 0)
-                map[basicPosX, basicPosZ-1].tag = "Area";
+                tileMap[basicPosX, basicPosZ-1].tag = "Area"; //↑
             if (basicPosZ < 9)
-                map[basicPosX, basicPosZ+1].tag = "Area";
+                tileMap[basicPosX, basicPosZ+1].tag = "Area"; //↓
             break;
 
         case 2: //ウンディーネ・ウェイブ
             if (basicPosX > 1)
-                map[basicPosX-2, basicPosZ].tag = "Area";
+                tileMap[basicPosX-2, basicPosZ].tag = "Area"; //←←
             if (basicPosX > 0)
-                map[basicPosX-1, basicPosZ].tag = "Area";
+                tileMap[basicPosX-1, basicPosZ].tag = "Area"; //←
             if (basicPosX < 9)
-                map[basicPosX+1, basicPosZ].tag = "Area";
+                tileMap[basicPosX+1, basicPosZ].tag = "Area"; //→
             break;
 
         case 3: //シルフ・ゲイル
             if (basicPosZ > 0)
-                map[basicPosX, basicPosZ-1].tag = "Area";
+                tileMap[basicPosX, basicPosZ-1].tag = "Area"; //↑
             if (basicPosZ < 9)
-                map[basicPosX, basicPosZ+1].tag = "Area";
+                tileMap[basicPosX, basicPosZ+1].tag = "Area"; //↓
             if (basicPosX > 0)
-                map[basicPosX-1, basicPosZ].tag = "Area";
+                tileMap[basicPosX-1, basicPosZ].tag = "Area"; //←
             if (basicPosX < 9)
-                map[basicPosX+1, basicPosZ].tag = "Area";
+                tileMap[basicPosX+1, basicPosZ].tag = "Area"; //→
             break;
 
         case 4: //ノーム・グレイブル
             if (basicPosZ > 0)
-                map[basicPosX, basicPosZ-1].tag = "Area";
+                tileMap[basicPosX, basicPosZ-1].tag = "Area"; //↑
             if (basicPosX < 9)
-                map[basicPosX+1, basicPosZ].tag = "Area";
+                tileMap[basicPosX+1, basicPosZ].tag = "Area"; //→
             if (basicPosX < 9 && basicPosZ > 0)
-                map[basicPosX+1, basicPosZ-1].tag = "Area";
+                tileMap[basicPosX+1, basicPosZ-1].tag = "Area"; //→↑
             break;
 
         case 8: //彗星
-            for (int i = basicPosX; basicPosX > 0; basicPosX--)
+            for (int i = basicPosX-1; i > -1; i--) //←
             {
-                map[basicPosX, basicPosZ].tag = "Area";
+                tileMap[i, basicPosZ].tag = "Area";
             }
-            for (int i = basicPosX; basicPosX < 10; basicPosX++)
+            for (int i = basicPosX+1; i < 10; i++) //→
             {
-                map[basicPosX, basicPosZ].tag = "Area";
+                tileMap[i, basicPosZ].tag = "Area";
             }
+            break;
+
+        case 9: //グラビトンブレイク
+            /*for (int up = basicPosZ-1; up > 0; up--) //↑
+            {
+                if (Map.Instance.map[basicPosX, up] == Map.Instance.meteor)
+                {
+                    tileMap[basicPosX, up].tag = "Search";
+                    for (int upLeft = basicPosX-1; upLeft > -1; upLeft--) //↑←
+                    {
+                        if (Map.Instance.map[upLeft, up] == Map.Instance.meteor)
+                        {
+                            tileMap[upLeft, up].tag = "Search";
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    for (int upRight = basicPosX+1; upRight < 10; upRight++) //↑→
+                    {
+                        if (Map.Instance.map[upRight, up] == Map.Instance.meteor)
+                        {
+                            tileMap[upRight, up].tag = "Search";
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }*/
             break;
 
         case 12: //コメットブロー
             GameDirector.Instance.IsMultiEffect = true;
             if (basicPosZ > 0 && basicPosX > 0)
-                map[basicPosX-1, basicPosZ-1].tag = "Area";
+                tileMap[basicPosX-1, basicPosZ-1].tag = "Area"; //←↑
             if (basicPosZ > 0)
-                map[basicPosX, basicPosZ-1].tag = "Area";
+                tileMap[basicPosX, basicPosZ-1].tag = "Area"; //↑
             if (basicPosX < 9 && basicPosZ > 0)
-                map[basicPosX+1, basicPosZ-1].tag = "Area";
+                tileMap[basicPosX+1, basicPosZ-1].tag = "Area"; //→↑
             if (basicPosX < 9)
-                map[basicPosX+1, basicPosZ].tag = "Area";
+                tileMap[basicPosX+1, basicPosZ].tag = "Area"; //→
             if (basicPosX < 9 && basicPosZ < 9)
-                map[basicPosX+1, basicPosZ+1].tag = "Area";
+                tileMap[basicPosX+1, basicPosZ+1].tag = "Area"; //→↓
             if (basicPosZ < 9)
-                map[basicPosX, basicPosZ+1].tag = "Area";
+                tileMap[basicPosX, basicPosZ+1].tag = "Area"; //↓
             if (basicPosX > 0 && basicPosZ < 9)
-                map[basicPosX-1, basicPosZ+1].tag = "Area";
+                tileMap[basicPosX-1, basicPosZ+1].tag = "Area"; //←↓
             if (basicPosX > 0)
-                map[basicPosX-1, basicPosZ].tag = "Area";
+                tileMap[basicPosX-1, basicPosZ].tag = "Area"; //←
             break;
 
         case 29: //ドラゴニックブレス
             if (basicPosZ > 1)
-                map[basicPosX, basicPosZ-2].tag = "Area";
+                tileMap[basicPosX, basicPosZ-2].tag = "Area"; //↑↑
             if (basicPosZ > 0)
-                map[basicPosX, basicPosZ-1].tag = "Area";
+                tileMap[basicPosX, basicPosZ-1].tag = "Area"; //↑
             if (basicPosZ < 9)
-                map[basicPosX, basicPosZ+1].tag = "Area";
+                tileMap[basicPosX, basicPosZ+1].tag = "Area"; //↓
             if (basicPosX < 9 && basicPosZ > 1)
-                map[basicPosX+1, basicPosZ-2].tag = "Area";
+                tileMap[basicPosX+1, basicPosZ-2].tag = "Area"; //→↑↑
             if (basicPosX < 9 && basicPosZ > 0)
-                map[basicPosX+1, basicPosZ-1].tag = "Area";
+                tileMap[basicPosX+1, basicPosZ-1].tag = "Area"; //→↑
             if (basicPosX < 9)
-                map[basicPosX+1, basicPosZ].tag = "Area";
+                tileMap[basicPosX+1, basicPosZ].tag = "Area"; //→
             if (basicPosX < 9 && basicPosZ < 9)
-                map[basicPosX+1, basicPosZ+1].tag = "Area";
+                tileMap[basicPosX+1, basicPosZ+1].tag = "Area"; //→↓
             break;
 
         case 30: //タイダルウェーブ
             if (basicPosX > 1)
-                map[basicPosX-2, basicPosZ].tag = "Area";
+                tileMap[basicPosX-2, basicPosZ].tag = "Area"; //←←
             if (basicPosX > 0)
-                map[basicPosX-1, basicPosZ].tag = "Area";
+                tileMap[basicPosX-1, basicPosZ].tag = "Area"; //←
             if (basicPosX < 9)
-                map[basicPosX+1, basicPosZ].tag = "Area";
+                tileMap[basicPosX+1, basicPosZ].tag = "Area"; //→
             if (basicPosX > 1 && basicPosZ > 0)
-                map[basicPosX-2, basicPosZ-1].tag = "Area";
+                tileMap[basicPosX-2, basicPosZ-1].tag = "Area"; //←←↑
             if (basicPosX > 0 && basicPosZ > 0)
-                map[basicPosX-1, basicPosZ-1].tag = "Area";
+                tileMap[basicPosX-1, basicPosZ-1].tag = "Area"; //←↑
             if (basicPosZ > 0)
-                map[basicPosX, basicPosZ-1].tag = "Area";
+                tileMap[basicPosX, basicPosZ-1].tag = "Area"; //↑
             if (basicPosX < 9 && basicPosZ > 0)
-                map[basicPosX+1, basicPosZ-1].tag = "Area";
+                tileMap[basicPosX+1, basicPosZ-1].tag = "Area"; //→↑
             break; 
 
         case 31: //シルフ・サイクロン
             if (basicPosZ > 1)
-                map[basicPosX, basicPosZ-2].tag = "Area";
+                tileMap[basicPosX, basicPosZ-2].tag = "Area"; //↑↑
             if (basicPosZ > 0)
-                map[basicPosX, basicPosZ-1].tag = "Area";
+                tileMap[basicPosX, basicPosZ-1].tag = "Area"; //↑
             if (basicPosZ < 8)
-                map[basicPosX, basicPosZ+2].tag = "Area";
+                tileMap[basicPosX, basicPosZ+2].tag = "Area"; //↓↓
             if (basicPosZ < 9)
-                map[basicPosX, basicPosZ+1].tag = "Area";
+                tileMap[basicPosX, basicPosZ+1].tag = "Area"; //↓
             if (basicPosX > 1)
-                map[basicPosX-2, basicPosZ].tag = "Area";
+                tileMap[basicPosX-2, basicPosZ].tag = "Area"; //←←
             if (basicPosX > 0)
-                map[basicPosX-1, basicPosZ].tag = "Area";
+                tileMap[basicPosX-1, basicPosZ].tag = "Area"; //←
             if (basicPosX < 8)
-                map[basicPosX+2, basicPosZ].tag = "Area";
+                tileMap[basicPosX+2, basicPosZ].tag = "Area"; //→→
             if (basicPosX < 9)
-                map[basicPosX+1, basicPosZ].tag = "Area";
+                tileMap[basicPosX+1, basicPosZ].tag = "Area"; //→
             break;
 
         case 32: //テラリウムグレイブ
             if (basicPosX > 1)
-                map[basicPosX-2, basicPosZ].tag = "Area";
+                tileMap[basicPosX-2, basicPosZ].tag = "Area"; //←←
             if (basicPosX > 0)
-                map[basicPosX-1, basicPosZ].tag = "Area";
+                tileMap[basicPosX-1, basicPosZ].tag = "Area"; //←
             if (basicPosZ > 1)
-                map[basicPosX, basicPosZ-2].tag = "Area";
+                tileMap[basicPosX, basicPosZ-2].tag = "Area"; //↑↑
             if (basicPosZ > 0)
-                map[basicPosX, basicPosZ-1].tag = "Area";
+                tileMap[basicPosX, basicPosZ-1].tag = "Area"; //↑
             if (basicPosX > 0 && basicPosZ > 0)
-                map[basicPosX-1, basicPosZ-1].tag = "Area";
+                tileMap[basicPosX-1, basicPosZ-1].tag = "Area"; //←↑
             if (basicPosX > 0 && basicPosZ < 9)
-                map[basicPosX-1, basicPosZ+1].tag = "Area";
+                tileMap[basicPosX-1, basicPosZ+1].tag = "Area"; //←↓
             if (basicPosX < 9 && basicPosZ > 0)
-                map[basicPosX+1, basicPosZ-1].tag = "Area"; 
+                tileMap[basicPosX+1, basicPosZ-1].tag = "Area"; //→↑
             break;
 
         default:
@@ -194,7 +230,7 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
         {
             for (int x = 0; x < 10; x++)
             {
-                if ((GameDirector.Instance.IsBasePointInArea == true && map[x, z].tag == "Search") || map[x, z].tag == "Area")
+                if ((GameDirector.Instance.IsBasePointInArea == true && tileMap[x, z].tag == "Search") || tileMap[x, z].tag == "Area")
                 {
                     //見つけた範囲内の隕石を破壊する
                     for (int targetNum = 0; targetNum < GameDirector.Instance.meteors.Count; targetNum++)
@@ -210,7 +246,7 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
                             DestroyedNum++;
                         }
                     }
-                    map[x, z].tag = "Untagged";
+                    tileMap[x, z].tag = "Untagged";
                 }
             }
         }
@@ -234,7 +270,7 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
         {
             for (int j = 0; j < 10; j++)
             {
-                map[j,i].tag = "Untagged";
+                tileMap[j,i].tag = "Untagged";
             }
         }
     }

@@ -269,6 +269,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         IsCardUsingConfirm = false;
         IsMeteorDestroyed = false;
         PayedCost = 0;
+        Player.hands = new List<Card>();
     }
 
     /// <summary>
