@@ -145,6 +145,58 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
                 tileMap[basicPosX-1, basicPosZ].tag = "Area"; //←
             break;
 
+        case 20: //アストラルリベリオン
+            GameDirector.Instance.IsMultiEffect = true;
+            if (basicPosX > 1 && basicPosZ > 1)
+                tileMap[basicPosX-2, basicPosZ-2].tag = "Area"; //←↑←↑
+            if (basicPosZ > 0 && basicPosX > 0)
+                tileMap[basicPosX-1, basicPosZ-1].tag = "Area"; //←↑
+            if (basicPosZ > 1)
+                tileMap[basicPosX, basicPosZ-2].tag = "Area"; //↑↑
+            if (basicPosX > 0 && basicPosZ > 1)
+                tileMap[basicPosX-1, basicPosZ-2].tag = "Area"; //↑↑←
+            if (basicPosX < 9 && basicPosZ > 1)
+                tileMap[basicPosX+1, basicPosZ-2].tag = "Area"; //↑↑→
+            if (basicPosZ > 0)
+                tileMap[basicPosX, basicPosZ-1].tag = "Area"; //↑
+            if (basicPosX < 8 && basicPosZ > 1)
+                tileMap[basicPosX+2, basicPosZ-2].tag = "Area"; //→↑→↑
+            if (basicPosX < 9 && basicPosZ > 0)
+                tileMap[basicPosX+1, basicPosZ-1].tag = "Area"; //→↑
+            if (basicPosX < 8)
+                tileMap[basicPosX+2, basicPosZ].tag = "Area"; //→→
+            if (basicPosX < 8 && basicPosZ > 0)
+                tileMap[basicPosX+2, basicPosZ-1].tag = "Area"; //→→↑
+            if (basicPosX < 8 && basicPosZ < 9)
+                tileMap[basicPosX+2, basicPosZ+1].tag = "Area"; //→→↓
+            if (basicPosX < 9)
+                tileMap[basicPosX+1, basicPosZ].tag = "Area"; //→
+            if (basicPosX < 8 && basicPosZ < 8)
+                tileMap[basicPosX+2, basicPosZ+2].tag = "Area"; //→↓→↓
+            if (basicPosX < 9 && basicPosZ < 9)
+                tileMap[basicPosX+1, basicPosZ+1].tag = "Area"; //→↓
+            if (basicPosZ < 8)
+                tileMap[basicPosX, basicPosZ+2].tag = "Area"; //↓↓
+            if (basicPosX < 9 && basicPosZ < 8)
+                tileMap[basicPosX+1, basicPosZ+2].tag = "Area"; //↓↓→
+            if (basicPosX > 0 && basicPosZ < 8)
+                tileMap[basicPosX-1, basicPosZ+2].tag = "Area"; //↓↓←
+            if (basicPosZ < 9)
+                tileMap[basicPosX, basicPosZ+1].tag = "Area"; //↓
+            if (basicPosX > 1 && basicPosZ < 8)
+                tileMap[basicPosX-2, basicPosZ+2].tag = "Area"; //←↓←↓
+            if (basicPosX > 0 && basicPosZ < 9)
+                tileMap[basicPosX-1, basicPosZ+1].tag = "Area"; //←↓
+            if (basicPosX > 1)
+                tileMap[basicPosX-2, basicPosZ].tag = "Area"; //←←
+            if (basicPosX > 1 && basicPosZ < 9)
+                tileMap[basicPosX-2, basicPosZ+1].tag = "Area"; //←←↓
+            if (basicPosX > 1 && basicPosZ > 0)
+                tileMap[basicPosX-2, basicPosZ-1].tag = "Area"; //←←↑
+            if (basicPosX > 0)
+                tileMap[basicPosX-1, basicPosZ].tag = "Area"; //←
+            break;
+
         case 25: //知性の光
             GameDirector.Instance.IsMultiEffect = true;
             if (basicPosX > 1 && basicPosZ > 1)
@@ -154,7 +206,6 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
             if (basicPosX < 9 && basicPosZ < 9)
                 tileMap[basicPosX+1, basicPosZ+1].tag = "Area"; //→↓
             break;
-
 
         case 29: //ドラゴニックブレス
             if (basicPosZ > 1)

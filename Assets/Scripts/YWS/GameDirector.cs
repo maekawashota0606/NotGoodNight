@@ -190,6 +190,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 if (_player.Life <= 0)
                 {
                     gameState = GameState.end;
+                    break;
                 }
                 //プレイヤーのスコアが100000以上の場合
                 else if (_player.Score >= 100000)
@@ -198,12 +199,12 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                     if (Map.Instance.CheckMap())
                     {
                         gameState = GameState.end;
+                        break;
                     }
                     //マップ上に隕石が存在する場合、隕石の生成を終了させる
                     else
                     {
                         CanMeteorGenerate = false;
-                        gameState = GameState.active;
                     }
                 }
                 //以上の条件すべてに当てはまらない場合
@@ -218,19 +219,20 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                             MeteorSet(MeteorGenNum,0);
                         }
                     }
-                    //ターンカウントを１つ増やす
-                    TurnCount++;
-                    IsCardUsingConfirm = false;
                     //１０ターンごとに生成する隕石の数を１個増やす（上限は６個）
                     if (TurnCount % 10 == 0 && MeteorGenNum < 6)
                     {
                         MeteorGenNum++;
                     }
-                    //持続系のカード効果のターンカウントを進める、効果が切れたら効果の処理を元に戻す
-                    _player.CheckEffectTurn();
-                    //アクティブフェイズに戻る
-                    gameState = GameState.active;
                 }
+                //ターンカウントを１つ増やす
+                TurnCount++;
+                IsCardUsingConfirm = false;
+                DestroyedNum = 0;
+                //持続系のカード効果のターンカウントを進める、効果が切れたら効果の処理を元に戻す
+                _player.CheckEffectTurn();
+                //アクティブフェイズに戻る
+                gameState = GameState.active;
                 break;
 
             case GameState.end: //ゲーム終了処理
