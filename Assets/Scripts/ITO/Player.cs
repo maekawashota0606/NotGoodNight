@@ -34,6 +34,8 @@ public class Player : MonoBehaviour
 
     //効果によるドローが発生するかどうか
     private bool IsDrawEffect = false;
+    //星屑収集用のこのゲーム中、何回ドローボタンでカードをドローしたかを保存する変数
+    public int DrawCount_Card10 = 0;
     //効果の持続ターンカウント
     public int EffectTurn_Card14 = 0;
     public static int EffectTurn_Card19 = 0;
@@ -104,6 +106,7 @@ public class Player : MonoBehaviour
             newCard.Init(ID,_cardData[ID][1],_cardData[ID][2],_cardData[ID][3],_cardData[ID][4]);
             //カードオブジェクトをリストに入れる
             hands.Add(newCard);
+            DrawCount_Card10++;
             //カードを引いたら隕石落下フェイズに移行する
             GameDirector.Instance.gameState = GameDirector.GameState.fall;
         }
@@ -170,6 +173,19 @@ public class Player : MonoBehaviour
             for (int i = 0; i < 3; i++)
             {
                 DrawCard();
+            }
+            break;
+        
+        case 10: //星屑収集
+            for (int i = 0; i < DrawCount_Card10; i++)
+            {
+                int DestoryNum = Random.Range(0,GameDirector.Instance.meteors.Count);
+                //マップから削除
+                Map.Instance.map[(int)GameDirector.Instance.meteors[DestoryNum].transform.position.z*-1, (int)GameDirector.Instance.meteors[DestoryNum].transform.position.x] = Map.Instance.empty;
+                //隕石オブジェクトを削除する
+                Destroy(GameDirector.Instance.meteors[DestoryNum].gameObject);
+                //リストから削除
+                GameDirector.Instance.meteors.RemoveAt(DestoryNum);
             }
             break;
 

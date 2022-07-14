@@ -50,7 +50,7 @@ public class CardData : MonoBehaviour
         {
             this.CardTypeValue = CardType.Special;
         }
-        this.EffectText = effectText;
+        this.EffectText = effectText.Replace("n","\n");
 
         if (this.ID == 3 || this.ID == 31)
         {
@@ -63,6 +63,7 @@ public class CardData : MonoBehaviour
     /// </summary>
     public void ShowCardStatus()
     {
+        Debug.Log(GameDirector.Instance._player.DrawCount_Card10);
         CardName.text = Name;
         CardCost.text = Cost.ToString();
         if (CardTypeValue == CardType.Attack)
@@ -73,8 +74,13 @@ public class CardData : MonoBehaviour
         {
             CardFrame.sprite = _cardFrameImage[1];
         }
+        if (ID == 10)
+        {
+            EffectText = EffectText.Replace("x",GameDirector.Instance._player.DrawCount_Card10.ToString());
+        }
         CardEffectText.text = EffectText;
         if (_illustrationImage[ID-1] != null)
             CardIllustration.sprite = _illustrationImage[ID-1];
+        Debug.Log(EffectText);
     }
 }

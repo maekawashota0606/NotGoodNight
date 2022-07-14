@@ -10,7 +10,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     [SerializeField, Header("隕石の初期位置")] public Vector3 _DEFAULT_POSITION = Vector3.zero;
     [SerializeField, Header("隕石生成オブジェクト")] MeteorGenerator _generator = null;
     [SerializeField, Header("画面を振動させるオブジェクト")] ShakeByRandom _shaker = null;
-    [SerializeField] Player _player = null;
+    [SerializeField] public Player _player = null;
     
     // 隕石用リストを宣言
     public List<Meteorite> meteors = new List<Meteorite>();
