@@ -271,9 +271,18 @@ public class Player : MonoBehaviour
             }
             break;
 
+        case 25: //知性の光
+            IsDrawEffect = true;
+            for (int i = 0; i < GameDirector.Instance.DestroyedNum; i++)
+            {
+                DrawCard();
+            }
+            break;
+
         default:
             break;
         }
+        IsDrawEffect = false;
         GameDirector.Instance.IsMultiEffect = false;
     }
 

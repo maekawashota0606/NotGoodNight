@@ -63,7 +63,6 @@ public class CardData : MonoBehaviour
     /// </summary>
     public void ShowCardStatus()
     {
-        Debug.Log(GameDirector.Instance._player.DrawCount_Card10);
         CardName.text = Name;
         CardCost.text = Cost.ToString();
         if (CardTypeValue == CardType.Attack)
@@ -81,6 +80,5 @@ public class CardData : MonoBehaviour
         CardEffectText.text = EffectText;
         if (_illustrationImage[ID-1] != null)
             CardIllustration.sprite = _illustrationImage[ID-1];
-        Debug.Log(EffectText);
     }
 }

@@ -2919,7 +2919,7 @@ MonoBehaviour:
   playerHand: {fileID: 677792873}
   Score: 0
   scoreText: {fileID: 1428903323}
-  Life: 99
+  Life: 3
   lifeText: {fileID: 1958270617}
   DrawCount_Card10: 0
   EffectTurn_Card14: 0

@@ -44,6 +44,8 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     public bool IsCardUsingConfirm = false;
     //隕石が破壊されたのかどうか
     public bool IsMeteorDestroyed = false;
+    //このターンで破壊された隕石の数
+    public int DestroyedNum = 0;
     //すでに選択されているコストの数
     public int PayedCost = 0;
     //複製魔法用フラグ
@@ -268,6 +270,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         IsMultiEffect = false;
         IsCardUsingConfirm = false;
         IsMeteorDestroyed = false;
+        DestroyedNum = 0;
         PayedCost = 0;
         Player.hands = new List<Card>();
     }
@@ -313,10 +316,9 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     /// <summary>
     /// スコアの加算
     /// </summary>
-    /// <param name="DestroyedNum">このターンに破壊した隕石の数</param>
-    public void AddScore(int DestroyedNum)
+    public void AddScore()
     {
-        var GetScore = 1000 * DestroyedNum * (1 + DestroyedNum * 0.1f);
+        var GetScore = 1000 * GameDirector.Instance.DestroyedNum * (1 + GameDirector.Instance.DestroyedNum * 0.1f);
         _player.Score += (int)GetScore;
     }
 }

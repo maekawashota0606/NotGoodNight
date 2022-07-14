@@ -145,6 +145,17 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
                 tileMap[basicPosX-1, basicPosZ].tag = "Area"; //←
             break;
 
+        case 25: //知性の光
+            GameDirector.Instance.IsMultiEffect = true;
+            if (basicPosX > 1 && basicPosZ > 1)
+                tileMap[basicPosX-2, basicPosZ-2].tag = "Area"; //←↑←↑
+            if (basicPosX > 0 && basicPosZ > 0)
+                tileMap[basicPosX-1, basicPosZ-1].tag = "Area"; //←↑
+            if (basicPosX < 9 && basicPosZ < 9)
+                tileMap[basicPosX+1, basicPosZ+1].tag = "Area"; //→↓
+            break;
+
+
         case 29: //ドラゴニックブレス
             if (basicPosZ > 1)
                 tileMap[basicPosX, basicPosZ-2].tag = "Area"; //↑↑
@@ -225,7 +236,6 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
     /// </summary>
     public void MeteorDestory()
     {
-        int DestroyedNum = 0;
         for (int z = 0; z < 10; z++)
         {
             for (int x = 0; x < 10; x++)
@@ -243,16 +253,16 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
                             GameDirector.Instance.meteors.RemoveAt(targetNum);
                             //マップから削除
                             Map.Instance.map[z, x] = Map.Instance.empty;
-                            DestroyedNum++;
+                            GameDirector.Instance.DestroyedNum++;
                         }
                     }
                     tileMap[x, z].tag = "Untagged";
                 }
             }
         }
-        if (DestroyedNum != 0)
+        if (GameDirector.Instance.DestroyedNum != 0)
         {
-            GameDirector.Instance.AddScore(DestroyedNum);
+            GameDirector.Instance.AddScore();
             GameDirector.Instance.IsMeteorDestroyed = true;
             if (GameDirector.Instance.IsMultiEffect == false)
             {
