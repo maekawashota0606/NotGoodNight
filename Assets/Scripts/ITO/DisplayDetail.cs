@@ -23,12 +23,12 @@ public class DisplayDetail : MonoBehaviour
                 displayIllustration.sprite = Illustration[GameDirector.Instance.WatchingCard.ID - 1];
             }
         }
-        if (GameDirector.Instance.WatchingCard == null)
+        else if (GameDirector.Instance.WatchingCard == null)
         {
             costText.text = "";
             nameText.text = "";
             effectText.text = "";
-            displayIllustration.sprite = Illustration[35];
+            //displayIllustration.sprite = Illustration[35];
         }
     }
 }

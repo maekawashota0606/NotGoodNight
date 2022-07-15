@@ -50,7 +50,6 @@ public class Card : CardData
                 else
                 {
                     image_component.color = Color.white;
-                    GameDirector.Instance.WatchingCard = null;
                 }
             }
             //複製魔法の対象の選択
@@ -212,6 +211,7 @@ public class Card : CardData
     private void OnMouseExit()
     {
         IsMouseOver = false;
+        GameDirector.Instance.WatchingCard = null;
     }
 
     private void OnDestroy()
