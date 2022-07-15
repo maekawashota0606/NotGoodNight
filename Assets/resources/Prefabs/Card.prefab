@@ -328,6 +328,8 @@ MonoBehaviour:
   Cost: 0
   CardTypeValue: 0
   EffectText: 
+  UpdateText: 
+  IsBasePointInArea: 1
   CardName: {fileID: 529507584029948131}
   CardCost: {fileID: 9131329955720828981}
   CardFrame: {fileID: 1861803613554962528}
@@ -340,32 +342,32 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 5bd97cb98a54b684b88af0094e3d6fe7, type: 3}
   - {fileID: 21300000, guid: 1c70bcecea6bb434ba81cf119bce0f7f, type: 3}
   - {fileID: 21300000, guid: 80e6c4580116f7842ae084f77df6a089, type: 3}
-  - {fileID: 0}
+  - {fileID: 21300000, guid: 3f09bea3cfc656a4988a333e6bcd2c26, type: 3}
   - {fileID: 21300000, guid: 5d4e47efe42b4f04fbe284ecda39d44f, type: 3}
   - {fileID: 21300000, guid: 9f71993644e95504fa8e6a04ddb11b81, type: 3}
   - {fileID: 21300000, guid: 0a148f7ba262898408337eff9ca9ff08, type: 3}
-  - {fileID: 0}
+  - {fileID: 21300000, guid: 6be5cb66bc2f4034ca8ca8dc041e0cd5, type: 3}
   - {fileID: 21300000, guid: 0bc6ceeba9674b842b03db4d294e9b5c, type: 3}
+  - {fileID: 21300000, guid: 1531c792db91fca408628ef33ffc5b3c, type: 3}
+  - {fileID: 21300000, guid: a69b6310ca906844bb1672478fdc74df, type: 3}
+  - {fileID: 21300000, guid: 13ac84597e4c2174fae09cf4ad741f1b, type: 3}
+  - {fileID: 21300000, guid: 180218833fde37c49852b9e7e1dfc1a9, type: 3}
+  - {fileID: 21300000, guid: c7e2207686c5d9745add88c29d0acc0c, type: 3}
+  - {fileID: 21300000, guid: 7b666bd6629fdc840af02f9082f418b2, type: 3}
+  - {fileID: 21300000, guid: 9d4f0e0b0351cdd4e993b379d0e8d900, type: 3}
+  - {fileID: 21300000, guid: 17cae1e92d5b74243b42cabd722c2c5c, type: 3}
+  - {fileID: 21300000, guid: 050455e7d2e6ac445a59a8903ddb0ca1, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 21300000, guid: 4a6d4b517ae74d342b580ab871f64fd9, type: 3}
+  - {fileID: 21300000, guid: 5ab955ea4e55dd44992651d1223f495a, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 21300000, guid: 45fcba8c5901dcc43b8553f98ceeaee5, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -376,7 +378,6 @@ MonoBehaviour:
   IsMouseOver: 0
   IsClick: 0
   IsCost: 0
-  TextFrame: {fileID: 0}
 --- !u!225 &5091186337394731272
 CanvasGroup:
   m_ObjectHideFlags: 0

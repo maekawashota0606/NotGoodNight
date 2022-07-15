@@ -19,6 +19,7 @@ public class CardData : MonoBehaviour
     public int Cost; //カードコスト
     public CardType CardTypeValue; //カードタイプ
     public string EffectText; //効果テキスト
+    public string UpdateText;
     public bool IsBasePointInArea = true;
 
     [SerializeField, Header("カード名")] private Text CardName = null;
@@ -75,9 +76,9 @@ public class CardData : MonoBehaviour
         }
         if (ID == 10)
         {
-            EffectText = EffectText.Replace("x",GameDirector.Instance._player.DrawCount_Card10.ToString());
+            UpdateText = EffectText.Replace("x",GameDirector.Instance._player.DrawCount_Card10.ToString());
         }
-        CardEffectText.text = EffectText;
+        CardEffectText.text = UpdateText;
         if (_illustrationImage[ID-1] != null)
             CardIllustration.sprite = _illustrationImage[ID-1];
     }

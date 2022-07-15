@@ -19,7 +19,14 @@ public class Tile : MonoBehaviour
         //このマスがカード範囲内に含まれている場合、光らせる
         if (this.tag == "Area")
         {
-            tile.color = new Color(1, 1, 1, 0.5f);
+            if (GameDirector.Instance.gameState == GameDirector.GameState.effect)
+            {
+                tile.color = new Color(1, 1, 1, 0.5f);
+            }
+            else
+            {
+                tile.color = new Color(1,0,0,0.5f);
+            }
         }
         else if (this.tag == "Untagged")
         {
@@ -41,7 +48,14 @@ public class Tile : MonoBehaviour
     {
         if (GameDirector.Instance.IsBasePointInArea == true)
         {
-            tile.color = new Color(1, 1, 1, 0.5f);
+            if (GameDirector.Instance.gameState == GameDirector.GameState.effect)
+            {
+                tile.color = new Color(1, 1, 1, 0.5f);
+            }
+            else
+            {
+                tile.color = new Color(1,0,0,0.5f);
+            }
         }
         this.tag = "Search";
         IsMouseOver = true;

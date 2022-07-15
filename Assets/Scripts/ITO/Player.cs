@@ -242,6 +242,22 @@ public class Player : MonoBehaviour
             Life++;
             break;
 
+        case 33: //流星群
+            for (int i = 0; i < 50; i++)
+            {
+                Debug.Log("Try Num:" + i);
+                int ranX = Random.Range(0,10);
+                Debug.Log("X " + ranX);
+                int ranZ = Random.Range(0,10);
+                Debug.Log("Z " + ranZ);
+                if (Map.Instance.map[ranX, ranZ] == Map.Instance.meteor)
+                {
+                    TileMap.Instance.tileMap[ranX,ranZ].tag = "Area";
+                }
+            }
+            TileMap.Instance.MeteorDestory();
+            break;
+
         case 35: //ラスト・ショット
             IsDrawEffect = true;
             for (int i = 0; i < 7; i++)
