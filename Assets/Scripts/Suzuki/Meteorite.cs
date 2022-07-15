@@ -27,7 +27,7 @@ public class Meteorite : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
 
-            this.transform.position += new Vector3(0, 0, -1.0f * Time.deltaTime);
+            this.transform.position += new Vector3(0, 0, -1.0f * Time.deltaTime * 2);
 
             if (elapsedTime >= TargetTime)
             {
