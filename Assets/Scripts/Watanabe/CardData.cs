@@ -74,10 +74,7 @@ public class CardData : MonoBehaviour
         {
             CardFrame.sprite = _cardFrameImage[1];
         }
-        if (ID == 10)
-        {
-            UpdateText = EffectText.Replace("x",GameDirector.Instance._player.DrawCount_Card10.ToString());
-        }
+        UpdateText = EffectText.Replace("x",GameDirector.Instance._player.DrawCount_Card10.ToString());
         CardEffectText.text = UpdateText;
         if (_illustrationImage[ID-1] != null)
             CardIllustration.sprite = _illustrationImage[ID-1];
