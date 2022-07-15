@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Meteorite : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class Meteorite : MonoBehaviour
     private int StartZPosition = 0;
     //Ç±ÇÃÉ^Å[Éìóéâ∫ÇçsÇ¡ÇƒÇ¢ÇÈÇ©Ç«Ç§Ç©
     public bool FallFinished = false;
+
+
 
     // Update is called once per frame
     void Update()
@@ -40,6 +43,13 @@ public class Meteorite : MonoBehaviour
                 FallFinished = true;
                 DoNextTurn = false;
             }
+        }
+
+        
+        if (TileMap.Instance.tileMap[(int)this.transform.position.x, (int)this.transform.position.z * -1].tag == "Search" ||
+                        TileMap.Instance.tileMap[(int)this.transform.position.x, (int)this.transform.position.z * -1].tag == "Area")
+        {
+            
         }
     }
 
