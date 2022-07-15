@@ -45,9 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e04305e33267fb41a13f4268e892f71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meteors: []
-  Timev: 1
+  TargetTime: 1
   DoNextTurn: 0
+  FallFinished: 0
 --- !u!1 &8500916965932140029
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,20 +13,18 @@ public class Player : MonoBehaviour
     //｜番号｜名前｜コスト｜カードタイプ｜効果テキスト｜
     public List<string[]> _cardData = new List<string[]>();
 
-    //カードプレハブ
-    [SerializeField] private GameObject cardPrefab = null;
-    //手札置き場
-    [SerializeField] private Transform playerHand = null;
+    [SerializeField, Header("カードプレハブ")] private GameObject cardPrefab = null;
+    [SerializeField, Header("手札置き場")] private Transform playerHand = null;
     //手札
     public static List<Card> hands = new List<Card>();
     //スコア
     public int Score = 0;
-    //スコア表示テキスト
-    [SerializeField] private Text scoreText = null;
+    [SerializeField, Header("スコアテキスト")] private Text scoreText = null;
     //ライフ
     public int Life = 3;
-    //ライフ表示テキスト
-    [SerializeField] private Text lifeText = null;
+    [SerializeField, Header("ライフテキスト")] private Text lifeText = null;
+    [SerializeField, Header("盤面")] private Image Board = null;
+    [SerializeField, Header("盤面の画像")] private Sprite[] BoardImage = new Sprite[3];
     //ボタンのダブルクリック防止用フラグ
     private bool IsClick = false;
 
@@ -64,6 +62,10 @@ public class Player : MonoBehaviour
         //獲得スコアと現在ライフを随時更新で画面に表示させる
         scoreText.text = "Score / " + Score.ToString("d6");
         lifeText.text = "Life / " + Life.ToString();
+        if (Life != 0)
+        {
+            Board.sprite = BoardImage[Life-1];
+        }
 
         if (GameDirector.Instance.WaitCopy_Card13 == true && GameDirector.Instance.CopyNum_Card13 != 0)
         {
@@ -87,7 +89,10 @@ public class Player : MonoBehaviour
             return;
         }
 
-        int ID = Random.Range(1,36);
+        int[] CardID = new int[25]{1,2,3,4,5,8,10,11,12,13,14,15,16,18,19,20,21,22,25,27,29,30,31,32,35};
+        //int ID = Random.Range(1,36);
+        int DrawNum = Random.Range(0,CardID.Length);
+        int ID = CardID[DrawNum];
         //ゲーム開始時の初期手札のドロー
         if (GameDirector.Instance.gameState == GameDirector.GameState.standby)
         {
