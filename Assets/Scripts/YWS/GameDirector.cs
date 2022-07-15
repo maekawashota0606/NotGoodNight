@@ -178,7 +178,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                         }
                     }
                 }
-                if (meteors[meteors.Count-1].FallFinished == true || DoMeteorFall == false)
+                if (meteors.Count == 0 || meteors[meteors.Count-1].FallFinished == true || DoMeteorFall == false)
                 {
                     gameState = GameState.judge;
                 }

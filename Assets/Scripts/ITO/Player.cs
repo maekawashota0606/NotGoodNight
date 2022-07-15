@@ -89,10 +89,10 @@ public class Player : MonoBehaviour
             return;
         }
 
-        int[] CardID = new int[25]{1,2,3,4,5,8,10,11,12,13,14,15,16,18,19,20,21,22,25,27,29,30,31,32,35};
-        //int ID = Random.Range(1,36);
-        int DrawNum = Random.Range(0,CardID.Length);
-        int ID = CardID[DrawNum];
+        //int[] CardID = new int[25]{1,2,3,4,5,8,10,11,12,13,14,15,16,18,19,20,21,22,25,27,29,30,31,32,35};
+        int ID = Random.Range(1,36);
+        //int DrawNum = Random.Range(0,CardID.Length);
+        //int ID = CardID[DrawNum];
         //ゲーム開始時の初期手札のドロー
         if (GameDirector.Instance.gameState == GameDirector.GameState.standby)
         {
@@ -255,9 +255,13 @@ public class Player : MonoBehaviour
                 Debug.Log("X " + ranX);
                 int ranZ = Random.Range(0,10);
                 Debug.Log("Z " + ranZ);
-                if (Map.Instance.map[ranX, ranZ] == Map.Instance.meteor)
+                if (TileMap.Instance.tileMap[ranX,ranZ].tag != "Area")
                 {
                     TileMap.Instance.tileMap[ranX,ranZ].tag = "Area";
+                }
+                else
+                {
+                    i--;
                 }
             }
             TileMap.Instance.MeteorDestory();
