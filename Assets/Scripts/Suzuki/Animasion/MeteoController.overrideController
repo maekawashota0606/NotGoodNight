@@ -7,5 +7,9 @@ AnimatorOverrideController:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: MeteoController
-  m_Controller: {fileID: 0}
-  m_Clips: []
+  m_Controller: {fileID: 9100000, guid: 83c9ca5f0b82fc44286c45af0726f2c0, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 279ab6c2ccc5f974a84ef986c6195966, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 279ab6c2ccc5f974a84ef986c6195966, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 4fdc54646b5352d4abe1e93c25e9391f, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 4fdc54646b5352d4abe1e93c25e9391f, type: 2}
