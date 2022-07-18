@@ -114,6 +114,16 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 break;
 
             case GameState.effect: //カード効果処理フェイズ
+                if (IsPlayerSelectMove == true)
+                {
+                    _player.DeleteUsedCard();
+                    SelectedCard = null;
+                    TileMap.Instance.ResetTileTag();
+                    IsMeteorDestroyed = false;
+                    //効果処理が終了したら、隕石落下フェイズに移行する
+                    gameState = GameState.fall;
+                }
+
                 if (SelectedCard != null)
                 {
                     TileMap.Instance.FindBasePoint();
@@ -133,16 +143,6 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                             IsPlayerSelectMove = true;
                         }
                     }
-                }
-
-                if (IsPlayerSelectMove == true)
-                {
-                    _player.DeleteUsedCard();
-                    SelectedCard = null;
-                    TileMap.Instance.ResetTileTag();
-                    IsMeteorDestroyed = false;
-                    //効果処理が終了したら、隕石落下フェイズに移行する
-                    gameState = GameState.fall;
                 }
                 break;
 

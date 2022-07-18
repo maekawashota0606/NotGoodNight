@@ -62,9 +62,13 @@ public class Player : MonoBehaviour
         //獲得スコアと現在ライフを随時更新で画面に表示させる
         scoreText.text = "Score / " + Score.ToString("d6");
         lifeText.text = "Life / " + Life.ToString();
-        if (Life != 0)
+        if (Life > 0 && Life <= 3)
         {
             Board.sprite = BoardImage[Life-1];
+        }
+        else if (Life > 3)
+        {
+            Board.sprite = BoardImage[2];
         }
 
         if (GameDirector.Instance.WaitCopy_Card13 == true && GameDirector.Instance.CopyNum_Card13 != 0)
@@ -184,6 +188,10 @@ public class Player : MonoBehaviour
         case 10: //星屑収集
             for (int i = 0; i < DrawCount_Card10; i++)
             {
+                if (GameDirector.Instance.meteors.Count == 0)
+                {
+                    break;
+                }
                 int DestoryNum = Random.Range(0,GameDirector.Instance.meteors.Count);
                 //マップから削除
                 Map.Instance.map[(int)GameDirector.Instance.meteors[DestoryNum].transform.position.z*-1, (int)GameDirector.Instance.meteors[DestoryNum].transform.position.x] = Map.Instance.empty;
@@ -191,7 +199,9 @@ public class Player : MonoBehaviour
                 Destroy(GameDirector.Instance.meteors[DestoryNum].gameObject);
                 //リストから削除
                 GameDirector.Instance.meteors.RemoveAt(DestoryNum);
+                GameDirector.Instance.DestroyedNum++;
             }
+            GameDirector.Instance.AddScore();
             break;
 
         case 13: //複製魔法
@@ -207,6 +217,10 @@ public class Player : MonoBehaviour
         case 16: //不破の城塞
             for (int i = 0; i < hands.Count; i++)
             {
+                if (GameDirector.Instance.meteors.Count == 0)
+                {
+                    break;
+                }
                 int DestoryNum = Random.Range(0,GameDirector.Instance.meteors.Count);
                 //マップから削除
                 Map.Instance.map[(int)GameDirector.Instance.meteors[DestoryNum].transform.position.z*-1, (int)GameDirector.Instance.meteors[DestoryNum].transform.position.x] = Map.Instance.empty;
@@ -214,6 +228,7 @@ public class Player : MonoBehaviour
                 Destroy(GameDirector.Instance.meteors[DestoryNum].gameObject);
                 //リストから削除
                 GameDirector.Instance.meteors.RemoveAt(DestoryNum);
+                GameDirector.Instance.DestroyedNum++;
             }
             break;
 
@@ -250,11 +265,8 @@ public class Player : MonoBehaviour
         case 33: //流星群
             for (int i = 0; i < 50; i++)
             {
-                Debug.Log("Try Num:" + i);
                 int ranX = Random.Range(0,10);
-                Debug.Log("X " + ranX);
                 int ranZ = Random.Range(0,10);
-                Debug.Log("Z " + ranZ);
                 if (TileMap.Instance.tileMap[ranX,ranZ].tag != "Area")
                 {
                     TileMap.Instance.tileMap[ranX,ranZ].tag = "Area";

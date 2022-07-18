@@ -225,6 +225,10 @@ public class Card : CardData
             case 15: //チェンジリング・マギア
                 for (int i = 0; i < 2; i++)
                 {
+                    if (GameDirector.Instance.meteors.Count == 0)
+                    {
+                        break;
+                    }
                     int DestoryNum = Random.Range(0,GameDirector.Instance.meteors.Count);
                     //マップから削除
                     Map.Instance.map[(int)GameDirector.Instance.meteors[DestoryNum].transform.position.z*-1, (int)GameDirector.Instance.meteors[DestoryNum].transform.position.x] = Map.Instance.empty;
@@ -232,6 +236,7 @@ public class Card : CardData
                     Destroy(GameDirector.Instance.meteors[DestoryNum].gameObject);
                     //リストから削除
                     GameDirector.Instance.meteors.RemoveAt(DestoryNum);
+                    GameDirector.Instance.DestroyedNum++;
                 }
                 break;
             
