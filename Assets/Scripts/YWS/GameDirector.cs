@@ -149,7 +149,10 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 break;
 
             case GameState.fall: //隕石落下フェイズ
-                IsBasePointInArea = true;
+                if (SelectedCard == null)
+                {
+                    IsBasePointInArea = true;
+                }
                 IsPlayerSelectMove = false;
                 if (DoMeteorFall == true)
                 {

@@ -90,7 +90,7 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
             break;
 
         case 9: //グラビトンブレイク
-            /*for (int up = basicPosZ-1; up > 0; up--) //↑
+            for (int up = basicPosZ-1; up > 0; up--) //↑
             {
                 if (Map.Instance.map[basicPosX, up] == Map.Instance.meteor)
                 {
@@ -122,7 +122,7 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
                 {
                     break;
                 }
-            }*/
+            }
             break;
 
         case 12: //コメットブロー
@@ -285,6 +285,9 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
                 tileMap[basicPosX-1, basicPosZ+1].tag = "Area"; //←↓
             if (basicPosX < 9 && basicPosZ > 0)
                 tileMap[basicPosX+1, basicPosZ-1].tag = "Area"; //→↑
+            break;
+
+        case 34: //次元断裂
             break;
 
         default:

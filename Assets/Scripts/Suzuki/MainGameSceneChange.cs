@@ -7,6 +7,16 @@ public class MainGameSceneChange : MonoBehaviour
 {
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            SceneManager.LoadScene("Title");
+        }
+
         if (GameDirector.Instance.gameState == GameDirector.GameState.ended && GameDirector.Instance.IsPlayerWin == true)
         {
             SwitchScene_GameClear();
