@@ -197,6 +197,16 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
                 tileMap[basicPosX-1, basicPosZ].tag = "Area"; //←
             break;
 
+        case 23: //グラビトンオフセッツ
+            GameDirector.Instance.IsMultiEffect = true;
+            if (basicPosX > 0)
+                tileMap[basicPosX-1, basicPosZ].tag = "Area"; //←
+            if (basicPosX < 9)
+                tileMap[basicPosX+1, basicPosZ].tag = "Area"; //→
+            if (basicPosX < 8)
+                tileMap[basicPosX+2, basicPosZ].tag = "Area"; //→→
+            break;
+
         case 25: //知性の光
             GameDirector.Instance.IsMultiEffect = true;
             if (basicPosX > 1 && basicPosZ > 1)

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class EffectText1 : MonoBehaviour
 {
-    int effetext = 0;
+    /*int effetext = 0;
     
     void Start()
     {
@@ -126,6 +126,6 @@ public class EffectText1 : MonoBehaviour
                 gameObject.GetComponent<UnityEngine.UI.Text>().text = "‰Ί‚©‚η4—ρ‚Ι‚ ‚ιθ¦Ξ‚π5—ρ–Ϊ‚ά‚Ε‰‚µγ‚°‚ι";
                 break;
         }
-    }
+    }*/
 }
 

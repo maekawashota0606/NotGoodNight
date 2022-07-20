@@ -319,6 +319,32 @@ public class Player : MonoBehaviour
             }
             break;
 
+        case 23: //グラビトンオフセッツ
+            List<int> columnList = new List<int>{0,1,2,3,4};
+            for (int num = 0; num < 4; num++)
+            {
+                if (columnList.Count == 0)
+                {
+                    break;
+                }
+                int z = Random.Range(0,columnList.Count);
+                for (int x = 0; x < 10; x++)
+                {
+                    Vector3 checkPos = GameDirector.Instance._DEFAULT_POSITION + new Vector3(x, 0 ,-z);
+                    if (Map.Instance.CheckEmpty(checkPos))
+                    {
+                        GameDirector.Instance.MeteorSet(1,z);
+                        break;
+                    }
+                    else if (x == 9 && !Map.Instance.CheckEmpty(checkPos))
+                    {
+                        columnList.RemoveAt(z);
+                        num--;
+                    }
+                }
+            }
+            break;
+
         case 25: //知性の光
             IsDrawEffect = true;
             for (int i = 0; i < GameDirector.Instance.DestroyedNum; i++)

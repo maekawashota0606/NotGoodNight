@@ -23,7 +23,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     //ターンチェンジで生成する隕石の数
     private int MeteorGenNum = 2;
     //ターンカウント
-    private int TurnCount = 0;
+    private int TurnCount = 1;
     //隕石の落下を行うかどうか
     public bool DoMeteorFall = true;
     //勝敗判定用フラグ
@@ -76,6 +76,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
 
     void Update()
     {
+        Debug.Log("Now Turn " + TurnCount);
         switch (gameState)
         {
             case GameState.standby: //スタンバイフェイズ
@@ -262,7 +263,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         IsPlayerSelectMove = false;
         CanMeteorGenerate = true;
         MeteorGenNum = 2;
-        TurnCount = 0;
+        TurnCount = 1;
         DoMeteorFall = true;
         IsPlayerWin = false;
         SelectedCard = null;
@@ -281,17 +282,15 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     /// </summary>
     /// <param name="amount">生成する数</param>
     /// <param name="columns">生成する列</param>
-    private void MeteorSet(int amount, int columns)
+    public void MeteorSet(int amount, int columns)
     {
         //生成した隕石の数
         int created = 0; 
-        //生成を試みた回数
-        int tryNum = 0;
 
         while (true)
         {
             //生成する場所を乱数で出す
-            int x = Random.Range(0,9); 
+            int x = Random.Range(0,10);
             Vector3 checkPos = _DEFAULT_POSITION + new Vector3(x, 0, -columns);
             if (Map.Instance.CheckEmpty(checkPos))
             {
@@ -299,18 +298,11 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 created++;
                 Map.Instance.map[columns, x] = Map.Instance.meteor;
             }
-            tryNum++;
 
             if (created == amount)
             {
                 break;
             }
-            
-            /*if (tryNum == 10)
-            {
-                Debug.Log("生成できる場所が存在しない");
-                break;
-            }*/
         }
     }
 
