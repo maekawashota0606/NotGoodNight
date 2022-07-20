@@ -13,6 +13,7 @@ public class Card : CardData
     public bool IsClick = false;
     //このカードがコストとして選択されているのかどうか
     public bool IsCost = false;
+    private bool IsSEPlayed = false;
 
     void Update()
     {
@@ -77,6 +78,7 @@ public class Card : CardData
         //カードが選択されていない場合、このカードがクリックされたら、枠を赤色にする
         if (GameDirector.Instance.SelectedCard == null && GameDirector.Instance.gameState != GameDirector.GameState.effect && IsMouseOver == true && Input.GetMouseButtonDown(0))
         {
+            SoundManager.Instance.PlaySE(2);
             image_component.color = Color.red;
             IsClick = true;
             GameDirector.Instance.SelectedCard = this;
@@ -103,6 +105,7 @@ public class Card : CardData
             //使用するカードが選択されており、それがこのカードではなく、かつ選択されているコストが必要コスト以下の場合、このカードがクリックされた時、枠を緑色にする
             if (GameDirector.Instance.PayedCost < GameDirector.Instance.SelectedCard.Cost && IsClick == false && IsMouseOver == true && Input.GetMouseButtonDown(0))
             {
+                SoundManager.Instance.PlaySE(2);
                 image_component.color = Color.green;
                 IsClick = true;
                 IsCost = true;
@@ -190,6 +193,7 @@ public class Card : CardData
                 }
                 else
                 {
+                    SoundManager.Instance.PlaySE(3);
                     GameDirector.Instance.IsCardUsingConfirm = true;
                 }
             }
@@ -201,6 +205,11 @@ public class Card : CardData
     /// </summary>
     private void OnMouseOver()
     {
+        if (IsSEPlayed == false)
+        {
+            SoundManager.Instance.PlaySE(1);
+            IsSEPlayed = true;
+        }
         IsMouseOver = true;
         GameDirector.Instance.WatchingCard = this;
     }
@@ -210,6 +219,7 @@ public class Card : CardData
     /// </summary>
     private void OnMouseExit()
     {
+        IsSEPlayed = false;
         IsMouseOver = false;
         GameDirector.Instance.WatchingCard = null;
     }

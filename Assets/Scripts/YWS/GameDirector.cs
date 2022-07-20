@@ -69,6 +69,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
 
     void Start()
     {
+        SoundManager.Instance.PlayBGM(1);
         //色々初期化
         Init();
         _player.SetCsv();
@@ -246,6 +247,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                     IsPlayerWin = true;
                     Debug.Log("ゲームクリア");
                 }
+                SoundManager.Instance.StopBGM();
                 gameState = GameState.ended;
                 break;
 

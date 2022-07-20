@@ -7,6 +7,7 @@ public class Tile : MonoBehaviour
     [SerializeField, Header("点滅させるオブジェクト")] private SpriteRenderer tile = null;
     //マウスが乗っているかどうか
     private bool IsMouseOver = false;
+    private bool IsSEPlayed = false;
     
     private void Start()
     {
@@ -36,6 +37,7 @@ public class Tile : MonoBehaviour
         //効果処理フェイズで使用するカードが選択されている、かつ必要分のコストが選択されており、さらにこのマスがクリックされた場合
         if (GameDirector.Instance.gameState == GameDirector.GameState.effect && GameDirector.Instance.SelectedCard != null && GameDirector.Instance.SelectedCard.CardTypeValue == CardData.CardType.Attack && GameDirector.Instance.IsCardUsingConfirm == true && IsMouseOver == true && Input.GetMouseButtonDown(0))
         {
+            SoundManager.Instance.PlaySE(5);
             //範囲が選択された場合、範囲内の隕石を検索する
             TileMap.Instance.MeteorDestory();
         }
@@ -46,6 +48,11 @@ public class Tile : MonoBehaviour
     /// </summary>
     private void OnMouseOver()
     {
+        if (IsSEPlayed == false)
+        {
+            SoundManager.Instance.PlaySE(4);
+            IsSEPlayed = true;
+        }
         if (GameDirector.Instance.IsBasePointInArea == true)
         {
             if (GameDirector.Instance.gameState == GameDirector.GameState.effect)
@@ -67,6 +74,7 @@ public class Tile : MonoBehaviour
     /// </summary>
     private void OnMouseExit()
     {
+        IsSEPlayed = false;
         tile.color = new Color(1, 1, 1, 0);
         this.tag = "Untagged";
         IsMouseOver = false;

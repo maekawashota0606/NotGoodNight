@@ -97,6 +97,7 @@ public class Player : MonoBehaviour
         int ID = Random.Range(1,36);
         //int DrawNum = Random.Range(0,CardID.Length);
         //int ID = CardID[DrawNum];
+        SoundManager.Instance.PlaySE(7);
         //ゲーム開始時の初期手札のドロー
         if (GameDirector.Instance.gameState == GameDirector.GameState.standby)
         {
@@ -192,6 +193,7 @@ public class Player : MonoBehaviour
                 {
                     break;
                 }
+                SoundManager.Instance.PlaySE(6);
                 int DestoryNum = Random.Range(0,GameDirector.Instance.meteors.Count);
                 //マップから削除
                 Map.Instance.map[(int)GameDirector.Instance.meteors[DestoryNum].transform.position.z*-1, (int)GameDirector.Instance.meteors[DestoryNum].transform.position.x] = Map.Instance.empty;
@@ -217,10 +219,11 @@ public class Player : MonoBehaviour
         case 16: //不破の城塞
             for (int i = 0; i < hands.Count; i++)
             {
-                if (GameDirector.Instance.meteors.Count == 0)
+                if (GameDirector.Instance.meteors.Count == 0 || hands.Count == 0)
                 {
                     break;
                 }
+                SoundManager.Instance.PlaySE(6);
                 int DestoryNum = Random.Range(0,GameDirector.Instance.meteors.Count);
                 //マップから削除
                 Map.Instance.map[(int)GameDirector.Instance.meteors[DestoryNum].transform.position.z*-1, (int)GameDirector.Instance.meteors[DestoryNum].transform.position.x] = Map.Instance.empty;
@@ -230,6 +233,7 @@ public class Player : MonoBehaviour
                 GameDirector.Instance.meteors.RemoveAt(DestoryNum);
                 GameDirector.Instance.DestroyedNum++;
             }
+            GameDirector.Instance.AddScore();
             break;
 
         case 18: //詮索するはばたき

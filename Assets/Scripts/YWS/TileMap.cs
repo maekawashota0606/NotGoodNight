@@ -308,6 +308,7 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
                     {
                         if (GameDirector.Instance.meteors[targetNum].transform.position.x == x && GameDirector.Instance.meteors[targetNum].transform.position.z == z * -1)
                         {
+                            SoundManager.Instance.PlaySE(6);
                             //隕石オブジェクトを削除する
                             Destroy(GameDirector.Instance.meteors[targetNum].gameObject);
                             //リストから削除
