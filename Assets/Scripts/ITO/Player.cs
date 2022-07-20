@@ -258,6 +258,27 @@ public class Player : MonoBehaviour
             }
             break;
 
+        case 24: //隕石の儀式
+            IsDrawEffect = true;
+            int emptyNum = 0;
+            for (int x = 0; x < 10; x++)
+            {
+                Vector3 checkPos = GameDirector.Instance._DEFAULT_POSITION + new Vector3(x, 0, 0);
+                if (Map.Instance.CheckEmpty(checkPos))
+                {
+                    emptyNum++;
+                }
+            }
+            if (emptyNum > 0)
+            {
+                GameDirector.Instance.MeteorSet(emptyNum,0);
+            }
+            for (int i = 0; i < 6; i++)
+            {
+                DrawCard();
+            }
+            break;
+
         case 27: //復興の灯
             Life++;
             break;
@@ -330,7 +351,7 @@ public class Player : MonoBehaviour
                 int z = Random.Range(0,columnList.Count);
                 for (int x = 0; x < 10; x++)
                 {
-                    Vector3 checkPos = GameDirector.Instance._DEFAULT_POSITION + new Vector3(x, 0 ,-z);
+                    Vector3 checkPos = GameDirector.Instance._DEFAULT_POSITION + new Vector3(x, 0, -z);
                     if (Map.Instance.CheckEmpty(checkPos))
                     {
                         GameDirector.Instance.MeteorSet(1,z);
