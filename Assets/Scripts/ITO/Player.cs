@@ -93,10 +93,10 @@ public class Player : MonoBehaviour
             return;
         }
 
-        int[] CardID = new int[28]{1,2,3,4,5,8,10,11,12,13,14,15,16,18,19,20,21,22,23,24,25,27,29,30,31,32,33,35};
-        //int ID = Random.Range(1,36);
-        int DrawNum = Random.Range(0,CardID.Length);
-        int ID = CardID[DrawNum];
+        //int[] CardID = new int[28]{1,2,3,4,5,8,10,11,12,13,14,15,16,18,19,20,21,22,23,24,25,27,29,30,31,32,33,35};
+        int ID = Random.Range(1,36);
+        //int DrawNum = Random.Range(0,CardID.Length);
+        //int ID = CardID[DrawNum];
         SoundManager.Instance.PlaySE(7);
         //ゲーム開始時の初期手札のドロー
         if (GameDirector.Instance.gameState == GameDirector.GameState.standby)
@@ -180,7 +180,7 @@ public class Player : MonoBehaviour
         {
         case 5: //アストラルリコール
             IsDrawEffect = true;
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 4; i++)
             {
                 DrawCard();
             }
@@ -288,7 +288,7 @@ public class Player : MonoBehaviour
             break;
 
         case 33: //流星群
-            for (int i = 0; i < 50; i++)
+            for (int i = 0; i < 70; i++)
             {
                 int ranX = Random.Range(0,10);
                 int ranZ = Random.Range(0,10);
@@ -306,7 +306,7 @@ public class Player : MonoBehaviour
 
         case 35: //ラスト・ショット
             IsDrawEffect = true;
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < 9; i++)
             {
                 DrawCard();
             }
@@ -327,7 +327,7 @@ public class Player : MonoBehaviour
         {
         case 12: //コメットブロー
             IsDrawEffect = true;
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 5; i++)
             {
                 DrawCard();
             }
@@ -337,7 +337,7 @@ public class Player : MonoBehaviour
             IsDrawEffect = true;
             if (Score >= 50000)
             {
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < 7; i++)
                 {
                     DrawCard();
                 }
