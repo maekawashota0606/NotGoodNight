@@ -93,10 +93,10 @@ public class Player : MonoBehaviour
             return;
         }
 
-        //int[] CardID = new int[28]{1,2,3,4,5,8,10,11,12,13,14,15,16,18,19,20,21,22,23,24,25,27,29,30,31,32,33,35};
-        int ID = Random.Range(1,36);
-        //int DrawNum = Random.Range(0,CardID.Length);
-        //int ID = CardID[DrawNum];
+        int[] CardID = new int[28]{1,2,3,4,5,8,10,11,12,13,14,15,16,18,19,20,21,22,23,24,25,27,29,30,31,32,33,35};
+        //int ID = Random.Range(1,36);
+        int DrawNum = Random.Range(0,CardID.Length);
+        int ID = CardID[DrawNum];
         SoundManager.Instance.PlaySE(7);
         //ゲーム開始時の初期手札のドロー
         if (GameDirector.Instance.gameState == GameDirector.GameState.standby)
@@ -203,7 +203,6 @@ public class Player : MonoBehaviour
                 GameDirector.Instance.meteors.RemoveAt(DestoryNum);
                 GameDirector.Instance.DestroyedNum++;
             }
-            GameDirector.Instance.AddScore();
             break;
 
         case 13: //複製魔法
@@ -233,7 +232,6 @@ public class Player : MonoBehaviour
                 GameDirector.Instance.meteors.RemoveAt(DestoryNum);
                 GameDirector.Instance.DestroyedNum++;
             }
-            GameDirector.Instance.AddScore();
             break;
 
         case 18: //詮索するはばたき

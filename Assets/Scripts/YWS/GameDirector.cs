@@ -232,7 +232,11 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 //ターンカウントを１つ増やす
                 TurnCount++;
                 IsCardUsingConfirm = false;
-                DestroyedNum = 0;
+                if (DestroyedNum > 0)
+                {
+                    AddScore();
+                    DestroyedNum = 0;
+                }
                 //持続系のカード効果のターンカウントを進める、効果が切れたら効果の処理を元に戻す
                 _player.CheckEffectTurn();
                 //アクティブフェイズに戻る

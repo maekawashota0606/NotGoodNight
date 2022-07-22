@@ -90,39 +90,10 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
             break;
 
         case 9: //グラビトンブレイク
-            for (int up = basicPosZ-1; up > 0; up--) //↑
-            {
-                if (Map.Instance.map[basicPosX, up] == Map.Instance.meteor)
-                {
-                    tileMap[basicPosX, up].tag = "Search";
-                    for (int upLeft = basicPosX-1; upLeft > -1; upLeft--) //↑←
-                    {
-                        if (Map.Instance.map[upLeft, up] == Map.Instance.meteor)
-                        {
-                            tileMap[upLeft, up].tag = "Search";
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                    for (int upRight = basicPosX+1; upRight < 10; upRight++) //↑→
-                    {
-                        if (Map.Instance.map[upRight, up] == Map.Instance.meteor)
-                        {
-                            tileMap[upRight, up].tag = "Search";
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    break;
-                }
-            }
+            //Map.Instance.CheckUp(basicPosX, basicPosZ);
+            //Map.Instance.CheckDown(basicPosX, basicPosZ);
+            //Map.Instance.CheckLeft(basicPosX, basicPosZ);
+            //Map.Instance.CheckRight(basicPosX, basicPosZ);
             break;
 
         case 12: //コメットブロー
@@ -327,7 +298,6 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
         }
         if (GameDirector.Instance.DestroyedNum != 0)
         {
-            GameDirector.Instance.AddScore();
             GameDirector.Instance.IsMeteorDestroyed = true;
             if (GameDirector.Instance.IsMultiEffect == false)
             {
