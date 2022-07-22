@@ -1,45 +1,82 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using System.IO;
 
-[System.Serializable]
-public class CardData
+public class CardData : MonoBehaviour
 {
-    //í—Ş
+    //ã‚«ãƒ¼ãƒ‰ã‚¿ã‚¤ãƒ—
     public enum CardType
     {
-        Attack,     //UŒ‚i”j‰óô•¶j
-        Defence    //–hŒäi‰‡Œìô•¶j
+        Attack, //æ”»æ’ƒ
+        Special, //ç‰¹æ®Š
     }
-    //Œø‰Ê
-    public enum CardEffective
-    {
-        Destroy,    //”j‰ó
-        Draw,       //ƒhƒ[
-        Move,       //ˆÚ“®
-        Stop,        //’â‘Ø
-        Dump,      //Ì‚Ä‚é
-        Create,     //¶¬
-        Heel,        //‰ñ•œ 
-        Trump,     //Ø‚èD
-        Border,     //ƒ{[ƒ_[
-        Up,          // ˆø‚«ã‚°iè¦Î‚ğã‚É‚ ‚°‚éj
-        Copy,       //ƒRƒs[
-        Reduse,   //ƒRƒXƒgŒyŒ¸
-        Extra,      //ŠO•”Š±Â
-    }
-    public int ID = 0;
-    public int Cost = 1;
-    public CardType CardTypeValue = CardData.CardType.Attack;
-    public CardEffective CardEffectiveValue = CardData.CardEffective.Destroy;
 
-    public void Init(int id,int cost,CardType type,CardEffective effective)
+    //ã‚«ãƒ¼ãƒ‰ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
+    public int ID; //ã‚«ãƒ¼ãƒ‰ç•ªå·
+    public string Name; //ã‚«ãƒ¼ãƒ‰å
+    public int Cost; //ã‚«ãƒ¼ãƒ‰ã‚³ã‚¹ãƒˆ
+    public CardType CardTypeValue; //ã‚«ãƒ¼ãƒ‰ã‚¿ã‚¤ãƒ—
+    public string EffectText; //åŠ¹æœãƒ†ã‚­ã‚¹ãƒˆ
+    public string UpdateText;
+    public bool IsBasePointInArea = true;
+
+    [SerializeField, Header("ã‚«ãƒ¼ãƒ‰å")] private Text CardName = null;
+    [SerializeField, Header("ã‚³ã‚¹ãƒˆ")] private Text CardCost = null;
+    [SerializeField, Header("ã‚«ãƒ¼ãƒ‰æ ")] private Image CardFrame = null;
+    [SerializeField, Header("ã‚«ãƒ¼ãƒ‰é¸æŠæ ")] private Sprite[] _cardFrameImage = new Sprite[2];
+    [SerializeField, Header("åŠ¹æœãƒ†ã‚­ã‚¹ãƒˆ")] private Text CardEffectText = null;
+    [SerializeField, Header("ã‚«ãƒ¼ãƒ‰ã‚¤ãƒ©ã‚¹ãƒˆ")] public Image CardIllustration = null;
+    [SerializeField, Header("ã‚«ãƒ¼ãƒ‰ã‚¤ãƒ©ã‚¹ãƒˆ")] private Sprite[] _illustrationImage = new Sprite[35];
+
+    /// <summary>
+    /// ã‚«ãƒ¼ãƒ‰æƒ…å ±ã®åˆæœŸåŒ–
+    /// </summary>
+    /// <param name="id">ã‚«ãƒ¼ãƒ‰ç•ªå·</param>
+    /// <param name="name">ã‚«ãƒ¼ãƒ‰å</param>
+    /// <param name="cost">ã‚«ãƒ¼ãƒ‰ã‚³ã‚¹ãƒˆ</param>
+    /// <param name="type">ã‚«ãƒ¼ãƒ‰ã‚¿ã‚¤ãƒ—</param>
+    /// <param name="effectText">ã‚«ãƒ¼ãƒ‰åŠ¹æœ</param>
+    public void Init(int id,string name,string cost,string type, string effectText)
     {
         this.ID = id;
-        this.Cost = cost;
-        this.CardTypeValue = type;
-        this.CardEffectiveValue = effective;
+        this.Name = name;
+        this.Cost = int.Parse(cost);
+        if (type == "0")
+        {
+            this.CardTypeValue = CardType.Attack;
+        }
+        else if (type == "1")
+        {
+            this.CardTypeValue = CardType.Special;
+        }
+        this.EffectText = effectText.Replace("n","\n");
+
+        if (this.ID == 3 || this.ID == 31)
+        {
+            IsBasePointInArea = false;
+        }
+    }
+
+    /// <summary>
+    /// ã‚«ãƒ¼ãƒ‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«æƒ…å ±ã‚’åæ˜ ã™ã‚‹
+    /// </summary>
+    public void ShowCardStatus()
+    {
+        CardName.text = Name;
+        CardCost.text = Cost.ToString();
+        if (CardTypeValue == CardType.Attack)
+        {
+            CardFrame.sprite = _cardFrameImage[0];
+        }
+        else if (CardTypeValue == CardType.Special)
+        {
+            CardFrame.sprite = _cardFrameImage[1];
+        }
+        UpdateText = EffectText.Replace("x",GameDirector.Instance._player.DrawCount_Card10.ToString());
+        CardEffectText.text = UpdateText;
+        if (_illustrationImage[ID-1] != null)
+            CardIllustration.sprite = _illustrationImage[ID-1];
     }
 }
-
-

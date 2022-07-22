@@ -14,12 +14,13 @@ public class MeteorGenerator : MonoBehaviour
     public void Generate(Vector3 GenPos)
     {
         //プレハブを生成
-        GameObject meteor = Instantiate(meteorPrefab);
+        GameObject genMeteor = Instantiate(meteorPrefab);
         //生成したオブジェクトを親オブジェクトの下に置く
-        meteor.transform.parent = root.transform;
+        genMeteor.transform.parent = root.transform;
         //生成したオブジェクトを所定位置に付かせる
-        meteor.transform.position = GenPos;
+        genMeteor.transform.position = GenPos;
+        Meteorite newMeteor = genMeteor.GetComponent<Meteorite>();
         //ディレクター側にある隕石のリストに入れる
-        GameDirector.Instance.meteors.Add(meteor);
+        GameDirector.Instance.meteors.Add(newMeteor);
     }
 }

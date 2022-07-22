@@ -6,7 +6,7 @@ public class GridManager : MonoBehaviour
 {
     [SerializeField] private int _width, _height;
     [SerializeField] private GameObject _tilePrefab;
-    [SerializeField] private GameObject root = null;
+    [SerializeField] private Transform root = null;
 
     private void Start()
     {
@@ -20,10 +20,10 @@ public class GridManager : MonoBehaviour
             for (int y = 0; y < _height; y++)
             {
                 GameObject spawnedTile = Instantiate(_tilePrefab);
-                spawnedTile.transform.parent = root.transform;
+                spawnedTile.transform.SetParent(root);
                 spawnedTile.transform.position = new Vector3(x,y);
                 spawnedTile.name = $"tile {x} {y}";
-                TileMap.Instance.map[y,x] = spawnedTile;
+                TileMap.Instance.tileMap[y,x] = spawnedTile;
             }
         }
     }

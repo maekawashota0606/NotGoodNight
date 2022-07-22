@@ -7,6 +7,16 @@ public class MainGameSceneChange : MonoBehaviour
 {
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            SceneManager.LoadScene("Title");
+        }
+
         if (GameDirector.Instance.gameState == GameDirector.GameState.ended && GameDirector.Instance.IsPlayerWin == true)
         {
             SwitchScene_GameClear();
@@ -17,11 +27,13 @@ public class MainGameSceneChange : MonoBehaviour
         }
     }
 
+    //ゲームクリアシーンへの遷移
     public void SwitchScene_GameClear()
     {
         SceneManager.LoadScene("Gameclear");
     }
 
+    //ゲームオーバーシーンへの遷移
     public void SwitchScene_GameOver()
     {
         SceneManager.LoadScene("Gameover");

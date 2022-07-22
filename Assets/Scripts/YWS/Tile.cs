@@ -5,37 +5,81 @@ using UnityEngine;
 public class Tile : MonoBehaviour
 {
     [SerializeField, Header("点滅させるオブジェクト")] private SpriteRenderer tile = null;
-    private float alpha_Sin = 0.0f;
-    private bool ShouldBlink = false;
+    //マウスが乗っているかどうか
+    private bool IsMouseOver = false;
+    private bool IsSEPlayed = false;
     
     private void Start()
     {
-        // 値を初期化
+        //値を初期化
         tile.color = new Color(255,255,255,0);
     }
 
     void Update()
     {
-        alpha_Sin = Mathf.Sin(Time.time) / 2 + 0.5f;
+        //このマスがカード範囲内に含まれている場合、光らせる
+        if (this.tag == "Area")
+        {
+            if (GameDirector.Instance.gameState == GameDirector.GameState.effect)
+            {
+                tile.color = new Color(1, 1, 1, 0.5f);
+            }
+            else
+            {
+                tile.color = new Color(1,0,0,0.5f);
+            }
+        }
+        else if (this.tag == "Untagged")
+        {
+            tile.color = new Color(1, 1, 1, 0);
+        }
+
+        //効果処理フェイズで使用するカードが選択されている、かつ必要分のコストが選択されており、さらにこのマスがクリックされた場合
+        if (GameDirector.Instance.gameState == GameDirector.GameState.effect && GameDirector.Instance.SelectedCard != null && GameDirector.Instance.SelectedCard.CardTypeValue == CardData.CardType.Attack && GameDirector.Instance.IsCardUsingConfirm == true && IsMouseOver == true && Input.GetMouseButtonDown(0))
+        {
+            SoundManager.Instance.PlaySE(5);
+            //範囲が選択された場合、範囲内の隕石を検索する
+            TileMap.Instance.MeteorDestory();
+        }
     }
 
-    private IEnumerator ColorCoroutine()
-    {
-        yield return new WaitUntil(() => ShouldBlink == true);
-
-        Color _color = tile.material.color;
-        _color.a = alpha_Sin;
-        tile.material.color = _color;
-    }
-
+    /// <summary>
+    /// マウスがマスの上に乗っている時
+    /// </summary>
     private void OnMouseOver()
     {
-        ShouldBlink = true;
-        StartCoroutine(ColorCoroutine());
+        if (IsSEPlayed == false)
+        {
+            SoundManager.Instance.PlaySE(4);
+            IsSEPlayed = true;
+        }
+        if (GameDirector.Instance.IsBasePointInArea == true)
+        {
+            if (GameDirector.Instance.gameState == GameDirector.GameState.effect)
+            {
+                tile.color = new Color(1, 1, 1, 0.5f);
+            }
+            else
+            {
+                tile.color = new Color(1,0,0,0.5f);
+            }
+        }
+        this.tag = "Search";
+        IsMouseOver = true;
+        GameDirector.Instance.IsMouseOnTile = true;
     }
 
+    /// <summary>
+    /// マウスがマスの上から離れた時
+    /// </summary>
     private void OnMouseExit()
     {
-        ShouldBlink = false;
+        IsSEPlayed = false;
+        tile.color = new Color(1, 1, 1, 0);
+        this.tag = "Untagged";
+        IsMouseOver = false;
+        GameDirector.Instance.IsMouseOnTile = false;
+        //マウスが他のマスに移動した場合、一回全てのマスのタグを初期化する
+        TileMap.Instance.ResetTileTag();
     }
 }

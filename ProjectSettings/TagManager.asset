@@ -4,7 +4,10 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Overing
+  - Selected
+  - Search
+  - Area
+  - Cost
   layers:
   - Default
   - TransparentFX

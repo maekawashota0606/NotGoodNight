@@ -5,8 +5,26 @@ using UnityEngine.SceneManagement;
 
 public class TitleSceneChange : MonoBehaviour
 {
-    public void SwitchScene()
+    private void Start()
     {
+        SoundManager.Instance.PlayBGM(0);    
+    }
+
+    //タイトルシーンからゲームシーンへの遷移
+    public void StartOnClick()
+    {
+        SoundManager.Instance.PlaySE(0);
+        SoundManager.Instance.StopBGM();
         SceneManager.LoadScene("MainGame");
+    }
+
+    public void TutorialOnClick()
+    {
+        SoundManager.Instance.PlaySE(0);
+    }
+
+    public void ExitOnClick()
+    {
+        SoundManager.Instance.PlaySE(0);
     }
 }
