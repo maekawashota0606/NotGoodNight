@@ -6,6 +6,8 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
 {
     //タイル収納マップ
     public GameObject[,] tileMap = new GameObject[10, 10];
+    public List<int> checkListX = new List<int>();
+    public List<int> checkListZ = new List<int>();
 
     public void FindBasePoint()
     {
@@ -90,10 +92,7 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
             break;
 
         case 9: //グラビトンブレイク
-            //Map.Instance.CheckUp(basicPosX, basicPosZ);
-            //Map.Instance.CheckDown(basicPosX, basicPosZ);
-            //Map.Instance.CheckLeft(basicPosX, basicPosZ);
-            //Map.Instance.CheckRight(basicPosX, basicPosZ);
+            GameDirector.Instance.IsMultiEffect = true;
             break;
 
         case 12: //コメットブロー
@@ -283,6 +282,11 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
                         if (GameDirector.Instance.meteors[targetNum].transform.position.x == x && GameDirector.Instance.meteors[targetNum].transform.position.z == z * -1)
                         {
                             SoundManager.Instance.PlaySE(6);
+                            if (GameDirector.Instance.SelectedCard.ID == 9)
+                            {
+                                checkListX.Add(x);
+                                checkListZ.Add(z);
+                            }
                             //隕石オブジェクトを削除する
                             Destroy(GameDirector.Instance.meteors[targetNum].gameObject);
                             //リストから削除

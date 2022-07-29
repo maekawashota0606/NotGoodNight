@@ -113,6 +113,20 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 {
                     _player.Score += 10000;
                 }
+                if (Input.GetKeyDown(KeyCode.S))
+                {
+                    for (int i = 0; i < 8; i++)
+                    {
+                        for (int j = 0; j < 8; j++)
+                        {
+                            Vector3 checkPos = new Vector3(i,0,-j);
+                            if (Map.Instance.CheckEmpty(checkPos))
+                            {
+                                MeteorSet(1,i);
+                            }
+                        }
+                    }
+                }
                 break;
 
             case GameState.effect: //カード効果処理フェイズ

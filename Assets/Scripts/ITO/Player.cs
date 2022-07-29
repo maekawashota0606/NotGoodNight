@@ -93,10 +93,10 @@ public class Player : MonoBehaviour
             return;
         }
 
-        int[] CardID = new int[28]{1,2,3,4,5,8,10,11,12,13,14,15,16,18,19,20,21,22,23,24,25,27,29,30,31,32,33,35};
-        //int ID = Random.Range(1,36);
-        int DrawNum = Random.Range(0,CardID.Length);
-        int ID = CardID[DrawNum];
+        //int[] CardID = new int[28]{1,2,3,4,5,8,10,11,12,13,14,15,16,18,19,20,21,22,23,24,25,27,29,30,31,32,33,35};
+        int ID = Random.Range(1,36);
+        //int DrawNum = Random.Range(0,CardID.Length);
+        //int ID = CardID[DrawNum];
         SoundManager.Instance.PlaySE(7);
         //ゲーム開始時の初期手札のドロー
         if (GameDirector.Instance.gameState == GameDirector.GameState.standby)
@@ -206,7 +206,10 @@ public class Player : MonoBehaviour
             break;
 
         case 13: //複製魔法
-            GameDirector.Instance.WaitCopy_Card13 = true;
+            if (hands.Count > 1)
+            {
+                GameDirector.Instance.WaitCopy_Card13 = true;
+            }
             break;
 
         case 14: //グラビトンリジェクト
@@ -323,6 +326,52 @@ public class Player : MonoBehaviour
     {
         switch(GameDirector.Instance.SelectedCard.ID)
         {
+        case 9: //グラビトンブレイク
+            for (int i = 0; i < TileMap.Instance.checkListX.Count; i++)
+            {
+                Vector3 basicPos = new Vector3(TileMap.Instance.checkListX[i], 0, -TileMap.Instance.checkListZ[i]);
+                Vector3 UpPos = basicPos + Vector3.forward;
+                Vector3 DownPos = basicPos + Vector3.back;
+                Vector3 LeftPos = basicPos + Vector3.left;
+                Vector3 RightPos = basicPos + Vector3.right;
+
+                if (-(int)UpPos.z > 0)
+                {
+                    if (!Map.Instance.CheckEmpty(UpPos))
+                    {
+                        TileMap.Instance.checkListX.Add((int)UpPos.x);
+                        TileMap.Instance.checkListZ.Add(-(int)UpPos.z);
+                    }
+                }
+                if (-(int)DownPos.z < 9)
+                {
+                    if (!Map.Instance.CheckEmpty(DownPos))
+                    {
+                        TileMap.Instance.checkListX.Add((int)DownPos.x);
+                        TileMap.Instance.checkListZ.Add(-(int)DownPos.z);
+                    }
+                }
+                if ((int)LeftPos.x > 0)
+                {
+                    if (!Map.Instance.CheckEmpty(LeftPos))
+                    {
+                        TileMap.Instance.checkListX.Add((int)LeftPos.x);
+                        TileMap.Instance.checkListZ.Add(-(int)LeftPos.z);
+                    }
+                }
+                if ((int)RightPos.x < 9)
+                {
+                    if (!Map.Instance.CheckEmpty(RightPos))
+                    {
+                        TileMap.Instance.checkListX.Add((int)RightPos.x);
+                        TileMap.Instance.checkListZ.Add(-(int)RightPos.z);
+                    }
+                }
+                Debug.Log("x " + TileMap.Instance.checkListX.Count);
+                Debug.Log("z " + TileMap.Instance.checkListZ.Count);
+            }
+            break;
+
         case 12: //コメットブロー
             IsDrawEffect = true;
             for (int i = 0; i < 5; i++)
