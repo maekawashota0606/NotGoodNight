@@ -48,6 +48,7 @@ MonoBehaviour:
   TargetTime: 0.5
   DoNextTurn: 0
   FallFinished: 0
+  meteorAnimator: {fileID: 943569848190254305}
 --- !u!1 &8500916965932140029
 GameObject:
   m_ObjectHideFlags: 0
@@ -58,6 +59,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2249416124623187913}
   - component: {fileID: 336633453178392961}
+  - component: {fileID: 943569848190254305}
   m_Layer: 6
   m_Name: Ui_0016
   m_TagString: Untagged
@@ -132,3 +134,23 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &943569848190254305
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8500916965932140029}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 23023b69041352b44a47bd9c60b1518d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

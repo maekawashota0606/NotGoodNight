@@ -13,10 +13,20 @@ public class Meteorite : MonoBehaviour
     private int StartZPosition = 0;
     //Ç±ÇÃÉ^Å[Éìóéâ∫ÇçsÇ¡ÇƒÇ¢ÇÈÇ©Ç«Ç§Ç©
     public bool FallFinished = false;
+    [SerializeField] private Animator meteorAnimator = null;
 
     // Update is called once per frame
     void Update()
     {
+        if (TileMap.Instance.tileMap[(int)this.transform.position.x, (int)this.transform.position.z * -1].tag == "Search" || TileMap.Instance.tileMap[(int)this.transform.position.x, (int)this.transform.position.z * -1].tag == "Area")
+        {
+            meteorAnimator.SetBool("IsArea", true);
+        }
+        else
+        {
+            meteorAnimator.SetBool("IsArea",false);
+        }
+
         if (GameDirector.Instance.gameState == GameDirector.GameState.active)
         {
             FallFinished = false;

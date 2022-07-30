@@ -329,7 +329,6 @@ public class Player : MonoBehaviour
         case 9: //グラビトンブレイク
             for (int i = 0; i < TileMap.Instance.checkListX.Count; i++)
             {
-                Map.Instance.CheckMapData();
                 Vector3 basicPos = new Vector3(TileMap.Instance.checkListX[i], 0, -TileMap.Instance.checkListZ[i]);
                 Vector3 UpPos = basicPos + Vector3.forward;
                 Vector3 DownPos = basicPos + Vector3.back;
@@ -392,7 +391,6 @@ public class Player : MonoBehaviour
                         GameDirector.Instance.DestroyedNum++;
                     }
                 }
-                Map.Instance.CheckMapData();
             }
             TileMap.Instance.checkListX = new List<int>();
             TileMap.Instance.checkListZ = new List<int>();
