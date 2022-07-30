@@ -1453,7 +1453,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1190849610
 GameObject:
@@ -2312,62 +2312,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1961024925}
   m_CullTransparentMesh: 1
---- !u!1 &1979114737
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1979114739}
-  - component: {fileID: 1979114738}
-  m_Layer: 0
-  m_Name: RelicManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1979114738
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1979114737}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d4eeef98f6a9754fb5f44bab41f04b5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  InstantPrefab1: {fileID: 4631036983801473964, guid: b9e8ae6cc7170e944bc0a7227af77521, type: 3}
-  InstantPrefab2: {fileID: 4631036983801473964, guid: 0e2112d3158b9bc41a0eb6100fc8ef50, type: 3}
-  InstantPrefab3: {fileID: 4631036983801473964, guid: 458829df03e6f0e468d926030da88129, type: 3}
-  InstantPrefab4: {fileID: 4631036983801473964, guid: 135ddb682a02b3246af7c92daa06000c, type: 3}
-  InstantPrefab5: {fileID: 4631036983801473964, guid: c14c7848e946c914d8b39a74eff8f498, type: 3}
-  ConstantPrefab1: {fileID: 4631036983801473964, guid: bea7daf1ae258b542921f302a4519eef, type: 3}
-  ConstantPrefab2: {fileID: 4631036983801473964, guid: 0a7ad0c8e3eb3014e97ede71763ffc22, type: 3}
-  ConstantPrefab3: {fileID: 4631036983801473964, guid: 438b1d890cea6bb4ca87c816db02d725, type: 3}
-  ConstantPrefab4: {fileID: 4631036983801473964, guid: 144587fde25211542b55966ed899ff52, type: 3}
-  ConstantPrefab5: {fileID: 4631036983801473964, guid: 14e31a4df4eb7ea4cb1c55edbc23fc1d, type: 3}
-  constant: {fileID: 714966411}
-  instant: {fileID: 172510628}
---- !u!4 &1979114739
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1979114737}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 12
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2020948938
 GameObject:
   m_ObjectHideFlags: 0
@@ -2397,6 +2341,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d35292e8c8465e948a1934d1eef9f824, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  checkListX: 
+  checkListZ: 
 --- !u!4 &2020948940
 Transform:
   m_ObjectHideFlags: 0

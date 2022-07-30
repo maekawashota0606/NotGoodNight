@@ -329,47 +329,73 @@ public class Player : MonoBehaviour
         case 9: //グラビトンブレイク
             for (int i = 0; i < TileMap.Instance.checkListX.Count; i++)
             {
+                Map.Instance.CheckMapData();
                 Vector3 basicPos = new Vector3(TileMap.Instance.checkListX[i], 0, -TileMap.Instance.checkListZ[i]);
                 Vector3 UpPos = basicPos + Vector3.forward;
                 Vector3 DownPos = basicPos + Vector3.back;
                 Vector3 LeftPos = basicPos + Vector3.left;
                 Vector3 RightPos = basicPos + Vector3.right;
 
-                if (-(int)UpPos.z > 0)
+                Debug.Log("now basic " + basicPos);
+                Debug.Log("now up " + UpPos);
+                Debug.Log("now down " + DownPos);
+                Debug.Log("now left " + LeftPos);
+                Debug.Log("now right " + RightPos);
+
+                if (-(int)UpPos.z > -1)
                 {
                     if (!Map.Instance.CheckEmpty(UpPos))
                     {
+                        Debug.Log(i + "up");
                         TileMap.Instance.checkListX.Add((int)UpPos.x);
                         TileMap.Instance.checkListZ.Add(-(int)UpPos.z);
                     }
                 }
-                if (-(int)DownPos.z < 9)
+                if (-(int)DownPos.z < 10)
                 {
                     if (!Map.Instance.CheckEmpty(DownPos))
                     {
+                        Debug.Log(i + "down");
                         TileMap.Instance.checkListX.Add((int)DownPos.x);
                         TileMap.Instance.checkListZ.Add(-(int)DownPos.z);
                     }
                 }
-                if ((int)LeftPos.x > 0)
+                if ((int)LeftPos.x > -1)
                 {
                     if (!Map.Instance.CheckEmpty(LeftPos))
                     {
+                        Debug.Log(i + "left");
                         TileMap.Instance.checkListX.Add((int)LeftPos.x);
                         TileMap.Instance.checkListZ.Add(-(int)LeftPos.z);
                     }
                 }
-                if ((int)RightPos.x < 9)
+                if ((int)RightPos.x < 10)
                 {
                     if (!Map.Instance.CheckEmpty(RightPos))
                     {
+                        Debug.Log(i + "right");
                         TileMap.Instance.checkListX.Add((int)RightPos.x);
                         TileMap.Instance.checkListZ.Add(-(int)RightPos.z);
                     }
                 }
-                Debug.Log("x " + TileMap.Instance.checkListX.Count);
-                Debug.Log("z " + TileMap.Instance.checkListZ.Count);
+
+                for (int num = 0; num < GameDirector.Instance.meteors.Count; num++)
+                {
+                    if (GameDirector.Instance.meteors[num].transform.position.x == (int)basicPos.x && GameDirector.Instance.meteors[num].transform.position.z == (int)basicPos.z)
+                    {
+                        //マップから削除
+                        Map.Instance.map[(int)GameDirector.Instance.meteors[num].transform.position.z*-1, (int)GameDirector.Instance.meteors[num].transform.position.x] = Map.Instance.empty;
+                        //隕石オブジェクトを削除する
+                        Destroy(GameDirector.Instance.meteors[num].gameObject);
+                        //リストから削除
+                        GameDirector.Instance.meteors.RemoveAt(num);
+                        GameDirector.Instance.DestroyedNum++;
+                    }
+                }
+                Map.Instance.CheckMapData();
             }
+            TileMap.Instance.checkListX = new List<int>();
+            TileMap.Instance.checkListZ = new List<int>();
             break;
 
         case 12: //コメットブロー

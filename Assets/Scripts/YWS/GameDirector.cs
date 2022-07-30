@@ -77,7 +77,6 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
 
     void Update()
     {
-        Debug.Log("Now Turn " + TurnCount);
         switch (gameState)
         {
             case GameState.standby: //スタンバイフェイズ
