@@ -35,11 +35,18 @@ public class Tile : MonoBehaviour
         }
 
         //効果処理フェイズで使用するカードが選択されている、かつ必要分のコストが選択されており、さらにこのマスがクリックされた場合
-        if (GameDirector.Instance.gameState == GameDirector.GameState.effect && GameDirector.Instance.SelectedCard != null && GameDirector.Instance.SelectedCard.CardTypeValue == CardData.CardType.Attack && GameDirector.Instance.IsCardUsingConfirm == true && IsMouseOver == true && Input.GetMouseButtonDown(0))
+        if (GameDirector.Instance.gameState == GameDirector.GameState.effect && GameDirector.Instance.SelectedCard != null && GameDirector.Instance.IsCardUsingConfirm == true && IsMouseOver == true && Input.GetMouseButtonDown(0))
         {
-            SoundManager.Instance.PlaySE(5);
-            //範囲が選択された場合、範囲内の隕石を検索する
-            TileMap.Instance.MeteorDestory();
+            if (GameDirector.Instance.SelectedCard.CardTypeValue == CardData.CardType.Attack)
+            {
+                SoundManager.Instance.PlaySE(5);
+                //範囲が選択された場合、範囲内の隕石を検索する
+                TileMap.Instance.MeteorDestory();
+            }
+            else if (GameDirector.Instance.SelectedCard.CardTypeValue == CardData.CardType.Special)
+            {
+                GameDirector.Instance.WaitForSelectingArea = false;
+            }
         }
     }
 

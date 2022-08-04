@@ -80,6 +80,29 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
                 tileMap[basicPosX+1, basicPosZ-1].tag = "Area"; //→↑
             break;
 
+        case 6: //星磁力
+
+            break;
+
+        case 7: //グラビトンコア
+            if (basicPosZ > 0 && basicPosX > 0)
+                tileMap[basicPosX-1, basicPosZ-1].tag = "Area"; //←↑
+            if (basicPosZ > 0)
+                tileMap[basicPosX, basicPosZ-1].tag = "Area"; //↑
+            if (basicPosX < 9 && basicPosZ > 0)
+                tileMap[basicPosX+1, basicPosZ-1].tag = "Area"; //→↑
+            if (basicPosX < 9)
+                tileMap[basicPosX+1, basicPosZ].tag = "Area"; //→
+            if (basicPosX < 9 && basicPosZ < 9)
+                tileMap[basicPosX+1, basicPosZ+1].tag = "Area"; //→↓
+            if (basicPosZ < 9)
+                tileMap[basicPosX, basicPosZ+1].tag = "Area"; //↓
+            if (basicPosX > 0 && basicPosZ < 9)
+                tileMap[basicPosX-1, basicPosZ+1].tag = "Area"; //←↓
+            if (basicPosX > 0)
+                tileMap[basicPosX-1, basicPosZ].tag = "Area"; //←
+            break;
+
         case 8: //彗星
             for (int i = basicPosX-1; i > -1; i--) //←
             {
@@ -185,6 +208,17 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
                 tileMap[basicPosX-1, basicPosZ-1].tag = "Area"; //←↑
             if (basicPosX < 9 && basicPosZ < 9)
                 tileMap[basicPosX+1, basicPosZ+1].tag = "Area"; //→↓
+            break;
+
+        case 26: //願いの代償
+            if (basicPosZ > 0)
+                tileMap[basicPosX, basicPosZ-1].tag = "Area"; //↑
+            if (basicPosZ < 9)
+                tileMap[basicPosX, basicPosZ+1].tag = "Area"; //↓
+            if (basicPosX > 0)
+                tileMap[basicPosX-1, basicPosZ].tag = "Area"; //←
+            if (basicPosX < 9)
+                tileMap[basicPosX+1, basicPosZ].tag = "Area"; //→
             break;
 
         case 29: //ドラゴニックブレス

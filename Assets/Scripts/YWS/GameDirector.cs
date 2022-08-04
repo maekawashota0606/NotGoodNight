@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 using Random = UnityEngine.Random;
 
 public class GameDirector : SingletonMonoBehaviour<GameDirector>
@@ -52,6 +53,8 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     public bool WaitCopy_Card13 = false;
     //複製魔法用のコピー元の番号
     public int CopyNum_Card13 = 0;
+    //範囲の選択を待つ必要があるかどうか
+    public bool WaitForSelectingArea = false;
 
     #endregion
     
@@ -77,7 +80,6 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
 
     void Update()
     {
-        Map.Instance.CheckMapData();
         switch (gameState)
         {
             case GameState.standby: //スタンバイフェイズ
@@ -102,8 +104,10 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 //カードの使用が確定した場合
                 if (IsCardUsingConfirm == true)
                 {
-                    //使用されたコストカードをすべて削除する
-                    _player.DeleteUsedCost();
+                    if (SelectedCard.ID == 6 || SelectedCard.ID == 7 || SelectedCard.ID == 26)
+                    {
+                        WaitForSelectingArea = true;
+                    }
                     //カード効果処理フェイズに移行する
                     gameState = GameState.effect;
                 }
@@ -118,6 +122,8 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
             case GameState.effect: //カード効果処理フェイズ
                 if (IsPlayerSelectMove == true)
                 {
+                    //使用されたカードをすべて削除する
+                    _player.DeleteUsedCost();
                     _player.DeleteUsedCard();
                     SelectedCard = null;
                     TileMap.Instance.ResetTileTag();
@@ -139,10 +145,13 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                     }
                     else if (SelectedCard.CardTypeValue == CardData.CardType.Special)
                     {
-                        _player.SpecialCardEffect();
-                        if (WaitCopy_Card13 == false)
+                        if (WaitForSelectingArea == false)
                         {
-                            IsPlayerSelectMove = true;
+                            _player.SpecialCardEffect();
+                            if (WaitCopy_Card13 == false)
+                            {
+                                IsPlayerSelectMove = true;
+                            }
                         }
                     }
                 }
@@ -156,10 +165,12 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 IsPlayerSelectMove = false;
                 if (DoMeteorFall == true)
                 {
+                    meteors = meteors.OrderBy(meteor => meteor.transform.position.z).ThenBy(meteors => meteors.transform.position.x).ToList();
                     for (int num = 0; num < meteors.Count; num++)
                     {
                         var x = (int)meteors[num].transform.position.x;
                         var z = (int)meteors[num].transform.position.z * -1;
+                        Debug.Log("i am num " + num + x + z);
                         //隕石の下１マスが空白だった場合
                         if (z < 9)
                         {
@@ -229,8 +240,10 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                         MeteorGenNum++;
                     }
                 }
+                
                 //ターンカウントを１つ増やす
                 TurnCount++;
+                Map.Instance.CheckMapData();
                 IsCardUsingConfirm = false;
                 if (DestroyedNum > 0)
                 {
@@ -283,11 +296,13 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         IsMeteorDestroyed = false;
         DestroyedNum = 0;
         PayedCost = 0;
+        WaitCopy_Card13 = false;
+        WaitForSelectingArea = false;
         Player.hands = new List<Card>();
     }
 
     /// <summary>
-    /// 隕石生成
+    /// 指定した行にランダムに指定した数だけ隕石を生成
     /// </summary>
     /// <param name="amount">生成する数</param>
     /// <param name="columns">生成する列</param>
@@ -313,6 +328,18 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 break;
             }
         }
+    }
+
+    /// <summary>
+    /// 指定した座標に隕石を生成
+    /// </summary>
+    /// <param name="targerPosX">指定されたx座標</param>
+    /// <param name="targetPosZ">指定されたz座標</param>
+    public void MeteorSetTarget(int targerPosX, int targetPosZ)
+    {
+        Vector3 TargetPos = _DEFAULT_POSITION + new Vector3(targerPosX, 0, -targetPosZ);
+        _generator.Generate(TargetPos);
+        Map.Instance.map[targetPosZ, targerPosX] = Map.Instance.meteor;
     }
 
     /// <summary>

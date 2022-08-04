@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
     [SerializeField, Header("手札置き場")] private Transform playerHand = null;
     //手札
     public static List<Card> hands = new List<Card>();
+    private List<BoxCollider2D> handsColliders = new List<BoxCollider2D>();
     //スコア
     public int Score = 0;
     [SerializeField, Header("スコアテキスト")] private Text scoreText = null;
@@ -94,7 +95,8 @@ public class Player : MonoBehaviour
         }
 
         //int[] CardID = new int[28]{1,2,3,4,5,8,10,11,12,13,14,15,16,18,19,20,21,22,23,24,25,27,29,30,31,32,33,35};
-        int ID = Random.Range(1,36);
+        //int ID = Random.Range(1,36);
+        int ID = 26;
         //int DrawNum = Random.Range(0,CardID.Length);
         //int ID = CardID[DrawNum];
         SoundManager.Instance.PlaySE(7);
@@ -139,6 +141,18 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void TuneCardCollider()
+    {
+        for (int num = 0; num < hands.Count; num++)
+        {
+            handsColliders[num] = hands[num].GetComponent<BoxCollider2D>();
+            Debug.Log(num + handsColliders[num].size.x);
+        }
+    }
+
+    /// <summary>
+    /// 使用コストカードの削除
+    /// </summary>
     public void DeleteUsedCost()
     {
         //使用されたカードすべてにタグがついているので、それらを手札から見つけ出して削除する
@@ -184,6 +198,13 @@ public class Player : MonoBehaviour
             {
                 DrawCard();
             }
+            break;
+        
+        case 6: //星磁力
+            break;
+
+        case 7: //グラビトンコア
+            List<Meteorite> MoveList = new List<Meteorite>();
             break;
         
         case 10: //星屑収集
@@ -265,20 +286,37 @@ public class Player : MonoBehaviour
 
         case 24: //隕石の儀式
             IsDrawEffect = true;
-            int emptyNum = 0;
             for (int x = 0; x < 10; x++)
             {
                 Vector3 checkPos = GameDirector.Instance._DEFAULT_POSITION + new Vector3(x, 0, 0);
                 if (Map.Instance.CheckEmpty(checkPos))
                 {
-                    emptyNum++;
+                    GameDirector.Instance.MeteorSetTarget(x,0);
                 }
             }
-            if (emptyNum > 0)
-            {
-                GameDirector.Instance.MeteorSet(emptyNum,0);
-            }
             for (int i = 0; i < 6; i++)
+            {
+                DrawCard();
+            }
+            break;
+
+        case 26: //願いの代償
+            IsDrawEffect = true;
+            for (int z = 0; z < 10; z++)
+            {
+                for (int x = 0; x < 10; x++)
+                {
+                    if ((GameDirector.Instance.IsBasePointInArea == true && TileMap.Instance.tileMap[x, z].tag == "Search") || TileMap.Instance.tileMap[x, z].tag == "Area")
+                    {
+                        Vector3 checkPos = GameDirector.Instance._DEFAULT_POSITION + new Vector3(x, 0, -z);
+                        if (Map.Instance.CheckEmpty(checkPos))
+                        {
+                            GameDirector.Instance.MeteorSetTarget(x,z);
+                        }
+                    }
+                }
+            }
+            for (int i = 0; i < 3; i++)
             {
                 DrawCard();
             }
@@ -335,17 +373,10 @@ public class Player : MonoBehaviour
                 Vector3 LeftPos = basicPos + Vector3.left;
                 Vector3 RightPos = basicPos + Vector3.right;
 
-                Debug.Log("now basic " + basicPos);
-                Debug.Log("now up " + UpPos);
-                Debug.Log("now down " + DownPos);
-                Debug.Log("now left " + LeftPos);
-                Debug.Log("now right " + RightPos);
-
                 if (-(int)UpPos.z > -1)
                 {
                     if (!Map.Instance.CheckEmpty(UpPos))
                     {
-                        Debug.Log(i + "up");
                         TileMap.Instance.checkListX.Add((int)UpPos.x);
                         TileMap.Instance.checkListZ.Add(-(int)UpPos.z);
                     }
@@ -354,7 +385,6 @@ public class Player : MonoBehaviour
                 {
                     if (!Map.Instance.CheckEmpty(DownPos))
                     {
-                        Debug.Log(i + "down");
                         TileMap.Instance.checkListX.Add((int)DownPos.x);
                         TileMap.Instance.checkListZ.Add(-(int)DownPos.z);
                     }
@@ -363,7 +393,6 @@ public class Player : MonoBehaviour
                 {
                     if (!Map.Instance.CheckEmpty(LeftPos))
                     {
-                        Debug.Log(i + "left");
                         TileMap.Instance.checkListX.Add((int)LeftPos.x);
                         TileMap.Instance.checkListZ.Add(-(int)LeftPos.z);
                     }
@@ -372,7 +401,6 @@ public class Player : MonoBehaviour
                 {
                     if (!Map.Instance.CheckEmpty(RightPos))
                     {
-                        Debug.Log(i + "right");
                         TileMap.Instance.checkListX.Add((int)RightPos.x);
                         TileMap.Instance.checkListZ.Add(-(int)RightPos.z);
                     }
@@ -429,7 +457,7 @@ public class Player : MonoBehaviour
                     Vector3 checkPos = GameDirector.Instance._DEFAULT_POSITION + new Vector3(x, 0, -z);
                     if (Map.Instance.CheckEmpty(checkPos))
                     {
-                        GameDirector.Instance.MeteorSet(1,z);
+                        GameDirector.Instance.MeteorSetTarget(x,z);
                         break;
                     }
                     else if (x == 9 && !Map.Instance.CheckEmpty(checkPos))

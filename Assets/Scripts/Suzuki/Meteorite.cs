@@ -43,10 +43,6 @@ public class Meteorite : MonoBehaviour
             {
                 elapsedTime = 0;
                 this.transform.position = new Vector3(StartXPosition, 0, StartZPosition - 1);
-                //マップの元居た場所の記録を削除し
-                Map.Instance.map[StartZPosition*-1, StartXPosition] = Map.Instance.empty;
-                //マップの移動先に新たに記録を書き込む
-                Map.Instance.map[StartZPosition*-1+1, StartXPosition] = Map.Instance.meteor;
                 FallFinished = true;
                 DoNextTurn = false;
             }
@@ -63,6 +59,10 @@ public class Meteorite : MonoBehaviour
             StartXPosition = (int)this.transform.position.x;
             StartZPosition = (int)this.transform.position.z;
             DoNextTurn = true;
+            //マップの元居た場所の記録を削除し
+            Map.Instance.map[StartZPosition*-1, StartXPosition] = Map.Instance.empty;
+            //マップの移動先に新たに記録を書き込む
+            Map.Instance.map[StartZPosition*-1+1, StartXPosition] = Map.Instance.meteor;
         }
     }
 }
