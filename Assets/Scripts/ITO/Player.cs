@@ -28,6 +28,7 @@ public class Player : MonoBehaviour
     [SerializeField, Header("盤面の画像")] private Sprite[] BoardImage = new Sprite[3];
     //ボタンのダブルクリック防止用フラグ
     private bool IsClick = false;
+    private List<Meteorite> MoveList = new List<Meteorite>();
 
     #region カードごとの専用変数
 
@@ -96,7 +97,7 @@ public class Player : MonoBehaviour
 
         //int[] CardID = new int[28]{1,2,3,4,5,8,10,11,12,13,14,15,16,18,19,20,21,22,23,24,25,27,29,30,31,32,33,35};
         //int ID = Random.Range(1,36);
-        int ID = 26;
+        int ID = 7;
         //int DrawNum = Random.Range(0,CardID.Length);
         //int ID = CardID[DrawNum];
         SoundManager.Instance.PlaySE(7);
@@ -192,22 +193,78 @@ public class Player : MonoBehaviour
     {
         switch(GameDirector.Instance.SelectedCard.ID)
         {
-        case 5: //アストラルリコール
+        #region アストラルリコール
+        case 5:
             IsDrawEffect = true;
             for (int i = 0; i < 4; i++)
             {
                 DrawCard();
             }
             break;
+        #endregion
         
-        case 6: //星磁力
+        #region 星磁力
+        case 6: //
             break;
+        #endregion
 
-        case 7: //グラビトンコア
-            List<Meteorite> MoveList = new List<Meteorite>();
+        #region グラビトンコア
+        case 7:
+            MoveList = new List<Meteorite>();
+            List<int> targetPosXList = new List<int>();
+            List<int> targetPosZList = new List<int>();
+            int LockedNum = 0;
+            for (int x = 0; x < 10; x++)
+            {
+                for (int z = 0; z < 10; z++)
+                {
+                    if (TileMap.Instance.tileMap[x, z].tag == "Search" || TileMap.Instance.tileMap[x, z].tag == "Area")
+                    {
+                        Vector3 checkPos = GameDirector.Instance._DEFAULT_POSITION + new Vector3(x, 0, -z);
+                        if (!Map.Instance.CheckEmpty(checkPos))
+                        {
+                            TileMap.Instance.tileMap[x,z].tag = "Lock";
+                            LockedNum++;
+                        }
+                        else
+                        {
+                            targetPosXList.Add(x);
+                            targetPosZList.Add(z);
+                        }
+                    }
+                }
+            }
+
+            for (int num = 0; num < targetPosXList.Count; num++)
+            {
+                if (GameDirector.Instance.meteors.Count == 0 || MoveList.Count == 9 || GameDirector.Instance.meteors.Count == MoveList.Count + LockedNum)
+                {
+                    break;
+                }
+
+                int chosenNum = Random.Range(0,GameDirector.Instance.meteors.Count);
+                int checkx = (int)GameDirector.Instance.meteors[chosenNum].transform.position.x;
+                int checkz = -(int)GameDirector.Instance.meteors[chosenNum].transform.position.z;
+                if (TileMap.Instance.tileMap[checkx, checkz].tag != "Lock" && TileMap.Instance.tileMap[checkx, checkz].tag != "Move")
+                {
+                    TileMap.Instance.tileMap[checkx,checkz].tag = "Move";
+                    MoveList.Add(GameDirector.Instance.meteors[chosenNum]);
+                }
+                else
+                {
+                    num--;
+                }
+            }
+            GameDirector.Instance.WaitingMove = true;
+            for (int num = 0; num < MoveList.Count; num++)
+            {
+                MoveList[num].MoveToTargetPoint(targetPosXList[num], -targetPosZList[num]);
+            }
             break;
+        #endregion
         
-        case 10: //星屑収集
+        #region 星屑収集
+        case 10:
             for (int i = 0; i < DrawCount_Card10; i++)
             {
                 if (GameDirector.Instance.meteors.Count == 0)
@@ -225,21 +282,27 @@ public class Player : MonoBehaviour
                 GameDirector.Instance.DestroyedNum++;
             }
             break;
+        #endregion
 
-        case 13: //複製魔法
+        #region 複製魔法
+        case 13:
             if (hands.Count > 1)
             {
                 GameDirector.Instance.WaitCopy_Card13 = true;
             }
             break;
+        #endregion
 
-        case 14: //グラビトンリジェクト
+        #region グラビトンリジェクト
+        case 14:
             EffectTurn_Card14 = 3;
             GameDirector.Instance.DoMeteorFall = false;
             GameDirector.Instance.CanMeteorGenerate = false;
             break;
+        #endregion
 
-        case 16: //不破の城塞
+        #region 不破の城塞
+        case 16:
             for (int i = 0; i < hands.Count; i++)
             {
                 if (GameDirector.Instance.meteors.Count == 0 || hands.Count == 0)
@@ -257,16 +320,20 @@ public class Player : MonoBehaviour
                 GameDirector.Instance.DestroyedNum++;
             }
             break;
+        #endregion
 
-        case 18: //詮索するはばたき
+        #region 詮索するはばたき
+        case 18:
             IsDrawEffect = true;
             for (int i = 0; i < 3; i++)
             {
                 DrawCard();
             }
             break;
+        #endregion
 
-        case 21: //残光のアストラル
+        #region 残光のアストラル
+        case 21:
             IsDrawEffect = true;
             int DrawNum = 2;
             DrawNum += Score / 30000 * 2;
@@ -275,16 +342,20 @@ public class Player : MonoBehaviour
                 DrawCard();
             }
             break;
+        #endregion
 
-        case 22: //至高天の顕現
+        #region 至高天の顕現
+        case 22:
             IsDrawEffect = true;
             for (int i = 0; i < 2; i++)
             {
                 DrawCard();
             }
             break;
+        #endregion
 
-        case 24: //隕石の儀式
+        #region 隕石の儀式
+        case 24:
             IsDrawEffect = true;
             for (int x = 0; x < 10; x++)
             {
@@ -299,14 +370,16 @@ public class Player : MonoBehaviour
                 DrawCard();
             }
             break;
+        #endregion
 
-        case 26: //願いの代償
+        #region 願いの代償
+        case 26:
             IsDrawEffect = true;
             for (int z = 0; z < 10; z++)
             {
                 for (int x = 0; x < 10; x++)
                 {
-                    if ((GameDirector.Instance.IsBasePointInArea == true && TileMap.Instance.tileMap[x, z].tag == "Search") || TileMap.Instance.tileMap[x, z].tag == "Area")
+                    if (TileMap.Instance.tileMap[x, z].tag == "Search" || TileMap.Instance.tileMap[x, z].tag == "Area")
                     {
                         Vector3 checkPos = GameDirector.Instance._DEFAULT_POSITION + new Vector3(x, 0, -z);
                         if (Map.Instance.CheckEmpty(checkPos))
@@ -321,12 +394,16 @@ public class Player : MonoBehaviour
                 DrawCard();
             }
             break;
+        #endregion
 
-        case 27: //復興の灯
+        #region 復興の灯
+        case 27:
             Life++;
             break;
+        #endregion
 
-        case 33: //流星群
+        #region 流星群
+        case 33:
             for (int i = 0; i < 70; i++)
             {
                 int ranX = Random.Range(0,10);
@@ -342,14 +419,17 @@ public class Player : MonoBehaviour
             }
             TileMap.Instance.MeteorDestory();
             break;
+        #endregion
 
-        case 35: //ラスト・ショット
+        #region ラスト・ショット
+        case 35:
             IsDrawEffect = true;
             for (int i = 0; i < 9; i++)
             {
                 DrawCard();
             }
             break;
+        #endregion
 
         default:
             break;
@@ -364,7 +444,8 @@ public class Player : MonoBehaviour
     {
         switch(GameDirector.Instance.SelectedCard.ID)
         {
-        case 9: //グラビトンブレイク
+        #region グラビトンブレイク
+        case 9:
             for (int i = 0; i < TileMap.Instance.checkListX.Count; i++)
             {
                 Vector3 basicPos = new Vector3(TileMap.Instance.checkListX[i], 0, -TileMap.Instance.checkListZ[i]);
@@ -423,16 +504,20 @@ public class Player : MonoBehaviour
             TileMap.Instance.checkListX = new List<int>();
             TileMap.Instance.checkListZ = new List<int>();
             break;
+        #endregion
 
-        case 12: //コメットブロー
+        #region コメットブロー
+        case 12:
             IsDrawEffect = true;
             for (int i = 0; i < 5; i++)
             {
                 DrawCard();
             }
             break;
+        #endregion
 
-        case 20: //アストラルリベリオン
+        #region アストラルリベリオン
+        case 20:
             IsDrawEffect = true;
             if (Score >= 50000)
             {
@@ -442,8 +527,10 @@ public class Player : MonoBehaviour
                 }
             }
             break;
+        #endregion
 
-        case 23: //グラビトンオフセッツ
+        #region グラビトンオフセッツ
+        case 23:
             List<int> columnList = new List<int>{0,1,2,3,4};
             for (int num = 0; num < 4; num++)
             {
@@ -468,14 +555,17 @@ public class Player : MonoBehaviour
                 }
             }
             break;
+        #endregion
 
-        case 25: //知性の光
+        #region 知性の光
+        case 25:
             IsDrawEffect = true;
             for (int i = 0; i < GameDirector.Instance.DestroyedNum; i++)
             {
                 DrawCard();
             }
             break;
+        #endregion
 
         default:
             break;
@@ -489,6 +579,7 @@ public class Player : MonoBehaviour
     /// </summary>
     public void CheckEffectTurn()
     {
+        #region グラビトンリジェクト
         if (EffectTurn_Card14 > 0)
         {
             EffectTurn_Card14--;
@@ -498,7 +589,9 @@ public class Player : MonoBehaviour
                 GameDirector.Instance.CanMeteorGenerate = true;
             }
         }
+        #endregion
 
+        #region 魔力障壁
         if (EffectTurn_Card19 > 0)
         {
             EffectTurn_Card19--;
@@ -508,8 +601,13 @@ public class Player : MonoBehaviour
                 GameDirector.Instance.CanMeteorGenerate = true;
             }
         }
+        #endregion
     }
 
+    /// <summary>
+    /// 複製魔法用関数
+    /// </summary>
+    /// <param name="cardID"></param>
     public void CopyCard_Card13(int cardID)
     {
         GameObject genCard = Instantiate(cardPrefab, playerHand);
@@ -519,5 +617,30 @@ public class Player : MonoBehaviour
         GameDirector.Instance.CopyNum_Card13 = 0;
         GameDirector.Instance.WaitCopy_Card13 = false;
         GameDirector.Instance.IsPlayerSelectMove = true;
+    }
+
+    public void CheckIsMoveFinish()
+    {
+        int FinishedNum = 0;
+        if (GameDirector.Instance.WaitingMove == true && MoveList.Count != 0)
+        {
+            for (int num = 0; num < MoveList.Count; num++)
+            {
+                if (MoveList[num].MoveFinished == true)
+                {
+                    FinishedNum++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            if (FinishedNum == MoveList.Count)
+            {
+                GameDirector.Instance.IsPlayerSelectMove = true;
+                Map.Instance.UpdateMapData();
+            }
+        }
     }
 }

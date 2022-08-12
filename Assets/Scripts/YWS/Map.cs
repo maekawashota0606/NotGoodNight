@@ -118,5 +118,6 @@ public class Map : SingletonMonoBehaviour<Map>
         {
             map[(int)GameDirector.Instance.meteors[num].transform.position.z * -1, (int)GameDirector.Instance.meteors[num].transform.position.x] = meteor;
         }
+        CheckMapData();
     }
 }

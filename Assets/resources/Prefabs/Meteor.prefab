@@ -46,8 +46,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TargetTime: 0.5
+  Duration: 0.25
   DoNextTurn: 0
   FallFinished: 0
+  MoveFinished: 0
   meteorAnimator: {fileID: 943569848190254305}
 --- !u!1 &8500916965932140029
 GameObject:

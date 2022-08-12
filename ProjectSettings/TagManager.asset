@@ -8,6 +8,8 @@ TagManager:
   - Search
   - Area
   - Cost
+  - Lock
+  - Move
   layers:
   - Default
   - TransparentFX

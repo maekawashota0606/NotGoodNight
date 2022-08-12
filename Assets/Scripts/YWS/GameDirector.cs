@@ -55,6 +55,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     public int CopyNum_Card13 = 0;
     //範囲の選択を待つ必要があるかどうか
     public bool WaitForSelectingArea = false;
+    public bool WaitingMove = false;
 
     #endregion
     
@@ -80,6 +81,8 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
 
     void Update()
     {
+        //Debug.Log(gameState);
+        //Debug.Log(TurnCount);
         switch (gameState)
         {
             case GameState.standby: //スタンバイフェイズ
@@ -134,25 +137,32 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
 
                 if (SelectedCard != null)
                 {
-                    TileMap.Instance.FindBasePoint();
-                    if (SelectedCard.CardTypeValue == CardData.CardType.Attack)
+                    if (WaitingMove == false)
                     {
-                        if (IsMeteorDestroyed == true && IsMultiEffect == true)
+                        TileMap.Instance.FindBasePoint();
+                        if (SelectedCard.CardTypeValue == CardData.CardType.Attack)
                         {
-                            _player.ExtraEffect();
-                            IsPlayerSelectMove = true;
-                        }
-                    }
-                    else if (SelectedCard.CardTypeValue == CardData.CardType.Special)
-                    {
-                        if (WaitForSelectingArea == false)
-                        {
-                            _player.SpecialCardEffect();
-                            if (WaitCopy_Card13 == false)
+                            if (IsMeteorDestroyed == true && IsMultiEffect == true)
                             {
+                                _player.ExtraEffect();
                                 IsPlayerSelectMove = true;
                             }
                         }
+                        else if (SelectedCard.CardTypeValue == CardData.CardType.Special)
+                        {
+                            if (WaitForSelectingArea == false)
+                            {
+                                _player.SpecialCardEffect();
+                                if (WaitCopy_Card13 == false)
+                                {
+                                    IsPlayerSelectMove = true;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        _player.CheckIsMoveFinish();
                     }
                 }
                 break;
@@ -163,6 +173,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                     IsBasePointInArea = true;
                 }
                 IsPlayerSelectMove = false;
+                WaitingMove = false;
                 if (DoMeteorFall == true)
                 {
                     meteors = meteors.OrderBy(meteor => meteor.transform.position.z).ThenBy(meteors => meteors.transform.position.x).ToList();
@@ -170,7 +181,6 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                     {
                         var x = (int)meteors[num].transform.position.x;
                         var z = (int)meteors[num].transform.position.z * -1;
-                        Debug.Log("i am num " + num + x + z);
                         //隕石の下１マスが空白だった場合
                         if (z < 9)
                         {

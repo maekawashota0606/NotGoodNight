@@ -9,6 +9,9 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
     public List<int> checkListX = new List<int>();
     public List<int> checkListZ = new List<int>();
 
+    /// <summary>
+    /// カードの効果範囲の原点を探す関数
+    /// </summary>
     public void FindBasePoint()
     {
         //効果処理フェイズで使用カードが選択されていおり、マウスカーソルが盤面の上にいる場合
@@ -42,7 +45,8 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
         //カードの種類に基づいて、範囲となるマスすべてにタグを付ける
         switch(GameDirector.Instance.SelectedCard.ID)
         {
-        case 1: //サラマンダーブレス
+        #region サラマンダーブレス
+        case 1:
             if (basicPosZ > 1)
                 tileMap[basicPosX, basicPosZ-2].tag = "Area"; //↑↑
             if (basicPosZ > 0)
@@ -50,8 +54,10 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
             if (basicPosZ < 9)
                 tileMap[basicPosX, basicPosZ+1].tag = "Area"; //↓
             break;
+        #endregion
 
-        case 2: //ウンディーネ・ウェイブ
+        #region ウンディーネ・ウェイブ
+        case 2:
             if (basicPosX > 1)
                 tileMap[basicPosX-2, basicPosZ].tag = "Area"; //←←
             if (basicPosX > 0)
@@ -59,8 +65,10 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
             if (basicPosX < 9)
                 tileMap[basicPosX+1, basicPosZ].tag = "Area"; //→
             break;
+        #endregion
 
-        case 3: //シルフ・ゲイル
+        #region シルフ・ゲイル
+        case 3:
             if (basicPosZ > 0)
                 tileMap[basicPosX, basicPosZ-1].tag = "Area"; //↑
             if (basicPosZ < 9)
@@ -70,8 +78,10 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
             if (basicPosX < 9)
                 tileMap[basicPosX+1, basicPosZ].tag = "Area"; //→
             break;
+        #endregion
 
-        case 4: //ノーム・グレイブル
+        #region ノーム・グレイブル
+        case 4:
             if (basicPosZ > 0)
                 tileMap[basicPosX, basicPosZ-1].tag = "Area"; //↑
             if (basicPosX < 9)
@@ -79,12 +89,16 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
             if (basicPosX < 9 && basicPosZ > 0)
                 tileMap[basicPosX+1, basicPosZ-1].tag = "Area"; //→↑
             break;
+        #endregion
 
-        case 6: //星磁力
+        #region 星磁力
+        case 6:
 
             break;
+        #endregion
 
-        case 7: //グラビトンコア
+        #region グラビトンコア
+        case 7:
             if (basicPosZ > 0 && basicPosX > 0)
                 tileMap[basicPosX-1, basicPosZ-1].tag = "Area"; //←↑
             if (basicPosZ > 0)
@@ -102,8 +116,10 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
             if (basicPosX > 0)
                 tileMap[basicPosX-1, basicPosZ].tag = "Area"; //←
             break;
+        #endregion
 
-        case 8: //彗星
+        #region 彗星
+        case 8:
             for (int i = basicPosX-1; i > -1; i--) //←
             {
                 tileMap[i, basicPosZ].tag = "Area";
@@ -113,12 +129,16 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
                 tileMap[i, basicPosZ].tag = "Area";
             }
             break;
+        #endregion
 
-        case 9: //グラビトンブレイク
+        #region グラビトンブレイク
+        case 9:
             GameDirector.Instance.IsMultiEffect = true;
             break;
+        #endregion
 
-        case 12: //コメットブロー
+        #region コメットブロー
+        case 12:
             GameDirector.Instance.IsMultiEffect = true;
             if (basicPosZ > 0 && basicPosX > 0)
                 tileMap[basicPosX-1, basicPosZ-1].tag = "Area"; //←↑
@@ -137,8 +157,10 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
             if (basicPosX > 0)
                 tileMap[basicPosX-1, basicPosZ].tag = "Area"; //←
             break;
+        #endregion
 
-        case 20: //アストラルリベリオン
+        #region アストラルリベリオン
+        case 20:
             GameDirector.Instance.IsMultiEffect = true;
             if (basicPosX > 1 && basicPosZ > 1)
                 tileMap[basicPosX-2, basicPosZ-2].tag = "Area"; //←↑←↑
@@ -189,8 +211,10 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
             if (basicPosX > 0)
                 tileMap[basicPosX-1, basicPosZ].tag = "Area"; //←
             break;
+        #endregion
 
-        case 23: //グラビトンオフセッツ
+        #region グラビトンオフセッツ
+        case 23:
             GameDirector.Instance.IsMultiEffect = true;
             if (basicPosX > 0)
                 tileMap[basicPosX-1, basicPosZ].tag = "Area"; //←
@@ -199,8 +223,10 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
             if (basicPosX < 8)
                 tileMap[basicPosX+2, basicPosZ].tag = "Area"; //→→
             break;
+        #endregion
 
-        case 25: //知性の光
+        #region 知性の光
+        case 25:
             GameDirector.Instance.IsMultiEffect = true;
             if (basicPosX > 1 && basicPosZ > 1)
                 tileMap[basicPosX-2, basicPosZ-2].tag = "Area"; //←↑←↑
@@ -209,8 +235,10 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
             if (basicPosX < 9 && basicPosZ < 9)
                 tileMap[basicPosX+1, basicPosZ+1].tag = "Area"; //→↓
             break;
+        #endregion
 
-        case 26: //願いの代償
+        #region 願いの代償
+        case 26:
             if (basicPosZ > 0)
                 tileMap[basicPosX, basicPosZ-1].tag = "Area"; //↑
             if (basicPosZ < 9)
@@ -220,8 +248,10 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
             if (basicPosX < 9)
                 tileMap[basicPosX+1, basicPosZ].tag = "Area"; //→
             break;
+        #endregion
 
-        case 29: //ドラゴニックブレス
+        #region ドラゴニックブレス
+        case 29:
             if (basicPosZ > 1)
                 tileMap[basicPosX, basicPosZ-2].tag = "Area"; //↑↑
             if (basicPosZ > 0)
@@ -237,8 +267,10 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
             if (basicPosX < 9 && basicPosZ < 9)
                 tileMap[basicPosX+1, basicPosZ+1].tag = "Area"; //→↓
             break;
+        #endregion
 
-        case 30: //タイダルウェーブ
+        #region タイダルウェーブ
+        case 30:
             if (basicPosX > 1)
                 tileMap[basicPosX-2, basicPosZ].tag = "Area"; //←←
             if (basicPosX > 0)
@@ -253,9 +285,11 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
                 tileMap[basicPosX, basicPosZ-1].tag = "Area"; //↑
             if (basicPosX < 9 && basicPosZ > 0)
                 tileMap[basicPosX+1, basicPosZ-1].tag = "Area"; //→↑
-            break; 
+            break;
+        #endregion
 
-        case 31: //シルフ・サイクロン
+        #region シルフ・サイクロン
+        case 31:
             if (basicPosZ > 1)
                 tileMap[basicPosX, basicPosZ-2].tag = "Area"; //↑↑
             if (basicPosZ > 0)
@@ -273,8 +307,10 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
             if (basicPosX < 9)
                 tileMap[basicPosX+1, basicPosZ].tag = "Area"; //→
             break;
+        #endregion
 
-        case 32: //テラリウムグレイブ
+        #region テラリウムグレイブ
+        case 32:
             if (basicPosX > 1)
                 tileMap[basicPosX-2, basicPosZ].tag = "Area"; //←←
             if (basicPosX > 0)
@@ -290,9 +326,12 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
             if (basicPosX < 9 && basicPosZ > 0)
                 tileMap[basicPosX+1, basicPosZ-1].tag = "Area"; //→↑
             break;
+        #endregion
 
-        case 34: //次元断裂
+        #region 次元断裂
+        case 34:
             break;
+        #endregion
 
         default:
             break;
