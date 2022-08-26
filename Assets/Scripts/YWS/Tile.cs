@@ -20,7 +20,7 @@ public class Tile : MonoBehaviour
         //このマスがカード範囲内に含まれている場合、光らせる
         if (this.tag == "Area")
         {
-            if (GameDirector.Instance.gameState == GameDirector.GameState.effect)
+            if (GameDirector.Instance.PayedCost >= GameDirector.Instance.SelectedCard.Cost)
             {
                 tile.color = new Color(1, 1, 1, 0.5f);
             }

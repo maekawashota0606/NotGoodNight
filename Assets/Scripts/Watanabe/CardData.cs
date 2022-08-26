@@ -6,22 +6,22 @@ using System.IO;
 
 public class CardData : MonoBehaviour
 {
-    //カードタイプ
+    #region  カードステータス関係の変数
+    public int ID; //カード番号
+    public string Name; //カード名
+    public int Cost; //カードコスト
     public enum CardType
     {
         Attack, //攻撃
         Special, //特殊
     }
-
-    //カードステータス
-    public int ID; //カード番号
-    public string Name; //カード名
-    public int Cost; //カードコスト
     public CardType CardTypeValue; //カードタイプ
     public string EffectText; //効果テキスト
     public string UpdateText;
     public bool IsBasePointInArea = true;
+    #endregion
 
+    #region カードオブジェクト上のUI関係の変数
     [SerializeField, Header("カード名")] private Text CardName = null;
     [SerializeField, Header("コスト")] private Text CardCost = null;
     [SerializeField, Header("カード枠")] private Image CardFrame = null;
@@ -29,6 +29,11 @@ public class CardData : MonoBehaviour
     [SerializeField, Header("効果テキスト")] private Text CardEffectText = null;
     [SerializeField, Header("カードイラスト")] public Image CardIllustration = null;
     [SerializeField, Header("カードイラスト")] private Sprite[] _illustrationImage = new Sprite[35];
+    #endregion
+
+    #region カードオブジェクトの移動関係の変数
+    public Vector3 originPos = new Vector3(0,0,0);
+    #endregion
 
     /// <summary>
     /// カード情報の初期化
@@ -57,6 +62,8 @@ public class CardData : MonoBehaviour
         {
             IsBasePointInArea = false;
         }
+
+        GetComponentInChildren<Canvas>().sortingLayerName = "Card";
     }
 
     /// <summary>

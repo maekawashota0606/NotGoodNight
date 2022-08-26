@@ -14,10 +14,9 @@ public class Player : MonoBehaviour
     public List<string[]> _cardData = new List<string[]>();
 
     [SerializeField, Header("カードプレハブ")] private GameObject cardPrefab = null;
-    [SerializeField, Header("手札置き場")] private Transform playerHand = null;
+    [SerializeField, Header("手札置き場")] public Transform playerHand = null;
     //手札
     public static List<Card> hands = new List<Card>();
-    private List<BoxCollider2D> handsColliders = new List<BoxCollider2D>();
     //スコア
     public int Score = 0;
     [SerializeField, Header("スコアテキスト")] private Text scoreText = null;
@@ -96,8 +95,8 @@ public class Player : MonoBehaviour
         }
 
         //int[] CardID = new int[28]{1,2,3,4,5,8,10,11,12,13,14,15,16,18,19,20,21,22,23,24,25,27,29,30,31,32,33,35};
-        //int ID = Random.Range(1,36);
-        int ID = 7;
+        int ID = Random.Range(1,36);
+        //int ID = 34;
         //int DrawNum = Random.Range(0,CardID.Length);
         //int ID = CardID[DrawNum];
         SoundManager.Instance.PlaySE(7);
@@ -140,14 +139,14 @@ public class Player : MonoBehaviour
             //カードオブジェクトをリストに入れる
             hands.Add(newCard);
         }
+        GameDirector.Instance.ResetCardPosition();
     }
 
-    private void TuneCardCollider()
+    public void ResetCardPosition()
     {
         for (int num = 0; num < hands.Count; num++)
         {
-            handsColliders[num] = hands[num].GetComponent<BoxCollider2D>();
-            Debug.Log(num + handsColliders[num].size.x);
+            hands[num].transform.localPosition = new Vector3(-180 + 45 * num, 0, 0);
         }
     }
 

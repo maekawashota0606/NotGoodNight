@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using Random = UnityEngine.Random;
+using DG.Tweening;
 
 public class GameDirector : SingletonMonoBehaviour<GameDirector>
 {
@@ -31,6 +32,9 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     public bool IsPlayerWin = false;
 
     #region カード使用関連の変数
+    [SerializeField, Header("選択カード置き場")] private Transform SelectedCardPosition = null;
+    [SerializeField, Header("選択コスト置き場")] private Transform SelectedCostPosition = null;
+    public List<Card> costCardList = new List<Card>();
     //カーソルが合っているカードオブジェクト
     public Card WatchingCard = null;
     //使用カードとして選択されているカードオブジェクト
@@ -359,5 +363,122 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     {
         var GetScore = 1000 * GameDirector.Instance.DestroyedNum * (1 + GameDirector.Instance.DestroyedNum * 0.1f);
         _player.Score += (int)GetScore;
+    }
+
+    public void SetSelectCard(Card card)
+    {
+        if (card.ID == 11 || card.ID == 15 || card.ID == 19 || (card.ID == 35 && Player.hands.Count != 1))
+        {
+            return;
+        }
+        
+        Player.hands.Remove(card);
+        SelectedCard = card;
+        if (card.IsBasePointInArea == false)
+        {
+            IsBasePointInArea = false;
+        }
+        //効果が処理された後に削除するために、タグを付けておく
+        card.tag = "Selected";
+        card.transform.SetParent(SelectedCardPosition);
+        card.transform.DOMove(SelectedCardPosition.transform.position, 0.1f, true);
+        ResetCardPosition();
+    }
+
+    public void SetCostCard(Card card)
+    {
+        Player.hands.Remove(card);
+        costCardList.Add(card);
+        //選択されているコストの数を加算する
+        switch(card.ID)
+        {
+        case 11: //サクリファイス・レプリカ
+            PayedCost += 2;
+            break;
+
+        default:
+            PayedCost++;
+            break;
+        }
+        //コストとして使用された時に削除する用にタグを付けておく
+        card.tag = "Cost";
+        card.transform.SetParent(SelectedCostPosition);
+        Vector3 movePoint = new Vector3(0, 160 - 45 * (costCardList.Count - 1), 0);
+        card.transform.DOLocalMove(movePoint, 0.1f, true);
+        card.GetComponentInChildren<Canvas>().sortingOrder = costCardList.Count - 1;
+        ResetCardPosition();
+    }
+
+    public void ResetToHand(Card card, bool IsCost)
+    {
+        if (IsCost)
+        {
+            costCardList.Remove(card);
+        }
+        Player.hands.Add(card);
+        card.tag = "Untagged";
+        card.transform.SetParent(_player.playerHand);
+        Vector3 movePoint = new Vector3(-180 + 45 * (Player.hands.Count - 1), 0, 0);
+        card.transform.DOLocalMove(movePoint, 0.1f, true);
+        card.GetComponentInChildren<Canvas>().sortingOrder = Player.hands.Count - 1;
+        ResetCostPosition();
+    }
+
+    public void ResetCardPosition()
+    {
+        for (int num = 0; num < Player.hands.Count; num++)
+        {
+            Player.hands[num].GetComponentInChildren<Canvas>().sortingOrder = num;
+            Player.hands[num].transform.localPosition = new Vector3(-180 + 45 * num, 0, 0);
+        }
+    }
+
+    public void ResetCardPositionWhenWatching()
+    {
+        bool StartReset = false;
+        for (int num = 0; num < Player.hands.Count; num++)
+        {
+            if (Player.hands[num].tag == "Watching" && StartReset == false)
+            {
+                Player.hands[num].transform.localPosition = new Vector3(-180 + 45 * num + 8, 0, 0);
+                if (num != Player.hands.Count)
+                {
+                    StartReset = true;
+                }
+            }
+            else if (StartReset == true)
+            {
+                Player.hands[num].transform.localPosition = new Vector3(-180 + 45 * num + 126, 0, 0);
+            }
+        }
+    }
+
+    public void ResetCostPosition()
+    {
+        for (int num = 0; num < costCardList.Count; num++)
+        {
+            costCardList[num].GetComponentInChildren<Canvas>().sortingOrder = num;
+            costCardList[num].transform.localPosition = new Vector3(0, 160 - 45 * num, 0);
+        }
+    }
+
+    public void ResetCostPositionWhenWatching()
+    {
+        bool StartReset = false;
+        for (int num = 0; num < costCardList.Count; num++)
+        {
+            if (costCardList[num].tag == "Watching" && StartReset == false)
+            {
+                costCardList[num].transform.localPosition = new Vector3(0, 160 - 45 * num - 11, 0);
+                if (num != costCardList.Count)
+                {
+                    StartReset = true;
+                }
+            }
+            else if (StartReset == true)
+            {
+                costCardList[num].transform.localPosition = new Vector3(0, 160 - 45 * num - 199, 0);
+            }
+        }
     }
 }
