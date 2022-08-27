@@ -31,9 +31,6 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
 	//全Audioを保持
 	private Dictionary<string, AudioClip> _bgmDic, _seDic;
 
-	//=================================================================================
-	//初期化
-	//=================================================================================
 
 	private void Awake()
 	{
@@ -68,9 +65,7 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
 		AttachSESource.volume = PlayerPrefs.GetFloat(SE_VOLUME_KEY, SE_VOLUME_DEFULT);
 	}
 
-	//=================================================================================
 	//SE
-	//=================================================================================
 
 	/// <summary>
 	/// 指定したファイル名のSEを流す。第二引数のdelayに指定した時間だけ再生までの間隔を空ける
@@ -92,9 +87,7 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
 		AttachSESource.PlayOneShot(_seDic[_nextSEName] as AudioClip);
 	}
 
-	//=================================================================================
 	//BGM
-	//=================================================================================
 
 	/// <summary>
 	/// 指定したファイル名のBGMを流す。ただし既に流れている場合は前の曲をフェードアウトさせてから。
@@ -158,10 +151,7 @@ public class AudioManager : SingletonMonoBehaviour<AudioManager>
 
 	}
 
-	//=================================================================================
-	//音量変更
-	//=================================================================================
-
+	/*音量変更*/
 	/// <summary>
 	/// BGMとSEのボリュームを別々に変更&保存
 	/// </summary>

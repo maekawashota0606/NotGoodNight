@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    internal static object instance;
     [SerializeField] GameObject cardPrefab;
     [SerializeField] Transform playerHand;
 

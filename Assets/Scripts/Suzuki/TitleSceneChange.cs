@@ -8,6 +8,8 @@ public class TitleSceneChange : MonoBehaviour
     //タイトルシーンからゲームシーンへの遷移
     public void SwitchScene()
     {
+        DontDestroyOnLoad(this.gameObject);
         SceneManager.LoadScene("MainGame");
     }
+
 }
