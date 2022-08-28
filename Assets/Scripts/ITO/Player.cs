@@ -61,7 +61,7 @@ public class Player : MonoBehaviour
         }
 
         //獲得スコアと現在ライフを随時更新で画面に表示させる
-        scoreText.text = "Score / " + Score.ToString("d6");
+        scoreText.text = " " + Score.ToString("d6");
         lifeText.text = "Life / " + Life.ToString();
         if (Life > 0 && Life <= 3)
         {
@@ -95,8 +95,8 @@ public class Player : MonoBehaviour
         }
 
         //int[] CardID = new int[28]{1,2,3,4,5,8,10,11,12,13,14,15,16,18,19,20,21,22,23,24,25,27,29,30,31,32,33,35};
-        int ID = Random.Range(1,36);
-        //int ID = 34;
+        //int ID = Random.Range(1,36);
+        int ID = 34;
         //int DrawNum = Random.Range(0,CardID.Length);
         //int ID = CardID[DrawNum];
         SoundManager.Instance.PlaySE(7);

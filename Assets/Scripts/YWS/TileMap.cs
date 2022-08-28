@@ -330,54 +330,37 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
 
         #region 次元断裂
         case 34:
-            if (basicPosX > 1 && basicPosZ > 1)
-                tileMap[basicPosX-2, basicPosZ-2].tag = "Area"; //←↑←↑
-            if (basicPosZ > 0 && basicPosX > 0)
-                tileMap[basicPosX-1, basicPosZ-1].tag = "Area"; //←↑
-            if (basicPosZ > 1)
-                tileMap[basicPosX, basicPosZ-2].tag = "Area"; //↑↑
-            if (basicPosX > 0 && basicPosZ > 1)
-                tileMap[basicPosX-1, basicPosZ-2].tag = "Area"; //↑↑←
-            if (basicPosX < 9 && basicPosZ > 1)
-                tileMap[basicPosX+1, basicPosZ-2].tag = "Area"; //↑↑→
-            if (basicPosZ > 0)
-                tileMap[basicPosX, basicPosZ-1].tag = "Area"; //↑
-            if (basicPosX < 8 && basicPosZ > 1)
-                tileMap[basicPosX+2, basicPosZ-2].tag = "Area"; //→↑→↑
-            if (basicPosX < 9 && basicPosZ > 0)
-                tileMap[basicPosX+1, basicPosZ-1].tag = "Area"; //→↑
-            if (basicPosX < 8)
-                tileMap[basicPosX+2, basicPosZ].tag = "Area"; //→→
-            if (basicPosX < 8 && basicPosZ > 0)
-                tileMap[basicPosX+2, basicPosZ-1].tag = "Area"; //→→↑
-            if (basicPosX < 8 && basicPosZ < 9)
-                tileMap[basicPosX+2, basicPosZ+1].tag = "Area"; //→→↓
-            if (basicPosX < 9)
-                tileMap[basicPosX+1, basicPosZ].tag = "Area"; //→
-            if (basicPosX < 8 && basicPosZ < 8)
-                tileMap[basicPosX+2, basicPosZ+2].tag = "Area"; //→↓→↓
-            if (basicPosX < 9 && basicPosZ < 9)
-                tileMap[basicPosX+1, basicPosZ+1].tag = "Area"; //→↓
-            if (basicPosZ < 8)
-                tileMap[basicPosX, basicPosZ+2].tag = "Area"; //↓↓
-            if (basicPosX < 9 && basicPosZ < 8)
-                tileMap[basicPosX+1, basicPosZ+2].tag = "Area"; //↓↓→
-            if (basicPosX > 0 && basicPosZ < 8)
-                tileMap[basicPosX-1, basicPosZ+2].tag = "Area"; //↓↓←
-            if (basicPosZ < 9)
-                tileMap[basicPosX, basicPosZ+1].tag = "Area"; //↓
-            if (basicPosX > 1 && basicPosZ < 8)
-                tileMap[basicPosX-2, basicPosZ+2].tag = "Area"; //←↓←↓
-            if (basicPosX > 0 && basicPosZ < 9)
-                tileMap[basicPosX-1, basicPosZ+1].tag = "Area"; //←↓
-            if (basicPosX > 1)
-                tileMap[basicPosX-2, basicPosZ].tag = "Area"; //←←
-            if (basicPosX > 1 && basicPosZ < 9)
-                tileMap[basicPosX-2, basicPosZ+1].tag = "Area"; //←←↓
-            if (basicPosX > 1 && basicPosZ > 0)
-                tileMap[basicPosX-2, basicPosZ-1].tag = "Area"; //←←↑
-            if (basicPosX > 0)
-                tileMap[basicPosX-1, basicPosZ].tag = "Area"; //←
+            for (int num = -3; num < 3; num++)
+            {
+                int upX = basicPosX;
+                int upZ = basicPosZ + num;
+                int downX = basicPosX;
+                int downZ = basicPosZ + num;
+                for (int i = 0; i < 10; i++)
+                {
+                    if (upX >= 0 && upX <= 9 && upZ >= 0 && upZ <= 9)
+                    {
+                        if (tileMap[upX,upZ].tag == "Untagged")
+                        {
+                            tileMap[upX, upZ].tag = "Area";
+                        }
+                    }
+                    upX++;
+                    upZ--;
+                }
+                for (int j = 0; j < 10; j++)
+                {
+                    if (downX >= 0 && downX <= 9 && downZ >= 0 && downZ <= 9)
+                    {
+                        if (tileMap[downX, downZ].tag == "Untagged")
+                        {
+                            tileMap[downX, downZ].tag = "Area";
+                        }
+                    }
+                    downX--;
+                    downZ++;
+                }
+            }
             break;
         #endregion
 
