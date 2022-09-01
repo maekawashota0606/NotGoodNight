@@ -9,7 +9,6 @@ using DG.Tweening;
 public class GameDirector : SingletonMonoBehaviour<GameDirector>
 {
     [SerializeField, Header("基本獲得スコア")] public int point = 0;
-    [SerializeField, Header("隕石の初期位置")] public Vector3 _DEFAULT_POSITION = Vector3.zero;
     [SerializeField, Header("隕石生成オブジェクト")] MeteorGenerator _generator = null;
     [SerializeField, Header("画面を振動させるオブジェクト")] ShakeByRandom _shaker = null;
     [SerializeField] public Player _player = null;
@@ -32,6 +31,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     public bool IsPlayerWin = false;
 
     #region カード使用関連の変数
+    [SerializeField, Header("拡散カード使用ボタン")] private GameObject CardUseButton = null;
     [SerializeField, Header("選択カード置き場")] private Transform SelectedCardPosition = null;
     [SerializeField, Header("選択コスト置き場")] private Transform SelectedCostPosition = null;
     public List<Card> costCardList = new List<Card>();
@@ -41,8 +41,6 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     public Card SelectedCard = null;
     //盤面にマウスカーソルが乗っているか
     public bool IsMouseOnTile = false;
-    //基点マスに光って欲しいのかどうか
-    public bool IsBasePointInArea = true;
     //使用カードに複数の効果が存在しているかどうか
     public bool IsMultiEffect = false;
     //カードの使用が確定したかどうか
@@ -57,8 +55,6 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     public bool WaitCopy_Card13 = false;
     //複製魔法用のコピー元の番号
     public int CopyNum_Card13 = 0;
-    //範囲の選択を待つ必要があるかどうか
-    public bool WaitForSelectingArea = false;
     public bool WaitingMove = false;
 
     #endregion
@@ -107,16 +103,16 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 break;
 
             case GameState.active: //アクティブフェイズ
-                TileMap.Instance.FindBasePoint();
-                //カードの使用が確定した場合
-                if (IsCardUsingConfirm == true)
+                if(SelectedCard != null)
                 {
-                    if (SelectedCard.ID == 6 || SelectedCard.ID == 7 || SelectedCard.ID == 26)
+                    if (SelectedCard.CardTypeValue == CardData.CardType.Convergence)
                     {
-                        WaitForSelectingArea = true;
+                        TileMap.Instance.FindBasePoint();
                     }
-                    //カード効果処理フェイズに移行する
-                    gameState = GameState.effect;
+                    else if (SelectedCard.CardTypeValue == CardData.CardType.Diffusion && PayedCost >= SelectedCard.Cost)
+                    {
+                        CardUseButton.SetActive(true);
+                    }
                 }
 
                 //ここらへんα版用
@@ -143,25 +139,10 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 {
                     if (WaitingMove == false)
                     {
-                        TileMap.Instance.FindBasePoint();
-                        if (SelectedCard.CardTypeValue == CardData.CardType.Attack)
+                        SelectedCard.CardEffect();
+                        if (WaitCopy_Card13 == false)
                         {
-                            if (IsMeteorDestroyed == true && IsMultiEffect == true)
-                            {
-                                _player.ExtraEffect();
-                                IsPlayerSelectMove = true;
-                            }
-                        }
-                        else if (SelectedCard.CardTypeValue == CardData.CardType.Special)
-                        {
-                            if (WaitForSelectingArea == false)
-                            {
-                                _player.SpecialCardEffect();
-                                if (WaitCopy_Card13 == false)
-                                {
-                                    IsPlayerSelectMove = true;
-                                }
-                            }
+                            IsPlayerSelectMove = true;
                         }
                     }
                     else
@@ -172,10 +153,6 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 break;
 
             case GameState.fall: //隕石落下フェイズ
-                if (SelectedCard == null)
-                {
-                    IsBasePointInArea = true;
-                }
                 IsPlayerSelectMove = false;
                 WaitingMove = false;
                 if (DoMeteorFall == true)
@@ -295,6 +272,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     /// </summary>
     private void Init()
     {
+        CardUseButton.SetActive(false);
         gameState = GameState.standby;
         IsPlayerSelectMove = false;
         CanMeteorGenerate = true;
@@ -304,15 +282,13 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         IsPlayerWin = false;
         SelectedCard = null;
         IsMouseOnTile = false;
-        IsBasePointInArea = true;
         IsMultiEffect = false;
         IsCardUsingConfirm = false;
         IsMeteorDestroyed = false;
         DestroyedNum = 0;
         PayedCost = 0;
         WaitCopy_Card13 = false;
-        WaitForSelectingArea = false;
-        Player.hands = new List<Card>();
+        _player.hands = new List<Card>();
     }
 
     /// <summary>
@@ -329,7 +305,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         {
             //生成する場所を乱数で出す
             int x = Random.Range(0,10);
-            Vector3 checkPos = _DEFAULT_POSITION + new Vector3(x, 0, -columns);
+            Vector3 checkPos = new Vector3(x, 0, -columns);
             if (Map.Instance.CheckEmpty(checkPos))
             {
                 _generator.Generate(checkPos);
@@ -351,7 +327,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     /// <param name="targetPosZ">指定されたz座標</param>
     public void MeteorSetTarget(int targerPosX, int targetPosZ)
     {
-        Vector3 TargetPos = _DEFAULT_POSITION + new Vector3(targerPosX, 0, -targetPosZ);
+        Vector3 TargetPos = new Vector3(targerPosX, 0, -targetPosZ);
         _generator.Generate(TargetPos);
         Map.Instance.map[targetPosZ, targerPosX] = Map.Instance.meteor;
     }
@@ -367,17 +343,13 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
 
     public void SetSelectCard(Card card)
     {
-        if (card.ID == 11 || card.ID == 15 || card.ID == 19 || (card.ID == 35 && Player.hands.Count != 1))
+        if (card.ID == 11 || card.ID == 15 || card.ID == 19 || (card.ID == 35 && _player.hands.Count != 1))
         {
             return;
         }
         
-        Player.hands.Remove(card);
+        _player.hands.Remove(card);
         SelectedCard = card;
-        if (card.IsBasePointInArea == false)
-        {
-            IsBasePointInArea = false;
-        }
         //効果が処理された後に削除するために、タグを付けておく
         card.tag = "Selected";
         card.transform.SetParent(SelectedCardPosition);
@@ -387,7 +359,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
 
     public void SetCostCard(Card card)
     {
-        Player.hands.Remove(card);
+        _player.hands.Remove(card);
         costCardList.Add(card);
         //選択されているコストの数を加算する
         switch(card.ID)
@@ -415,40 +387,41 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         {
             costCardList.Remove(card);
         }
-        Player.hands.Add(card);
+        _player.hands.Add(card);
         card.tag = "Untagged";
         card.transform.SetParent(_player.playerHand);
-        Vector3 movePoint = new Vector3(-180 + 45 * (Player.hands.Count - 1), 0, 0);
+        Vector3 movePoint = new Vector3(-180 + 45 * (_player.hands.Count - 1), 0, 0);
         card.transform.DOLocalMove(movePoint, 0.1f, true);
-        card.GetComponentInChildren<Canvas>().sortingOrder = Player.hands.Count - 1;
+        card.GetComponentInChildren<Canvas>().sortingOrder = _player.hands.Count - 1;
         ResetCostPosition();
+        CardUseButton.SetActive(false);
     }
 
     public void ResetCardPosition()
     {
-        for (int num = 0; num < Player.hands.Count; num++)
+        for (int num = 0; num < _player.hands.Count; num++)
         {
-            Player.hands[num].GetComponentInChildren<Canvas>().sortingOrder = num;
-            Player.hands[num].transform.localPosition = new Vector3(-180 + 45 * num, 0, 0);
+            _player.hands[num].GetComponentInChildren<Canvas>().sortingOrder = num;
+            _player.hands[num].transform.localPosition = new Vector3(-180 + 45 * num, 0, 0);
         }
     }
 
     public void ResetCardPositionWhenWatching()
     {
         bool StartReset = false;
-        for (int num = 0; num < Player.hands.Count; num++)
+        for (int num = 0; num < _player.hands.Count; num++)
         {
-            if (Player.hands[num].tag == "Watching" && StartReset == false)
+            if (_player.hands[num].tag == "Watching" && StartReset == false)
             {
-                Player.hands[num].transform.localPosition = new Vector3(-180 + 45 * num + 8, 0, 0);
-                if (num != Player.hands.Count)
+                _player.hands[num].transform.localPosition = new Vector3(-180 + 45 * num + 8, 0, 0);
+                if (num != _player.hands.Count)
                 {
                     StartReset = true;
                 }
             }
             else if (StartReset == true)
             {
-                Player.hands[num].transform.localPosition = new Vector3(-180 + 45 * num + 126, 0, 0);
+                _player.hands[num].transform.localPosition = new Vector3(-180 + 45 * num + 126, 0, 0);
             }
         }
     }
@@ -480,5 +453,11 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 costCardList[num].transform.localPosition = new Vector3(0, 160 - 45 * num - 199, 0);
             }
         }
+    }
+
+    public void UseButtonOnClick()
+    {
+        gameState = GameState.effect;
+        CardUseButton.SetActive(false);
     }
 }

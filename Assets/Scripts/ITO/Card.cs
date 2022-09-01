@@ -108,7 +108,7 @@ public class Card : CardData
         {
             if (GameDirector.Instance.gameState == GameDirector.GameState.active && GameDirector.Instance.PayedCost >= GameDirector.Instance.SelectedCard.Cost && IsClick == true && IsCost == false && IsMouseOver == true && Input.GetMouseButtonDown(0))
             {
-                if (GameDirector.Instance.SelectedCard.ID == 11 || GameDirector.Instance.SelectedCard.ID == 15 || GameDirector.Instance.SelectedCard.ID == 19 || (GameDirector.Instance.SelectedCard.ID == 35 && Player.hands.Count != 1))
+                if (GameDirector.Instance.SelectedCard.CardTypeValue == CardType.Cost || (GameDirector.Instance.SelectedCard.ID == 35 && GameDirector.Instance._player.hands.Count != 1))
                 {
                     return;
                 }
@@ -178,7 +178,6 @@ public class Card : CardData
                 }
                 IsClick = false;
                 GameDirector.Instance.SelectedCard = null;
-                GameDirector.Instance.IsBasePointInArea = true;
                 GameDirector.Instance.PayedCost = 0;
             }
             else if (IsClick && IsCost)

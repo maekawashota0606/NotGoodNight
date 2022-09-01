@@ -851,12 +851,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 28
+    m_Font: {fileID: 12800000, guid: cbf3f1852d82d35468e97f0c2356c022, type: 3}
+    m_FontSize: 40
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 2
-    m_MaxSize: 40
+    m_MinSize: 0
+    m_MaxSize: 45
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -1084,7 +1084,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   point: 1000
-  _DEFAULT_POSITION: {x: 0, y: 0, z: 0}
   _generator: {fileID: 23861880}
   _shaker: {fileID: 283617216}
   _player: {fileID: 2110949644}
@@ -1094,13 +1093,13 @@ MonoBehaviour:
   CanMeteorGenerate: 1
   DoMeteorFall: 1
   IsPlayerWin: 0
+  CardUseButton: {fileID: 1984471891}
   SelectedCardPosition: {fileID: 1459768188}
   SelectedCostPosition: {fileID: 222600256}
   costCardList: []
   WatchingCard: {fileID: 0}
   SelectedCard: {fileID: 0}
   IsMouseOnTile: 0
-  IsBasePointInArea: 1
   IsMultiEffect: 0
   IsCardUsingConfirm: 0
   IsMeteorDestroyed: 0
@@ -1108,7 +1107,6 @@ MonoBehaviour:
   PayedCost: 0
   WaitCopy_Card13: 0
   CopyNum_Card13: 0
-  WaitForSelectingArea: 0
   WaitingMove: 0
 --- !u!4 &707400063
 Transform:
@@ -1929,7 +1927,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: f6a3b1fed15c2174f83506138c1f6e88, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2558,7 +2556,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1984471894}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 707400062}
+        m_TargetAssemblyTypeName: GameDirector, Assembly-CSharp
+        m_MethodName: UseButtonOnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1984471894
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2579,8 +2589,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: ba7157d6cee473b49a78dc22cea2867b, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -2734,6 +2744,7 @@ MonoBehaviour:
   _csvFile: {fileID: 4900000, guid: 63c822431d736854e8aa139c9369a38d, type: 3}
   cardPrefab: {fileID: 4275816436816075199, guid: b229e62bc8e314a4aaff474741e99714, type: 3}
   playerHand: {fileID: 1613119776}
+  hands: []
   Score: 0
   scoreText: {fileID: 663649435}
   Life: 3
@@ -2743,6 +2754,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 329e63271e558fc4d9b25cd0cc0a2865, type: 3}
   - {fileID: 21300000, guid: 4043cf01b59945346b50b22329f5fab9, type: 3}
   - {fileID: 21300000, guid: be4dd41e9019640448ef2924cebb8b82, type: 3}
+  MoveList: []
+  IsDrawEffect: 0
   DrawCount_Card10: 0
   EffectTurn_Card14: 0
 --- !u!1 &2119274711
