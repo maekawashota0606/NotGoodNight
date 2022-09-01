@@ -504,7 +504,7 @@ GameObject:
   - component: {fileID: 222600257}
   m_Layer: 5
   m_Name: CostSpace
-  m_TagString: Untagged
+  m_TagString: CostCardSpace
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1882,7 +1882,7 @@ GameObject:
   - component: {fileID: 1459768189}
   m_Layer: 5
   m_Name: SelectedCardSpace
-  m_TagString: Untagged
+  m_TagString: SelectedCardSpace
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2754,6 +2754,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 329e63271e558fc4d9b25cd0cc0a2865, type: 3}
   - {fileID: 21300000, guid: 4043cf01b59945346b50b22329f5fab9, type: 3}
   - {fileID: 21300000, guid: be4dd41e9019640448ef2924cebb8b82, type: 3}
+  SelectedCardSpace: {fileID: 1459768189}
+  SelectedCardSpaceImage:
+  - {fileID: 21300000, guid: f6a3b1fed15c2174f83506138c1f6e88, type: 3}
+  - {fileID: 21300000, guid: ba2583732e27fbf41ac2bf83a970c54e, type: 3}
   MoveList: []
   IsDrawEffect: 0
   DrawCount_Card10: 0

@@ -25,6 +25,8 @@ public class Player : MonoBehaviour
     [SerializeField, Header("ライフテキスト")] private Text lifeText = null;
     [SerializeField, Header("盤面")] private Image Board = null;
     [SerializeField, Header("盤面の画像")] private Sprite[] BoardImage = new Sprite[3];
+    [SerializeField, Header("選択カードの置き場")] private Image SelectedCardSpace = null;
+    [SerializeField, Header("選択カード置き場の画像")] private Sprite[] SelectedCardSpaceImage = new Sprite[2];
     //ボタンのダブルクリック防止用フラグ
     private bool IsClick = false;
     public List<Meteorite> MoveList = new List<Meteorite>();
@@ -70,6 +72,15 @@ public class Player : MonoBehaviour
         else if (Life > 3)
         {
             Board.sprite = BoardImage[2];
+        }
+
+        if (GameDirector.Instance.SelectedCard == null || GameDirector.Instance.PayedCost < GameDirector.Instance.SelectedCard.Cost)
+        {
+            SelectedCardSpace.sprite = SelectedCardSpaceImage[0];
+        }
+        else if (GameDirector.Instance.SelectedCard != null && GameDirector.Instance.PayedCost >= GameDirector.Instance.SelectedCard.Cost)
+        {
+            SelectedCardSpace.sprite = SelectedCardSpaceImage[1];
         }
 
         if (GameDirector.Instance.WaitCopy_Card13 == true && GameDirector.Instance.CopyNum_Card13 != 0)

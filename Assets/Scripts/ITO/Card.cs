@@ -15,6 +15,7 @@ public class Card : CardData
     //このカードがコストとして選択されているのかどうか
     public bool IsCost = false;
     private bool IsSEPlayed = false;
+    private Vector2 originPosition = Vector2.zero;
 
     void Update()
     {
@@ -26,7 +27,6 @@ public class Card : CardData
             //image_component.color = Color.white;
         }
 
-        //ConfirmUsing();
         //WaitForSelect();
     }
 
@@ -91,32 +91,6 @@ public class Card : CardData
                 IsClick = true;
                 IsCost = true;
                 GameDirector.Instance.SetCostCard(this);
-            }
-        }
-    }
-
-    /// <summary>
-    /// カードの使用を確定する処理
-    /// </summary>
-    private void ConfirmUsing()
-    {
-        if (GameDirector.Instance.SelectedCard == null)
-        {
-            return;
-        }
-        else
-        {
-            if (GameDirector.Instance.gameState == GameDirector.GameState.active && GameDirector.Instance.PayedCost >= GameDirector.Instance.SelectedCard.Cost && IsClick == true && IsCost == false && IsMouseOver == true && Input.GetMouseButtonDown(0))
-            {
-                if (GameDirector.Instance.SelectedCard.CardTypeValue == CardType.Cost || (GameDirector.Instance.SelectedCard.ID == 35 && GameDirector.Instance._player.hands.Count != 1))
-                {
-                    return;
-                }
-                else
-                {
-                    SoundManager.Instance.PlaySE(3);
-                    GameDirector.Instance.IsCardUsingConfirm = true;
-                }
             }
         }
     }
@@ -196,6 +170,41 @@ public class Card : CardData
                     break;
                 }
             }
+        }
+    }
+
+    public void OnBeginDrag(BaseEventData eventData)
+    {
+        var pointerEventData = eventData as PointerEventData;
+        originPosition = transform.position;
+    }
+
+    public void OnDrag(BaseEventData eventData)
+    {
+        var pointerEventData = eventData as PointerEventData;
+        transform.position = pointerEventData.position;
+    }
+
+    public void OnEndDrag(BaseEventData eventData)
+    {
+        var pointerEventData = eventData as PointerEventData;
+        bool flg = true;
+
+        var raycastResults = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointerEventData, raycastResults);
+
+        foreach (var hit in raycastResults)
+        {
+            if (hit.gameObject.CompareTag("SelectedCardSpace"))
+            {
+                transform.position = hit.gameObject.transform.position;
+                flg = false;
+            }
+        }
+
+        if (flg)
+        {
+            transform.position = originPosition;
         }
     }
 

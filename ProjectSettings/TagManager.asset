@@ -11,6 +11,8 @@ TagManager:
   - Lock
   - Move
   - Watching
+  - SelectedCardSpace
+  - CostCardSpace
   layers:
   - Default
   - TransparentFX
