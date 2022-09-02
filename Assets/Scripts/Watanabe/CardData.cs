@@ -602,7 +602,7 @@ public class CardData : MonoBehaviour
             break;
         #endregion
 
-        #region 
+        #region 聖櫃の開放
         case 17:
             break;
         #endregion
@@ -708,7 +708,7 @@ public class CardData : MonoBehaviour
             break;
         #endregion
 
-        #region 
+        #region 光の奔流
         case 28:
             break;
         #endregion

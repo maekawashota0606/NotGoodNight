@@ -22,7 +22,6 @@ public class Player : MonoBehaviour
     [SerializeField, Header("スコアテキスト")] private Text scoreText = null;
     //ライフ
     public int Life = 3;
-    [SerializeField, Header("ライフテキスト")] private Text lifeText = null;
     [SerializeField, Header("盤面")] private Image Board = null;
     [SerializeField, Header("盤面の画像")] private Sprite[] BoardImage = new Sprite[3];
     [SerializeField, Header("選択カードの置き場")] private Image SelectedCardSpace = null;
@@ -62,9 +61,8 @@ public class Player : MonoBehaviour
             Life = 0;
         }
 
-        //獲得スコアと現在ライフを随時更新で画面に表示させる
+        //獲得スコアを随時更新で画面に表示させる
         scoreText.text = " " + Score.ToString("d6");
-        lifeText.text = "Life / " + Life.ToString();
         if (Life > 0 && Life <= 3)
         {
             Board.sprite = BoardImage[Life-1];
