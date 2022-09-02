@@ -628,7 +628,7 @@ public class CardData : MonoBehaviour
         case 21:
             GameDirector.Instance._player.IsDrawEffect = true;
             int DrawNum = 2;
-            DrawNum += GameDirector.Instance._player.Score / 30000 * 2;
+            DrawNum += Player.Score / 30000 * 2;
             for (int i = 0; i < DrawNum; i++)
             {
                 GameDirector.Instance._player.DrawCard();
@@ -860,7 +860,7 @@ public class CardData : MonoBehaviour
         #region アストラルリベリオン
         case 20:
             GameDirector.Instance._player.IsDrawEffect = true;
-            if (GameDirector.Instance._player.Score >= 50000)
+            if (Player.Score >= 50000)
             {
                 for (int i = 0; i < 7; i++)
                 {

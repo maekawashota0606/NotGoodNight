@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
     //手札
     public List<Card> hands = new List<Card>();
     //スコア
-    public int Score = 0;
+    public static int Score = 0;
     [SerializeField, Header("スコアテキスト")] private Text scoreText = null;
     //ライフ
     public int Life = 3;
@@ -99,17 +99,27 @@ public class Player : MonoBehaviour
     /// </summary>
     public void DrawCard()
     {
+        int totalCardNum = 0;
+        if (GameDirector.Instance.SelectedCard != null)
+        {
+            totalCardNum++;
+        }
+        if (GameDirector.Instance.costCardList.Count > 0)
+        {
+            totalCardNum += GameDirector.Instance.costCardList.Count;
+        }
+        totalCardNum += hands.Count;
         //手札は10枚が上限なので、10枚の状態でドローは行えない
-        if (hands.Count == 10 || IsClick == true)
+        if (totalCardNum == 10 || IsClick == true)
         {
             return;
         }
 
-        //int[] CardID = new int[28]{1,2,3,4,5,8,10,11,12,13,14,15,16,18,19,20,21,22,23,24,25,27,29,30,31,32,33,35};
-        int ID = Random.Range(1,36);
+        int[] CardID = new int[31]{1,2,3,4,5,7,8,9,10,11,12,14,15,16,18,19,20,21,22,23,24,25,26,27,29,30,31,32,33,34,35};
+        //int ID = Random.Range(1,36);
         //int ID = 34;
-        //int DrawNum = Random.Range(0,CardID.Length);
-        //int ID = CardID[DrawNum];
+        int DrawNum = Random.Range(0,CardID.Length);
+        int ID = CardID[DrawNum];
         SoundManager.Instance.PlaySE(7);
         //ゲーム開始時の初期手札のドロー
         if (GameDirector.Instance.gameState == GameDirector.GameState.standby)
@@ -158,16 +168,7 @@ public class Player : MonoBehaviour
     /// </summary>
     public void DeleteUsedCost()
     {
-        //使用されたカードすべてにタグがついているので、それらを手札から見つけ出して削除する
-        /*for (int i = 0; i < hands.Count; i++)
-        {
-            if (hands[i].tag == "Cost")
-            {
-                Destroy(hands[i].gameObject);
-                hands.RemoveAt(i);
-                i--;
-            }
-        }*/
+        //使用されたコストカードすべてを削除する
         for (int i = 0; i < GameDirector.Instance.costCardList.Count; i++)
         {
             Destroy(GameDirector.Instance.costCardList[i].gameObject);
@@ -181,16 +182,7 @@ public class Player : MonoBehaviour
     /// </summary>
     public void DeleteUsedCard()
     {
-        //使用されたカードすべてにタグがついているので、それらを手札から見つけ出して削除する
-        /*for (int i = 0; i < hands.Count; i++)
-        {
-            if (hands[i].tag == "Selected")
-            {
-                Destroy(hands[i].gameObject);
-                hands.RemoveAt(i);
-                break;
-            }
-        }*/
+        //使用されたカードを削除する
         Destroy(GameDirector.Instance.SelectedCard.gameObject);
         GameDirector.Instance.PayedCost = 0;
     }

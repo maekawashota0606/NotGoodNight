@@ -105,7 +105,8 @@ public class Card : CardData
             SoundManager.Instance.PlaySE(1);
             IsSEPlayed = true;
         }
-        transform.localScale = Vector3.one * 1.1f;
+        //transform.localScale = Vector3.one * 1.1f;
+        transform.localScale *= 1.1f;
         GetComponentInChildren<Canvas>().sortingLayerName = "Overlay";
         IsMouseOver = true;
         GameDirector.Instance.WatchingCard = this;
@@ -119,7 +120,8 @@ public class Card : CardData
     /// </summary>
     public void OnPointerExit()
     {
-        transform.localScale = Vector3.one;
+        //transform.localScale = Vector3.one;
+        transform.localScale /= 1.1f;
         GetComponentInChildren<Canvas>().sortingLayerName = "Card";
         IsSEPlayed = false;
         IsMouseOver = false;

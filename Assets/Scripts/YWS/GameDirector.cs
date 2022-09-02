@@ -118,7 +118,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 //ここらへんα版用
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
-                    _player.Score += 10000;
+                    Player.Score += 10000;
                 }
                 break;
 
@@ -199,7 +199,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                     break;
                 }
                 //プレイヤーのスコアが100000以上の場合
-                else if (_player.Score >= 100000)
+                else if (Player.Score >= 100000)
                 {
                     //かつマップ上に隕石が存在しない場合、ゲームを終了させる
                     if (Map.Instance.CheckMap())
@@ -289,6 +289,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         PayedCost = 0;
         WaitCopy_Card13 = false;
         _player.hands = new List<Card>();
+        Player.Score = 0;
     }
 
     /// <summary>
@@ -338,7 +339,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     public void AddScore()
     {
         var GetScore = 1000 * GameDirector.Instance.DestroyedNum * (1 + GameDirector.Instance.DestroyedNum * 0.1f);
-        _player.Score += (int)GetScore;
+        Player.Score += (int)GetScore;
     }
 
     public void SetSelectCard(Card card)
@@ -375,7 +376,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         //コストとして使用された時に削除する用にタグを付けておく
         card.tag = "Cost";
         card.transform.SetParent(SelectedCostPosition);
-        Vector3 movePoint = new Vector3(0, 160 - 45 * (costCardList.Count - 1), 0);
+        Vector3 movePoint = new Vector3(0, 95 - 70 * (costCardList.Count - 1), 0);
         card.transform.DOLocalMove(movePoint, 0.1f, true);
         card.GetComponentInChildren<Canvas>().sortingOrder = costCardList.Count - 1;
         ResetCardPosition();
@@ -386,11 +387,21 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         if (IsCost)
         {
             costCardList.Remove(card);
+            switch(card.ID)
+            {
+            case 11: //サクリファイス・レプリカ
+                PayedCost -= 2;
+                break;
+
+            default:
+                PayedCost--;
+                break;
+            }
         }
         _player.hands.Add(card);
         card.tag = "Untagged";
         card.transform.SetParent(_player.playerHand);
-        Vector3 movePoint = new Vector3(-180 + 45 * (_player.hands.Count - 1), 0, 0);
+        Vector3 movePoint = new Vector3(-315 + 70 * (_player.hands.Count - 1), 0, 0);
         card.transform.DOLocalMove(movePoint, 0.1f, true);
         card.GetComponentInChildren<Canvas>().sortingOrder = _player.hands.Count - 1;
         ResetCostPosition();
@@ -402,7 +413,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         for (int num = 0; num < _player.hands.Count; num++)
         {
             _player.hands[num].GetComponentInChildren<Canvas>().sortingOrder = num;
-            _player.hands[num].transform.localPosition = new Vector3(-180 + 45 * num, 0, 0);
+            _player.hands[num].transform.localPosition = new Vector3(-315 + 70 * num, 0, 0);
         }
     }
 
@@ -413,7 +424,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         {
             if (_player.hands[num].tag == "Watching" && StartReset == false)
             {
-                _player.hands[num].transform.localPosition = new Vector3(-180 + 45 * num + 8, 0, 0);
+                _player.hands[num].transform.localPosition = new Vector3(-315 + 70 * num + 14, 0, 0);
                 if (num != _player.hands.Count)
                 {
                     StartReset = true;
@@ -421,7 +432,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
             }
             else if (StartReset == true)
             {
-                _player.hands[num].transform.localPosition = new Vector3(-180 + 45 * num + 126, 0, 0);
+                _player.hands[num].transform.localPosition = new Vector3(-315 + 70 * num + 206, 0, 0);
             }
         }
     }
@@ -431,7 +442,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         for (int num = 0; num < costCardList.Count; num++)
         {
             costCardList[num].GetComponentInChildren<Canvas>().sortingOrder = num;
-            costCardList[num].transform.localPosition = new Vector3(0, 160 - 45 * num, 0);
+            costCardList[num].transform.localPosition = new Vector3(0, 95 - 70 * num, 0);
         }
     }
 
@@ -442,7 +453,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         {
             if (costCardList[num].tag == "Watching" && StartReset == false)
             {
-                costCardList[num].transform.localPosition = new Vector3(0, 160 - 45 * num - 11, 0);
+                costCardList[num].transform.localPosition = new Vector3(0, 95 - 70 * num - 19, 0);
                 if (num != costCardList.Count)
                 {
                     StartReset = true;
@@ -450,7 +461,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
             }
             else if (StartReset == true)
             {
-                costCardList[num].transform.localPosition = new Vector3(0, 160 - 45 * num - 199, 0);
+                costCardList[num].transform.localPosition = new Vector3(0, 95 - 70 * num - 322, 0);
             }
         }
     }

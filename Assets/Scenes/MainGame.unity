@@ -526,8 +526,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -240, y: 240}
-  m_SizeDelta: {x: 330, y: 550}
+  m_AnchoredPosition: {x: -240, y: 250.00002}
+  m_SizeDelta: {x: 330, y: 580}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &222600257
 MonoBehaviour:
@@ -1904,8 +1904,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 190.00003, y: 255}
-  m_SizeDelta: {x: 330, y: 471}
+  m_AnchoredPosition: {x: 190.00003, y: 290}
+  m_SizeDelta: {x: 350, y: 460}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1459768189
 MonoBehaviour:
@@ -2510,7 +2510,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 190, y: 86}
+  m_AnchoredPosition: {x: 190, y: 10}
   m_SizeDelta: {x: 320, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1984471893
@@ -2745,7 +2745,6 @@ MonoBehaviour:
   cardPrefab: {fileID: 4275816436816075199, guid: b229e62bc8e314a4aaff474741e99714, type: 3}
   playerHand: {fileID: 1613119776}
   hands: []
-  Score: 0
   scoreText: {fileID: 663649435}
   Life: 3
   lifeText: {fileID: 1958270617}

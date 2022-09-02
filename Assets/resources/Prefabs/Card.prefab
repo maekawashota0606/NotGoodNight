@@ -688,7 +688,7 @@ RectTransform:
   m_GameObject: {fileID: 4275816436816075199}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.6, y: 1.6, z: 1.6}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4672498641082047558}
@@ -765,7 +765,6 @@ MonoBehaviour:
   IsMouseOver: 0
   IsClick: 0
   IsCost: 0
-  sceneCanvas: {fileID: 0}
 --- !u!1 &7511553661025812919
 GameObject:
   m_ObjectHideFlags: 0

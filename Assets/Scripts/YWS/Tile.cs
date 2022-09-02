@@ -39,7 +39,6 @@ public class Tile : MonoBehaviour
         {
             SoundManager.Instance.PlaySE(5);
             //範囲が選択された場合、範囲内の隕石を検索する
-            //TileMap.Instance.MeteorDestory();
             GameDirector.Instance.gameState = GameDirector.GameState.effect;
         }
     }
