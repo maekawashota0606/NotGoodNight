@@ -36,11 +36,6 @@ public class ShakeByRandom : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.B))
-        {
-            //揺れ度設定
-            StartShake(1f,20f,30f);
-        }
         if (!_isDoShake) return;
 
         // 揺れ位置情報更新
@@ -89,6 +84,7 @@ public class ShakeByRandom : MonoBehaviour
         position.y = Mathf.Clamp(position.y, initPosition.y - vibrato, initPosition.y + vibrato);
         return position;
     }
+    
     /// <summary>
     /// 揺れ開始
     /// </summary>

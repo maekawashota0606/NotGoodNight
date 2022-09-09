@@ -10,8 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4403897312007601324}
   - component: {fileID: 3136783083013718745}
-  - component: {fileID: 7473727431172033284}
-  - component: {fileID: 1125723433328710572}
   m_Layer: 6
   m_Name: Meteor
   m_TagString: Untagged
@@ -31,7 +29,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8031397664198235274}
+  - {fileID: 2249416124623187913}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -47,43 +45,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e04305e33267fb41a13f4268e892f71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetTime: 1
+  TargetTime: 0.5
+  Duration: 0.25
   DoNextTurn: 0
   FallFinished: 0
---- !u!114 &7473727431172033284
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2328050306063117210}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a23ae30dd97d32458e25290865a7fd0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Meteo: {fileID: 8500916965932140029}
-  Meteos: {fileID: 21300000, guid: 86eb82c856a8297499dd399499470d1f, type: 3}
---- !u!95 &1125723433328710572
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2328050306063117210}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: 046d1c80d36af6341a8633c3abd8f29a, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  MoveFinished: 0
+  meteorAnimator: {fileID: 943569848190254305}
 --- !u!1 &8500916965932140029
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,9 +59,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8031397664198235274}
+  - component: {fileID: 2249416124623187913}
   - component: {fileID: 336633453178392961}
-  - component: {fileID: 7819790320674250949}
+  - component: {fileID: 943569848190254305}
   m_Layer: 6
   m_Name: Ui_0016
   m_TagString: Untagged
@@ -102,8 +69,8 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &8031397664198235274
-RectTransform:
+--- !u!4 &2249416124623187913
+Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -117,11 +84,6 @@ RectTransform:
   m_Father: {fileID: 4403897312007601324}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0.18, y: 0.18}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!212 &336633453178392961
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -174,11 +136,23 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!222 &7819790320674250949
-CanvasRenderer:
+--- !u!95 &943569848190254305
+Animator:
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8500916965932140029}
-  m_CullTransparentMesh: 1
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 23023b69041352b44a47bd9c60b1518d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

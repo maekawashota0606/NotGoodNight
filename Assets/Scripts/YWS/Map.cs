@@ -71,15 +71,53 @@ public class Map : SingletonMonoBehaviour<Map>
     /// </summary>
     public void CheckMapData()
     {
+        int meteorNum = 0;
         string printMapData = "";
 		for (int i = 0; i < 10; i++)
 		{
 			for (int j = 0; j < 10; j++)
 			{
 				printMapData += map[i, j].ToString() + ",";
+                if (map[i, j] == meteor)
+                {
+                    meteorNum++;
+                }
 			}
 			printMapData += "\n";
 		}
 		Debug.Log("マップ\n" + printMapData);
+        if (meteorNum != GameDirector.Instance.meteors.Count)
+        {
+            Debug.LogError("The number of meteor on map data is not match with the real number of meteor");
+            UpdateMapData();
+        }
+        else
+        {
+            Debug.Log("Meteors number match");
+        }
+    }
+
+    public void UpdateMapData()
+    {
+        //マップデータを初期化
+        map = new string[height,width]
+        {
+            {"□", "□", "□", "□", "□", "□", "□", "□", "□", "□"},
+            {"□", "□", "□", "□", "□", "□", "□", "□", "□", "□"},
+            {"□", "□", "□", "□", "□", "□", "□", "□", "□", "□"},
+            {"□", "□", "□", "□", "□", "□", "□", "□", "□", "□"},
+            {"□", "□", "□", "□", "□", "□", "□", "□", "□", "□"},
+            {"□", "□", "□", "□", "□", "□", "□", "□", "□", "□"},
+            {"□", "□", "□", "□", "□", "□", "□", "□", "□", "□"},
+            {"□", "□", "□", "□", "□", "□", "□", "□", "□", "□"},
+            {"□", "□", "□", "□", "□", "□", "□", "□", "□", "□"},
+            {"□", "□", "□", "□", "□", "□", "□", "□", "□", "□"}
+        };
+
+        for (int num = 0; num < GameDirector.Instance.meteors.Count; num++)
+        {
+            map[(int)GameDirector.Instance.meteors[num].transform.position.z * -1, (int)GameDirector.Instance.meteors[num].transform.position.x] = meteor;
+        }
+        CheckMapData();
     }
 }

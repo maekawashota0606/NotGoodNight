@@ -17,11 +17,18 @@ public class DisplayDetail : MonoBehaviour
         {
             costText.text = GameDirector.Instance.WatchingCard.Cost.ToString();
             nameText.text = GameDirector.Instance.WatchingCard.Name;
-            effectText.text = GameDirector.Instance.WatchingCard.EffectText;
+            effectText.text = GameDirector.Instance.WatchingCard.EffectText.Replace("x",GameDirector.Instance._player.DrawCount_Card10.ToString());
             if(Illustration[GameDirector.Instance.WatchingCard.ID - 1] != null)
             {
                 displayIllustration.sprite = Illustration[GameDirector.Instance.WatchingCard.ID - 1];
-            }       
+            }
+        }
+        else if (GameDirector.Instance.WatchingCard == null)
+        {
+            costText.text = "";
+            nameText.text = "";
+            effectText.text = "";
+            displayIllustration.sprite = null;
         }
     }
 }
