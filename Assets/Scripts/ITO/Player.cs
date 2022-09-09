@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     //csvファイル用変数
     public TextAsset _csvFile;
     //並び順
-    //｜番号｜名前｜コスト｜カードタイプ｜効果テキスト｜
+    //｜番号｜名前｜コスト｜カードタイプ｜破壊効果持ちかどうか｜効果テキスト｜
     public List<string[]> _cardData = new List<string[]>();
 
     [SerializeField, Header("カードプレハブ")] private GameObject cardPrefab = null;
@@ -113,18 +113,18 @@ public class Player : MonoBehaviour
             return;
         }
 
-        //int[] CardID = new int[31]{1,2,3,4,5,7,8,9,10,11,12,14,15,16,18,19,20,21,22,23,24,25,26,27,29,30,31,32,33,34,35};
+        int[] CardID = new int[31]{1,2,3,4,5,7,8,9,10,11,12,14,15,16,18,19,20,21,22,23,24,25,26,27,29,30,31,32,33,34,35};
         //int ID = Random.Range(1,36);
-        int ID = 7;
-        //int DrawNum = Random.Range(0,CardID.Length);
-        //int ID = CardID[DrawNum];
+        //int ID = 7;
+        int DrawNum = Random.Range(0,CardID.Length);
+        int ID = CardID[DrawNum];
         SoundManager.Instance.PlaySE(7);
         //ゲーム開始時の初期手札のドロー
         if (GameDirector.Instance.gameState == GameDirector.GameState.standby)
         {
             GameObject genCard = Instantiate(cardPrefab, playerHand);
             Card newCard = genCard.GetComponent<Card>();
-            newCard.Init(ID,_cardData[ID][1],_cardData[ID][2],_cardData[ID][3],_cardData[ID][4]);
+            newCard.Init(ID,_cardData[ID][1],_cardData[ID][2],_cardData[ID][3],_cardData[ID][4],_cardData[ID][5]);
             //カードオブジェクトをリストに入れる
             hands.Add(newCard);
         }
@@ -134,7 +134,7 @@ public class Player : MonoBehaviour
             IsClick = true;
             GameObject genCard = Instantiate(cardPrefab, playerHand);
             Card newCard = genCard.GetComponent<Card>();
-            newCard.Init(ID,_cardData[ID][1],_cardData[ID][2],_cardData[ID][3],_cardData[ID][4]);
+            newCard.Init(ID,_cardData[ID][1],_cardData[ID][2],_cardData[ID][3],_cardData[ID][4],_cardData[ID][5]);
             //カードオブジェクトをリストに入れる
             hands.Add(newCard);
             DrawCount_Card10++;
@@ -146,7 +146,7 @@ public class Player : MonoBehaviour
         {
             GameObject genCard = Instantiate(cardPrefab, playerHand);
             Card newCard = genCard.GetComponent<Card>();
-            newCard.Init(ID,_cardData[ID][1],_cardData[ID][2],_cardData[ID][3],_cardData[ID][4]);
+            newCard.Init(ID,_cardData[ID][1],_cardData[ID][2],_cardData[ID][3],_cardData[ID][4],_cardData[ID][5]);
             if (GameDirector.Instance.SelectedCard.ID == 18 && newCard.Cost > 0)
             {
                 newCard.Cost--;
@@ -223,7 +223,7 @@ public class Player : MonoBehaviour
     {
         GameObject genCard = Instantiate(cardPrefab, playerHand);
         Card newCard = genCard.GetComponent<Card>();
-        newCard.Init(cardID,_cardData[cardID][1],_cardData[cardID][2],_cardData[cardID][3],_cardData[cardID][4]);
+        newCard.Init(cardID,_cardData[cardID][1],_cardData[cardID][2],_cardData[cardID][3],_cardData[cardID][4],_cardData[cardID][5]);
         hands.Add(newCard);
         GameDirector.Instance.CopyNum_Card13 = 0;
         GameDirector.Instance.WaitCopy_Card13 = false;

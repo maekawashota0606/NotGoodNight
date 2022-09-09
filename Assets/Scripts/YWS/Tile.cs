@@ -38,6 +38,29 @@ public class Tile : MonoBehaviour
         if (GameDirector.Instance.gameState == GameDirector.GameState.active && GameDirector.Instance.SelectedCard != null && GameDirector.Instance.SelectedCard.CardTypeValue == CardData.CardType.Convergence && GameDirector.Instance.PayedCost >= GameDirector.Instance.SelectedCard.Cost && IsMouseOver == true && Input.GetMouseButtonDown(0))
         {
             SoundManager.Instance.PlaySE(5);
+            bool IsTarget = false;
+            if (GameDirector.Instance.SelectedCard.IsDestroyEffect == true)
+            {
+                for (int z = 0; z < 10; z++)
+                {
+                    for (int x = 0; x < 10; x++)
+                    {
+                        if (TileMap.Instance.tileMap[x, z].tag == "Search" || TileMap.Instance.tileMap[x, z].tag == "Area")
+                        {
+                            Vector3 checkPos = new Vector3(x, 0, -z);
+                            if (!Map.Instance.CheckEmpty(checkPos))
+                            {
+                                IsTarget = true;
+                            }
+                        }
+                    }
+                }
+
+                if (IsTarget == false)
+                {
+                    return;
+                }
+            }
             //範囲が選択された場合、範囲内の隕石を検索する
             GameDirector.Instance.gameState = GameDirector.GameState.effect;
         }

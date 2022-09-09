@@ -17,6 +17,7 @@ public class CardData : MonoBehaviour
         Cost, //コスト
     }
     public CardType CardTypeValue; //カードタイプ
+    public bool IsDestroyEffect = false; //破壊効果持ちかどうか
     public string EffectText; //効果テキスト
     private string UpdateText;
     #endregion
@@ -38,8 +39,9 @@ public class CardData : MonoBehaviour
     /// <param name="name">カード名</param>
     /// <param name="cost">カードコスト</param>
     /// <param name="type">カードタイプ</param>
+    /// <param name="IsDestroyEffect">破壊効果持ちかどうか</param>
     /// <param name="effectText">カード効果</param>
-    public void Init(int id,string name,string cost,string type, string effectText)
+    public void Init(int id, string name, string cost, string type, string IsDestroy, string effectText)
     {
         this.ID = id;
         this.Name = name;
@@ -55,6 +57,14 @@ public class CardData : MonoBehaviour
         else if (type == "2")
         {
             this.CardTypeValue = CardType.Cost;
+        }
+        if (IsDestroy == "0")
+        {
+            IsDestroyEffect = true;
+        }
+        else if (IsDestroy == "1")
+        {
+            IsDestroyEffect = false;
         }
         this.EffectText = effectText.Replace("n","\n");
 
