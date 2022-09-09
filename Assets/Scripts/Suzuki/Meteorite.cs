@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class Meteorite : MonoBehaviour
 {
@@ -86,13 +87,21 @@ public class Meteorite : MonoBehaviour
 
     public void MoveToTargetPoint(int PosX, int PosZ)
     {
-        if (MoveFinished == false)
+        /*if (MoveFinished == false)
         {
             StartXPosition = (int)this.transform.position.x;
             StartZPosition = (int)this.transform.position.z;
             TargetXPosition = PosX;
             TargetZPosition = PosZ;
             DoMoving = true;
-        }
+        }*/
+        Vector3 targetPos = new Vector3(PosX, 0, PosZ);
+        this.transform.DOMove(targetPos, Duration, true).OnComplete(() => FixPositionAfterMoving(PosX, PosZ));
+    }
+
+    public void FixPositionAfterMoving(int PosX, int PosZ)
+    {
+        this.transform.position = new Vector3(PosX, 0, PosZ);
+        MoveFinished = true;
     }
 }
