@@ -7,7 +7,6 @@ using Random = UnityEngine.Random;
 
 public class Card : CardData
 {
-    //[SerializeField, Header("カード選択フレーム")] private Image image_component = null;
     //マウスがカードの上に乗っているかどうか
     public bool IsMouseOver = false;
     //クリックされた状態なのかどうか
@@ -15,56 +14,20 @@ public class Card : CardData
     //このカードがコストとして選択されているのかどうか
     public bool IsCost = false;
     private bool IsSEPlayed = false;
-    private Vector2 originPosition = Vector2.zero;
+    private Vector3 originPosition = Vector3.zero;
+    private Vector3 mouse = Vector3.zero;
+    private Vector3 target = Vector3.zero;
 
     void Update()
     {
         base.ShowCardStatus();
 
+        mouse = Input.mousePosition;
+        target = Camera.main.ScreenToWorldPoint(new Vector3(mouse.x, mouse.y, 10));
+
         if (GameDirector.Instance.WaitCopy_Card13 == true && IsMouseOver == true && Input.GetMouseButtonDown(0))
         {
             GameDirector.Instance.CopyNum_Card13 = this.ID;
-            //image_component.color = Color.white;
-        }
-
-        //WaitForSelect();
-    }
-
-    /// <summary>
-    /// 選択されていない待機状態の処理
-    /// </summary>
-    private void WaitForSelect()
-    {
-        //このカードが選択されていない場合
-        if (IsClick == false)
-        {
-            if (GameDirector.Instance.WaitCopy_Card13 == false)
-            {
-                //マウスが乗っていたら、カードの枠を黄色にする
-                if (IsMouseOver == true)
-                {
-                    //image_component.color = Color.yellow;
-                }
-                //乗っていない場合、白色にする
-                else
-                {
-                    //image_component.color = Color.white;
-                }
-            }
-            //複製魔法の対象の選択
-            else if (GameDirector.Instance.WaitCopy_Card13 == true)
-            {
-                //マウスが乗っていたら、カードの枠をマゼンタにする
-                if (IsMouseOver == true)
-                {
-                    //image_component.color = Color.magenta;
-                }
-                //乗っていない場合、白色にする
-                else
-                {
-                    //image_component.color = Color.white;
-                }
-            }
         }
     }
 
@@ -73,21 +36,22 @@ public class Card : CardData
     /// </summary>
     public void OnClick()
     {
+        SoundManager.Instance.PlaySE(2);
         if (GameDirector.Instance.gameState != GameDirector.GameState.effect)
         {
             //使用カードとして選択された時の処理
             if (GameDirector.Instance.SelectedCard == null)
             {
-                SoundManager.Instance.PlaySE(2);
-                //image_component.color = Color.red;
+                if (this.ID == 11 || this.ID == 15 || this.ID == 19 || (this.ID == 35 && GameDirector.Instance._player.hands.Count != 1))
+                {
+                    return;
+                }
                 IsClick = true;
                 GameDirector.Instance.SetSelectCard(this);
             }
             //コストカードとして選択された時の処理
             else if (GameDirector.Instance.SelectedCard != null && GameDirector.Instance.PayedCost < GameDirector.Instance.SelectedCard.Cost && IsClick == false)
             {
-                SoundManager.Instance.PlaySE(2);
-                //image_component.color = Color.green;
                 IsClick = true;
                 IsCost = true;
                 GameDirector.Instance.SetCostCard(this);
@@ -161,16 +125,6 @@ public class Card : CardData
                 GameDirector.Instance.ResetToHand(this, IsCost);
                 IsClick = false;
                 IsCost = false;
-                switch(this.ID)
-                {
-                case 11: //サクリファイス・レプリカ
-                    GameDirector.Instance.PayedCost -= 2;
-                    break;
-
-                default:
-                    GameDirector.Instance.PayedCost--;
-                    break;
-                }
             }
         }
     }
@@ -184,7 +138,7 @@ public class Card : CardData
     public void OnDrag(BaseEventData eventData)
     {
         var pointerEventData = eventData as PointerEventData;
-        transform.position = pointerEventData.position;
+        transform.position = target;
     }
 
     public void OnEndDrag(BaseEventData eventData)
