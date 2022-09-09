@@ -28,7 +28,7 @@ public class DisplayDetail : MonoBehaviour
             costText.text = "";
             nameText.text = "";
             effectText.text = "";
-            //displayIllustration.sprite = Illustration[35];
+            displayIllustration.sprite = null;
         }
     }
 }

@@ -5,116 +5,81 @@ using UnityEngine.UI;
 
 public class LifeGauge : MonoBehaviour
 {
-    // ó]èËâÒïúï™
-    public GameObject obj1;
-    public GameObject obj2;
-    public GameObject obj3;
-    public GameObject obj4;
-    public GameObject obj5;
-    public GameObject obj6;
-    public GameObject obj7;
-    public GameObject obj8;
-    public GameObject obj9;
-    // åüçıÇ…ïKóv
-    private Image image1;
-    private Image image2;
-    private Image image3;
-    // ëÃóÕê‘ÇÃâÊëú
-    public Sprite ime1;
-    public Sprite ime2;
-    public Sprite ime3;
-    // ëÃóÕçïÇÃâÊëú
-    public Sprite ime11;
-    public Sprite ime22;
-    public Sprite ime33;
-    // switchï∂
-    public int a = 3;
+    [SerializeField, Header("„É©„Ç§„Éï„Ç≤„Éº„Ç∏")] private GameObject[] LifeObj = new GameObject[6];
+    private List<SpriteRenderer> LifeGaugeList = new List<SpriteRenderer>();
+    [SerializeField, Header("„É©„Ç§„Éï„Ç≤„Éº„Ç∏ÁîªÂÉè")] private Sprite[] LifeImage = new Sprite[6];
+
     private void Start()
     {
-        // åüçı
-        image1 = GameObject.Find("Image").GetComponent<Image>();
-        image2 = GameObject.Find("Image1").GetComponent<Image>();
-        image3 = GameObject.Find("Image2").GetComponent<Image>();
+        for (int i = 0; i < LifeObj.Length; i++)
+        {
+            LifeGaugeList.Add(LifeObj[i].GetComponent<SpriteRenderer>());
+        }
     }
+
     private void Update()
     {
-        // âÒïú
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            a++;
-        }
-        // É_ÉÅÅ[ÉW
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            a--;
-        }
-
-        switch (a)
+        switch (GameDirector.Instance._player.Life)
         {
             case 0:
-                image1.sprite = ime11;
-                image2.sprite = ime22;
-                image3.sprite = ime33;
+                LifeGaugeList[0].sprite = LifeImage[3];
+                LifeGaugeList[1].sprite = LifeImage[4];
+                LifeGaugeList[2].sprite = LifeImage[5];
+                LifeObj[3].SetActive(false);
+                LifeObj[4].SetActive(false);
+                LifeObj[5].SetActive(false);
                 break;
             case 1:
-                image1.sprite = ime11;
-                image2.sprite = ime22;
-                image3.sprite = ime3;
+                LifeGaugeList[0].sprite = LifeImage[0];
+                LifeGaugeList[1].sprite = LifeImage[4];
+                LifeGaugeList[2].sprite = LifeImage[5];
+                LifeObj[3].SetActive(false);
+                LifeObj[4].SetActive(false);
+                LifeObj[5].SetActive(false);
                 break;
             case 2:
-                image1.sprite = ime11;
-                image2.sprite = ime2;
-                
+                LifeGaugeList[0].sprite = LifeImage[0];
+                LifeGaugeList[1].sprite = LifeImage[1];
+                LifeGaugeList[2].sprite = LifeImage[5];
+                LifeObj[3].SetActive(false);
+                LifeObj[4].SetActive(false);
+                LifeObj[5].SetActive(false);
                 break;
             case 3:
-                image1.sprite = ime1;
-                obj1.SetActive(false);
+                LifeGaugeList[0].sprite = LifeImage[0];
+                LifeGaugeList[1].sprite = LifeImage[1];
+                LifeGaugeList[2].sprite = LifeImage[2];
+                LifeObj[3].SetActive(false);
+                LifeObj[4].SetActive(false);
+                LifeObj[5].SetActive(false);
                 break;
             case 4:
-                obj1.SetActive(true);
-                obj2.SetActive(false);
+                LifeGaugeList[0].sprite = LifeImage[0];
+                LifeGaugeList[1].sprite = LifeImage[1];
+                LifeGaugeList[2].sprite = LifeImage[2];
+                LifeObj[3].SetActive(true);
+                LifeObj[4].SetActive(false);
+                LifeObj[5].SetActive(false);
                 break;
             case 5:
-                obj2.SetActive(true);
-                obj3.SetActive(false);
+                LifeGaugeList[0].sprite = LifeImage[0];
+                LifeGaugeList[1].sprite = LifeImage[1];
+                LifeGaugeList[2].sprite = LifeImage[2];
+                LifeObj[3].SetActive(true);
+                LifeObj[4].SetActive(true);
+                LifeObj[5].SetActive(false);
                 break;
             case 6:
-                obj3.SetActive(true);
-                obj4.SetActive(false);
+                LifeGaugeList[0].sprite = LifeImage[0];
+                LifeGaugeList[1].sprite = LifeImage[1];
+                LifeGaugeList[2].sprite = LifeImage[2];
+                LifeObj[3].SetActive(true);
+                LifeObj[4].SetActive(true);
+                LifeObj[5].SetActive(true);
                 break;
-            case 7:
-                obj4.SetActive(true);
-                obj5.SetActive(false);
+
+            default:
                 break;
-            case 8:
-                obj5.SetActive(true);
-                obj6.SetActive(false);
-                break;
-            case 9:
-                obj6.SetActive(true);
-                obj7.SetActive(false);
-                break;
-            case 10:
-                obj7.SetActive(true);
-                obj8.SetActive(false);
-                break;
-            case 11:
-                obj8.SetActive(true);
-                obj9.SetActive(false);
-                break;
-            case 12:
-                obj9.SetActive(true);
-                break;
-        }
-        // âÒïúè„å¿
-        if (a == 13)
-        {
-            a = 12;
-        }
-        // ÉQÅ[ÉÄÉIÅ[ÉoÅ[èàóù
-        if (a <= 0)
-        {
-            a = 0;
         }
     }
 }
