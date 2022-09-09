@@ -12,10 +12,11 @@ public class MeteoAnimasion : MonoBehaviour
     public Sprite ThirdImage;
     private float fps = 0.1f;
     public GameObject MuneImage;*/
-    [SerializeField] Animator animator;
-
-    static readonly int hashStatePositive = Animator.StringToHash("Positive");
-    static readonly int hashStateNegative = Animator.StringToHash("Negative");
+    /*[SerializeField] Animator MeteoRightAnimator;
+    [SerializeField] Animator MeteoAnimator;*/
+    
+    /*static readonly int hashStatePositive = Animator.StringToHash("Positive");
+    static readonly int hashStateNegative = Animator.StringToHash("Negative");*/
 
 
     /*void Start()
@@ -26,16 +27,26 @@ public class MeteoAnimasion : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //GetComponentを用いてAnimatorコンポーネントを取り出す.
+        Animator animator = GetComponent<Animator>();
+
+        //あらかじめ設定していたintパラメーター「trans」の値を取り出す.
+        int trans = animator.GetInteger("meteo");
+        
         if (TileMap.Instance.tileMap[(int)this.transform.position.x, (int)this.transform.position.z * -1].tag == "Search" ||
                         TileMap.Instance.tileMap[(int)this.transform.position.x, (int)this.transform.position.z * -1].tag == "Area")
         {
             //StartCoroutine("Sample");
-            animator.Play(hashStatePositive);
+            //MeteoRightAnimator.Play(hashStatePositive);
+            trans++;
+            animator.SetInteger("meteo", trans);
         }
         else if (TileMap.Instance.tileMap[(int)this.transform.position.x, (int)this.transform.position.z * -1].tag == "Untagged")
         {
             //StopCoroutine(Sample());
-            animator.Play(hashStateNegative);
+            //MeteoAnimator.Play(hashStateNegative);
+            trans--;
+            animator.SetInteger("meteo", trans);
         }
     }
     /*public void MeteoAnimaterRiset()
