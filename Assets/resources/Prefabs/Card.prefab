@@ -765,6 +765,7 @@ MonoBehaviour:
   IsMouseOver: 0
   IsClick: 0
   IsCost: 0
+  buttonComponent: {fileID: 5908478394787519723}
 --- !u!1 &7511553661025812919
 GameObject:
   m_ObjectHideFlags: 0

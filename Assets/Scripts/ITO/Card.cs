@@ -17,6 +17,7 @@ public class Card : CardData
     private Vector3 originPosition = Vector3.zero;
     private Vector3 mouse = Vector3.zero;
     private Vector3 target = Vector3.zero;
+    [SerializeField] private Button buttonComponent = null;
 
     void Update()
     {
@@ -36,6 +37,7 @@ public class Card : CardData
     /// </summary>
     public void OnClick()
     {
+        Debug.Log("Clicked");
         SoundManager.Instance.PlaySE(2);
         if (GameDirector.Instance.gameState != GameDirector.GameState.effect)
         {
@@ -133,6 +135,7 @@ public class Card : CardData
     {
         var pointerEventData = eventData as PointerEventData;
         originPosition = transform.position;
+        buttonComponent.enabled = false;
     }
 
     public void OnDrag(BaseEventData eventData)
@@ -151,9 +154,35 @@ public class Card : CardData
 
         foreach (var hit in raycastResults)
         {
-            if (hit.gameObject.CompareTag("SelectedCardSpace"))
+            if (GameDirector.Instance.SelectedCard == null && hit.gameObject.CompareTag("SelectedCardSpace"))
             {
-                transform.position = hit.gameObject.transform.position;
+                GameDirector.Instance.SetSelectCard(this);
+                IsClick = true;
+                flg = false;
+            }
+            else if (GameDirector.Instance.SelectedCard != null && IsClick == false && hit.gameObject.CompareTag("CostCardSpace"))
+            {
+                GameDirector.Instance.SetCostCard(this);
+                IsClick = true;
+                IsCost = true;
+                flg = false;
+            }
+            else if (IsClick == true && hit.gameObject.CompareTag("PlayerHand"))
+            {
+                GameDirector.Instance.ResetToHand(this, IsCost);
+                if (!IsCost && GameDirector.Instance.PayedCost > 0)
+                {
+                    while (GameDirector.Instance.costCardList.Count > 0)
+                    {
+                        GameDirector.Instance.costCardList[0].IsClick = false;
+                        GameDirector.Instance.costCardList[0].IsCost = false;
+                        GameDirector.Instance.ResetToHand(GameDirector.Instance.costCardList[0], true);
+                    }
+                    GameDirector.Instance.SelectedCard = null;
+                    GameDirector.Instance.PayedCost = 0;
+                }
+                IsClick = false;
+                IsCost = false;
                 flg = false;
             }
         }
@@ -162,6 +191,7 @@ public class Card : CardData
         {
             transform.position = originPosition;
         }
+        buttonComponent.enabled = true;
     }
 
     private void OnDestroy()

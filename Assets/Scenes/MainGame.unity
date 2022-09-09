@@ -2091,7 +2091,7 @@ GameObject:
   - component: {fileID: 1613119778}
   m_Layer: 5
   m_Name: PlayerHand
-  m_TagString: Untagged
+  m_TagString: PlayerHand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2191,7 +2191,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -469.7, y: 500}
+  m_AnchoredPosition: {x: -469.69995, y: 500}
   m_SizeDelta: {x: -935.79, y: -1000}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1889331436
@@ -2612,7 +2612,6 @@ MonoBehaviour:
   hands: []
   scoreText: {fileID: 663649435}
   Life: 3
-  lifeText: {fileID: 0}
   Board: {fileID: 283617212}
   BoardImage:
   - {fileID: 21300000, guid: 329e63271e558fc4d9b25cd0cc0a2865, type: 3}

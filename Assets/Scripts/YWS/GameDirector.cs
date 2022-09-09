@@ -344,11 +344,6 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
 
     public void SetSelectCard(Card card)
     {
-        //if (card.ID == 11 || card.ID == 15 || card.ID == 19 || (card.ID == 35 && _player.hands.Count != 1))
-        //{
-            //return;
-        //}
-        
         _player.hands.Remove(card);
         SelectedCard = card;
         //効果が処理された後に削除するために、タグを付けておく
