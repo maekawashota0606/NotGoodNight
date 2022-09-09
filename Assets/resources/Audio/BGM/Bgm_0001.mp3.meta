@@ -1,0 +1,26 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/resources/Audio/BGM/Kunou_No_Sakini-1(Fast).mp3.meta
+guid: b0f037ffbacdee4408442d1971e25a4f
+========
+guid: ae227a4ad97cc674fbc100f8ab10afce
+>>>>>>>> origin/itoyoshiki:Assets/resources/Audio/BGM/Bgm_0001.mp3.meta
+AudioImporter:
+  externalObjects: {}
+  serializedVersion: 6
+  defaultSettings:
+    loadType: 0
+    sampleRateSetting: 0
+    sampleRateOverride: 44100
+    compressionFormat: 1
+    quality: 1
+    conversionMode: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  normalize: 1
+  preloadAudioData: 1
+  loadInBackground: 0
+  ambisonic: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

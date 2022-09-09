@@ -1,0 +1,26 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/resources/Audio/BGM/Seijaku_Ni_Tsutsumarete-1(Slow).mp3.meta
+guid: aeadc8e3090c5f64b880b0f19ae29782
+========
+guid: dc9c8adf928e0914685c167cb89f09f5
+>>>>>>>> origin/itoyoshiki:Assets/resources/Audio/BGM/Bgm_0002.mp3.meta
+AudioImporter:
+  externalObjects: {}
+  serializedVersion: 6
+  defaultSettings:
+    loadType: 0
+    sampleRateSetting: 0
+    sampleRateOverride: 44100
+    compressionFormat: 1
+    quality: 1
+    conversionMode: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  normalize: 1
+  preloadAudioData: 1
+  loadInBackground: 0
+  ambisonic: 0
+  3D: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
