@@ -155,11 +155,17 @@ public class CardData : MonoBehaviour
         #region 星磁力
         case 6:
             if (basicPosZ > 0)
+            {
                 TileMap.Instance.tileMap[basicPosX, basicPosZ-1].tag = "Area"; //↑
+            }
             if (basicPosX < 9)
+            {
                 TileMap.Instance.tileMap[basicPosX+1, basicPosZ].tag = "Area"; //→
+            }
             if (basicPosX < 9 && basicPosZ > 0)
+            {
                 TileMap.Instance.tileMap[basicPosX+1, basicPosZ-1].tag = "Area"; //→↑
+            }
             break;
         #endregion
 
@@ -200,6 +206,62 @@ public class CardData : MonoBehaviour
         #region グラビトンブレイク
         case 9:
             GameDirector.Instance.IsMultiEffect = true;
+            Vector3 checkPos = new Vector3(basicPosX, 0, -basicPosZ);
+            if (!Map.Instance.CheckEmpty(checkPos))
+            {
+                for (int i = 0; i < TileMap.Instance.checkListX.Count; i++)
+                {
+                    Debug.Log(i);
+                    Vector3 basicPos = new Vector3(TileMap.Instance.checkListX[i], 0, -TileMap.Instance.checkListZ[i]); Debug.Log(basicPos);
+                    Vector3 UpPos = basicPos + Vector3.forward;
+                    Vector3 DownPos = basicPos + Vector3.back;
+                    Vector3 LeftPos = basicPos + Vector3.left;
+                    Vector3 RightPos = basicPos + Vector3.right;
+
+                    if (-(int)UpPos.z > -1)
+                    {
+                        if (TileMap.Instance.tileMap[(int)UpPos.x, -(int)UpPos.z].tag != "Search" && TileMap.Instance.tileMap[(int)UpPos.x, -(int)UpPos.z].tag != "Watching" && !Map.Instance.CheckEmpty(UpPos))
+                        {
+                            Debug.Log("up Hit " + (int)UpPos.x + -(int)UpPos.z);
+                            TileMap.Instance.tileMap[(int)UpPos.x, -(int)UpPos.z].tag = "Watching";
+                            TileMap.Instance.checkListX.Add((int)UpPos.x);
+                            TileMap.Instance.checkListZ.Add(-(int)UpPos.z);
+                        }
+                    }
+                    if (-(int)DownPos.z < 10)
+                    {
+                        if (TileMap.Instance.tileMap[(int)DownPos.x, -(int)DownPos.z].tag != "Search" && TileMap.Instance.tileMap[(int)DownPos.x, -(int)DownPos.z].tag != "Watching" && !Map.Instance.CheckEmpty(DownPos))
+                        {
+                            Debug.Log("down Hit " + (int)DownPos.x + -(int)DownPos.z);
+                            TileMap.Instance.tileMap[(int)DownPos.x, -(int)DownPos.z].tag = "Watching";
+                            TileMap.Instance.checkListX.Add((int)DownPos.x);
+                            TileMap.Instance.checkListZ.Add(-(int)DownPos.z);
+                        }
+                    }
+                    if ((int)LeftPos.x > -1)
+                    {
+                        if (TileMap.Instance.tileMap[(int)LeftPos.x, -(int)LeftPos.z].tag != "Search" && TileMap.Instance.tileMap[(int)LeftPos.x, -(int)LeftPos.z].tag != "Watching" && !Map.Instance.CheckEmpty(LeftPos))
+                        {
+                            Debug.Log("left Hit " + (int)LeftPos.x + -(int)LeftPos.z);
+                            TileMap.Instance.tileMap[(int)LeftPos.x, -(int)LeftPos.z].tag = "Watching";
+                            TileMap.Instance.checkListX.Add((int)LeftPos.x);
+                            TileMap.Instance.checkListZ.Add(-(int)LeftPos.z);
+                        }
+                    }
+                    if ((int)RightPos.x < 10)
+                    {
+                        if (TileMap.Instance.tileMap[(int)RightPos.x, -(int)RightPos.z].tag != "Search" && TileMap.Instance.tileMap[(int)RightPos.x, -(int)RightPos.z].tag != "Watching" && !Map.Instance.CheckEmpty(RightPos))
+                        {
+                            Debug.Log("right Hit " + (int)RightPos.x + -(int)RightPos.z);
+                            TileMap.Instance.tileMap[(int)RightPos.x, -(int)RightPos.z].tag = "Watching";
+                            TileMap.Instance.checkListX.Add((int)RightPos.x);
+                            TileMap.Instance.checkListZ.Add(-(int)RightPos.z);
+                        }
+                    }
+                }
+            }
+            TileMap.Instance.checkListX = new List<int>();
+            TileMap.Instance.checkListZ = new List<int>();
             break;
         #endregion
 
@@ -475,61 +537,13 @@ public class CardData : MonoBehaviour
             
         #region 星磁力
         case 6:
+            MeteorAttract();
             break;
         #endregion
 
         #region グラビトンコア
         case 7:
-            GameDirector.Instance._player.MoveList = new List<Meteorite>();
-            List<int> targetPosXList = new List<int>();
-            List<int> targetPosZList = new List<int>();
-            int LockedNum = 0;
-            for (int x = 0; x < 10; x++)
-            {
-                for (int z = 0; z < 10; z++)
-                {
-                    if (TileMap.Instance.tileMap[x, z].tag == "Search" || TileMap.Instance.tileMap[x, z].tag == "Area")
-                    {
-                        Vector3 checkPos = new Vector3(x, 0, -z);
-                        if (!Map.Instance.CheckEmpty(checkPos))
-                        {
-                            TileMap.Instance.tileMap[x,z].tag = "Lock";
-                            LockedNum++;
-                        }
-                        else
-                        {
-                            targetPosXList.Add(x);
-                            targetPosZList.Add(z);
-                        }
-                    }
-                }
-            }
-
-            for (int num = 0; num < targetPosXList.Count; num++)
-            {
-                if (GameDirector.Instance.meteors.Count == 0 || GameDirector.Instance._player.MoveList.Count == 9 || GameDirector.Instance.meteors.Count == GameDirector.Instance._player.MoveList.Count + LockedNum)
-                {
-                    break;
-                }
-
-                int chosenNum = Random.Range(0,GameDirector.Instance.meteors.Count);
-                int checkx = (int)GameDirector.Instance.meteors[chosenNum].transform.position.x;
-                int checkz = -(int)GameDirector.Instance.meteors[chosenNum].transform.position.z;
-                if (TileMap.Instance.tileMap[checkx, checkz].tag != "Lock" && TileMap.Instance.tileMap[checkx, checkz].tag != "Move")
-                {
-                    TileMap.Instance.tileMap[checkx,checkz].tag = "Move";
-                    GameDirector.Instance._player.MoveList.Add(GameDirector.Instance.meteors[chosenNum]);
-                }
-                else
-                {
-                    num--;
-                }
-            }
-            GameDirector.Instance.WaitingMove = true;
-            for (int num = 0; num < GameDirector.Instance._player.MoveList.Count; num++)
-            {
-                GameDirector.Instance._player.MoveList[num].MoveToTargetPoint(targetPosXList[num], -targetPosZList[num]);
-            }
+            MeteorAttract();
             break;
         #endregion
 
@@ -923,5 +937,59 @@ public class CardData : MonoBehaviour
         }
         GameDirector.Instance._player.IsDrawEffect = false;
         GameDirector.Instance.IsMultiEffect = false;
+    }
+
+    private void MeteorAttract()
+    {
+        GameDirector.Instance._player.MoveList = new List<Meteorite>();
+        GameDirector.Instance._player.targetPosXList = new List<int>();
+        GameDirector.Instance._player.targetPosZList = new List<int>();
+        int LockedNum = 0;
+        for (int x = 0; x < 10; x++)
+        {
+            for (int z = 0; z < 10; z++)
+            {
+                if (TileMap.Instance.tileMap[x, z].tag == "Search" || TileMap.Instance.tileMap[x, z].tag == "Area")
+                {
+                    Vector3 checkPos = new Vector3(x, 0, -z);
+                    if (!Map.Instance.CheckEmpty(checkPos))
+                    {
+                        TileMap.Instance.tileMap[x,z].tag = "Lock";
+                        LockedNum++;
+                    }
+                    else
+                    {
+                        GameDirector.Instance._player.targetPosXList.Add(x);
+                        GameDirector.Instance._player.targetPosZList.Add(z);
+                    }
+                }
+            }
+        }
+
+        for (int num = 0; num < GameDirector.Instance._player.targetPosXList.Count; num++)
+        {
+            if (GameDirector.Instance.meteors.Count == 0 || GameDirector.Instance._player.MoveList.Count == 9 || GameDirector.Instance.meteors.Count == GameDirector.Instance._player.MoveList.Count + LockedNum)
+            {
+                break;
+            }
+
+            int chosenNum = Random.Range(0,GameDirector.Instance.meteors.Count);
+            int checkx = (int)GameDirector.Instance.meteors[chosenNum].transform.position.x;
+            int checkz = -(int)GameDirector.Instance.meteors[chosenNum].transform.position.z;
+            if (TileMap.Instance.tileMap[checkx, checkz].tag != "Lock" && TileMap.Instance.tileMap[checkx, checkz].tag != "Move")
+            {
+                TileMap.Instance.tileMap[checkx,checkz].tag = "Move";
+                GameDirector.Instance._player.MoveList.Add(GameDirector.Instance.meteors[chosenNum]);
+            }
+            else
+            {
+                num--;
+            }
+        }
+        GameDirector.Instance.WaitingMove = true;
+        for (int num = 0; num < GameDirector.Instance._player.MoveList.Count; num++)
+        {
+            GameDirector.Instance._player.MoveList[num].MoveToTargetPoint(GameDirector.Instance._player.targetPosXList[num], -GameDirector.Instance._player.targetPosZList[num]);
+        }
     }
 }

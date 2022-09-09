@@ -28,7 +28,10 @@ public class Player : MonoBehaviour
     [SerializeField, Header("選択カード置き場の画像")] private Sprite[] SelectedCardSpaceImage = new Sprite[2];
     //ボタンのダブルクリック防止用フラグ
     private bool IsClick = false;
+    //隕石の引き寄せを行う時に使うデータのリスト
     public List<Meteorite> MoveList = new List<Meteorite>();
+    public List<int> targetPosXList = new List<int>();
+    public List<int> targetPosZList = new List<int>();
 
     #region カードごとの専用変数
 
@@ -113,9 +116,9 @@ public class Player : MonoBehaviour
             return;
         }
 
-        int[] CardID = new int[31]{1,2,3,4,5,7,8,9,10,11,12,14,15,16,18,19,20,21,22,23,24,25,26,27,29,30,31,32,33,34,35};
+        int[] CardID = new int[32]{1,2,3,4,5,6,7,8,9,10,11,12,14,15,16,18,19,20,21,22,23,24,25,26,27,29,30,31,32,33,34,35};
         //int ID = Random.Range(1,36);
-        //int ID = 7;
+        //int ID = 6;
         int DrawNum = Random.Range(0,CardID.Length);
         int ID = CardID[DrawNum];
         SoundManager.Instance.PlaySE(7);

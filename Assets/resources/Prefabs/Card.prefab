@@ -250,11 +250,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 30c038b66d879d9449f69be4edc7f025, type: 3}
+    m_Font: {fileID: 12800000, guid: 1a476162d4833e9408384a664c6080a2, type: 2}
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 1
     m_MaxSize: 40
     m_Alignment: 0
     m_AlignByGeometry: 0
@@ -330,7 +330,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 30c038b66d879d9449f69be4edc7f025, type: 3}
+    m_Font: {fileID: 12800000, guid: 1a476162d4833e9408384a664c6080a2, type: 2}
     m_FontSize: 10
     m_FontStyle: 0
     m_BestFit: 0
@@ -716,6 +716,7 @@ MonoBehaviour:
   Name: 
   Cost: 0
   CardTypeValue: 0
+  IsDestroyEffect: 0
   EffectText: 
   CardName: {fileID: 8473196585812861262}
   CardCost: {fileID: 4405867879839542792}
@@ -833,7 +834,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 30c038b66d879d9449f69be4edc7f025, type: 3}
+    m_Font: {fileID: 12800000, guid: 1a476162d4833e9408384a664c6080a2, type: 2}
     m_FontSize: 25
     m_FontStyle: 0
     m_BestFit: 0

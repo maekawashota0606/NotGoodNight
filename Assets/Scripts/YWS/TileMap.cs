@@ -25,6 +25,11 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
                     if (tileMap[j, i].tag == "Search")
                     {
                         GameDirector.Instance.SelectedCard.DecideSearchArea(j, i);
+                        if (GameDirector.Instance.SelectedCard.ID == 9)
+                        {
+                            checkListX.Add(j);
+                            checkListZ.Add(i);
+                        }
                     }
                 }
             }
