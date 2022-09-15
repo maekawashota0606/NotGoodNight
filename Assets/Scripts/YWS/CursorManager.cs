@@ -21,23 +21,32 @@ public class CursorManager : MonoBehaviour
         //シーン遷移では破棄させない
         DontDestroyOnLoad(gameObject);
         cursor = cursorObj.GetComponent<SpriteRenderer>();
+        //マウスカーソルの表示をなくす
         Cursor.visible = false;
+        //カーソルとして使うオブジェクトを起動する
         cursorObj.SetActive(true);
     }
 
     // Update is called once per frame
     void Update()
     {
+        //マウスカーソルの位置を随時更新
         mouse = Input.mousePosition;
         target = Camera.main.ScreenToWorldPoint(new Vector3(mouse.x, mouse.y, 10));
+        //取得したマウスカーソルの位置にカーソルオブジェクトを移動させる
         cursorObj.transform.position = target;
 
+        //クリックを行った場合、カーソルオブジェクトの画像を切り替える
         if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
         {
             StartCoroutine(ChangeCursorImage());
         }   
     }
 
+    /// <summary>
+    /// カーソルオブジェクトの画像を切り替える処理
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator ChangeCursorImage()
     {
         cursor.sprite = CursorImage[1];

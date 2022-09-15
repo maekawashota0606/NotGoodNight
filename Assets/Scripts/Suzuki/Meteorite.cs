@@ -19,7 +19,6 @@ public class Meteorite : MonoBehaviour
     public bool FallFinished = false;
     public bool MoveFinished = false;
     [SerializeField] private Animator meteorAnimator = null;
-    private bool DoMoving = false;
 
     // Update is called once per frame
     void Update()
@@ -37,20 +36,6 @@ public class Meteorite : MonoBehaviour
         {
             FallFinished = false;
             MoveFinished = false;
-        }
-
-        if (DoMoving)
-        {
-            Vector3 targetPos = new Vector3(TargetXPosition, 0, TargetZPosition);
-            elapsedTime += Time.deltaTime;
-            this.transform.position = Vector3.Lerp(this.transform.position, targetPos, elapsedTime / Duration);
-            if (elapsedTime >= Duration)
-            {
-                elapsedTime = 0;
-                this.transform.position = new Vector3(TargetXPosition, 0, TargetZPosition);
-                MoveFinished = true;
-                DoMoving = false;
-            }
         }
 
         //—Ž‰º‚Ì‰‰o
@@ -87,14 +72,6 @@ public class Meteorite : MonoBehaviour
 
     public void MoveToTargetPoint(int PosX, int PosZ)
     {
-        /*if (MoveFinished == false)
-        {
-            StartXPosition = (int)this.transform.position.x;
-            StartZPosition = (int)this.transform.position.z;
-            TargetXPosition = PosX;
-            TargetZPosition = PosZ;
-            DoMoving = true;
-        }*/
         Vector3 targetPos = new Vector3(PosX, 0, PosZ);
         this.transform.DOMove(targetPos, Duration, true).OnComplete(() => FixPositionAfterMoving(PosX, PosZ));
     }

@@ -45,6 +45,9 @@ public class Player : MonoBehaviour
 
     #endregion
 
+    /// <summary>
+    /// csvファイスのセットアップ
+    /// </summary>
     public void SetCsv()
     {
         StringReader reader = new StringReader(_csvFile.text);
@@ -66,6 +69,8 @@ public class Player : MonoBehaviour
 
         //獲得スコアを随時更新で画面に表示させる
         scoreText.text = " " + Score.ToString("d6");
+
+        //残りライフによって盤面の画像を随時更新させる
         if (Life > 0 && Life <= 3)
         {
             Board.sprite = BoardImage[Life-1];
@@ -75,18 +80,14 @@ public class Player : MonoBehaviour
             Board.sprite = BoardImage[2];
         }
 
-        if (GameDirector.Instance.SelectedCard == null || GameDirector.Instance.PayedCost < GameDirector.Instance.SelectedCard.Cost)
+        //選択された使用カードが使用可能かどうかによって使用カード置き場の画像を切り替える
+        if (GameDirector.Instance.gameState != GameDirector.GameState.extra && (GameDirector.Instance.SelectedCard == null || GameDirector.Instance.PayedCost < GameDirector.Instance.SelectedCard.Cost))
         {
             SelectedCardSpace.sprite = SelectedCardSpaceImage[0];
         }
-        else if (GameDirector.Instance.SelectedCard != null && GameDirector.Instance.PayedCost >= GameDirector.Instance.SelectedCard.Cost)
+        else if ((GameDirector.Instance.SelectedCard != null && GameDirector.Instance.PayedCost >= GameDirector.Instance.SelectedCard.Cost) || GameDirector.Instance.gameState == GameDirector.GameState.extra)
         {
             SelectedCardSpace.sprite = SelectedCardSpaceImage[1];
-        }
-
-        if (GameDirector.Instance.WaitCopy_Card13 == true && GameDirector.Instance.CopyNum_Card13 != 0)
-        {
-            CopyCard_Card13(GameDirector.Instance.CopyNum_Card13);
         }
 
         if (GameDirector.Instance.gameState == GameDirector.GameState.active)
@@ -100,6 +101,7 @@ public class Player : MonoBehaviour
     /// </summary>
     public void DrawCard()
     {
+        //使用カードと使用コストは手札から外されているため、手札の数を計算する
         int totalCardNum = 0;
         if (GameDirector.Instance.SelectedCard != null)
         {
@@ -116,18 +118,19 @@ public class Player : MonoBehaviour
             return;
         }
 
+        //ドローするカードの番号を乱数で生成する
         int[] CardID = new int[32]{1,2,3,4,5,6,7,8,9,10,11,12,14,15,16,18,19,20,21,22,23,24,25,26,27,29,30,31,32,33,34,35};
         //int ID = Random.Range(1,36);
-        //int ID = 6;
-        int DrawNum = Random.Range(0,CardID.Length);
-        int ID = CardID[DrawNum];
+        int ID = 13;
+        //int DrawNum = Random.Range(0,CardID.Length);
+        //int ID = CardID[DrawNum];
         SoundManager.Instance.PlaySE(7);
         //ゲーム開始時の初期手札のドロー
         if (GameDirector.Instance.gameState == GameDirector.GameState.standby)
         {
             GameObject genCard = Instantiate(cardPrefab, playerHand);
             Card newCard = genCard.GetComponent<Card>();
-            newCard.Init(ID,_cardData[ID][1],_cardData[ID][2],_cardData[ID][3],_cardData[ID][4],_cardData[ID][5]);
+            newCard.Init(ID);
             //カードオブジェクトをリストに入れる
             hands.Add(newCard);
         }
@@ -137,7 +140,7 @@ public class Player : MonoBehaviour
             IsClick = true;
             GameObject genCard = Instantiate(cardPrefab, playerHand);
             Card newCard = genCard.GetComponent<Card>();
-            newCard.Init(ID,_cardData[ID][1],_cardData[ID][2],_cardData[ID][3],_cardData[ID][4],_cardData[ID][5]);
+            newCard.Init(ID);
             //カードオブジェクトをリストに入れる
             hands.Add(newCard);
             DrawCount_Card10++;
@@ -149,7 +152,7 @@ public class Player : MonoBehaviour
         {
             GameObject genCard = Instantiate(cardPrefab, playerHand);
             Card newCard = genCard.GetComponent<Card>();
-            newCard.Init(ID,_cardData[ID][1],_cardData[ID][2],_cardData[ID][3],_cardData[ID][4],_cardData[ID][5]);
+            newCard.Init(ID);
             if (GameDirector.Instance.SelectedCard.ID == 18 && newCard.Cost > 0)
             {
                 newCard.Cost--;
@@ -161,6 +164,7 @@ public class Player : MonoBehaviour
             //カードオブジェクトをリストに入れる
             hands.Add(newCard);
         }
+        //手札のカードの位置を調整する
         GameDirector.Instance.ResetCardPosition();
     }
 
@@ -169,7 +173,7 @@ public class Player : MonoBehaviour
     /// </summary>
     public void DeleteUsedCost()
     {
-        //使用されたコストカードすべてを削除する
+        //コストリストにあるカードをすべて削除する
         for (int i = 0; i < GameDirector.Instance.costCardList.Count; i++)
         {
             Destroy(GameDirector.Instance.costCardList[i].gameObject);
@@ -183,7 +187,7 @@ public class Player : MonoBehaviour
     /// </summary>
     public void DeleteUsedCard()
     {
-        //使用されたカードを削除する
+        //使用カードとして登録しているカードを削除する
         Destroy(GameDirector.Instance.SelectedCard.gameObject);
         GameDirector.Instance.PayedCost = 0;
     }
@@ -219,27 +223,17 @@ public class Player : MonoBehaviour
     }
 
     /// <summary>
-    /// 複製魔法用関数
+    /// 隕石の引き寄せ効果を使用する時、移動が完了しているかどうかを調べる関数
     /// </summary>
-    /// <param name="cardID"></param>
-    public void CopyCard_Card13(int cardID)
-    {
-        GameObject genCard = Instantiate(cardPrefab, playerHand);
-        Card newCard = genCard.GetComponent<Card>();
-        newCard.Init(cardID,_cardData[cardID][1],_cardData[cardID][2],_cardData[cardID][3],_cardData[cardID][4],_cardData[cardID][5]);
-        hands.Add(newCard);
-        GameDirector.Instance.CopyNum_Card13 = 0;
-        GameDirector.Instance.WaitCopy_Card13 = false;
-        GameDirector.Instance.IsPlayerSelectMove = true;
-    }
-
     public void CheckIsMoveFinish()
     {
         int FinishedNum = 0;
         if (GameDirector.Instance.WaitingMove == true && MoveList.Count != 0)
         {
+            //順番に隕石を調べる
             for (int num = 0; num < MoveList.Count; num++)
             {
+                //隕石の移動が完了したら、カウンターを増やす
                 if (MoveList[num].MoveFinished == true)
                 {
                     FinishedNum++;
@@ -250,9 +244,11 @@ public class Player : MonoBehaviour
                 }
             }
 
+            //すべての隕石の移動が完了した場合
             if (FinishedNum == MoveList.Count)
             {
                 GameDirector.Instance.IsPlayerSelectMove = true;
+                //マップの更新
                 Map.Instance.UpdateMapData();
             }
         }

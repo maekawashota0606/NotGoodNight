@@ -43,18 +43,10 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     public bool IsMouseOnTile = false;
     //使用カードに複数の効果が存在しているかどうか
     public bool IsMultiEffect = false;
-    //カードの使用が確定したかどうか
-    public bool IsCardUsingConfirm = false;
-    //隕石が破壊されたのかどうか
-    public bool IsMeteorDestroyed = false;
     //このターンで破壊された隕石の数
     public int DestroyedNum = 0;
     //すでに選択されているコストの数
     public int PayedCost = 0;
-    //複製魔法用フラグ
-    public bool WaitCopy_Card13 = false;
-    //複製魔法用のコピー元の番号
-    public int CopyNum_Card13 = 0;
     public bool WaitingMove = false;
 
     #endregion
@@ -65,6 +57,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         standby,
         active,
         effect,
+        extra,
         fall,
         judge,
         end,
@@ -103,26 +96,24 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 break;
 
             case GameState.active: //アクティブフェイズ
+                //使用カードが選択されている場合
                 if(SelectedCard != null)
                 {
+                    //収束カードの場合、効果範囲を盤面上に表示する
                     if (SelectedCard.CardTypeValue == CardData.CardType.Convergence)
                     {
                         TileMap.Instance.FindBasePoint();
                     }
+                    //拡散カードの場合、カード使用ボタンを表示する
                     else if (SelectedCard.CardTypeValue == CardData.CardType.Diffusion && PayedCost >= SelectedCard.Cost)
                     {
                         CardUseButton.SetActive(true);
                     }
                 }
-
-                //ここらへんα版用
-                if (Input.GetKeyDown(KeyCode.Space))
-                {
-                    Player.Score += 10000;
-                }
                 break;
 
             case GameState.effect: //カード効果処理フェイズ
+                //カードの処理がすべて終了した場合、次のフェイズに移行する
                 if (IsPlayerSelectMove == true)
                 {
                     //使用されたカードをすべて削除する
@@ -130,8 +121,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                     _player.DeleteUsedCard();
                     SelectedCard = null;
                     TileMap.Instance.ResetTileTag();
-                    IsMeteorDestroyed = false;
-                    //効果処理が終了したら、隕石落下フェイズに移行する
+                    //隕石落下フェイズに移行する
                     gameState = GameState.fall;
                 }
 
@@ -139,22 +129,30 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 {
                     if (WaitingMove == false)
                     {
+                        //カードの効果を処理する
                         SelectedCard.CardEffect();
-                        if (WaitCopy_Card13 == false)
-                        {
-                            IsPlayerSelectMove = true;
-                        }
+                        IsPlayerSelectMove = true;
                     }
                     else
                     {
+                        //隕石引き寄せ効果の場合、全ての隕石が移動を終了しているかどうかをチェック
                         _player.CheckIsMoveFinish();
                     }
+                }
+                break;
+
+            case GameState.extra: //複製魔法処理フェイズ
+                if (SelectedCard.CardTypeValue == CardData.CardType.Diffusion)
+                {
+                    CardUseButton.SetActive(true);
                 }
                 break;
 
             case GameState.fall: //隕石落下フェイズ
                 IsPlayerSelectMove = false;
                 WaitingMove = false;
+
+                //隕石の落下を止める効果がない場合にのみ、隕石の落下を行う
                 if (DoMeteorFall == true)
                 {
                     meteors = meteors.OrderBy(meteor => meteor.transform.position.z).ThenBy(meteors => meteors.transform.position.x).ToList();
@@ -180,11 +178,13 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                             Map.Instance.map[z, x] = Map.Instance.empty;
                             //プレイヤーのライフを減らす
                             _player.Life--;
+                            //盤面を振動させる
                             _shaker.StartShake(1f,20f,20f);
                             num--;
                         }
                     }
                 }
+                //隕石が存在しない、隕石の落下を行わない、またはすべての隕石の落下が終了した場合、ゲーム終了判定フェイズに移行する
                 if (meteors.Count == 0 || meteors[meteors.Count-1].FallFinished == true || DoMeteorFall == false)
                 {
                     gameState = GameState.judge;
@@ -235,7 +235,6 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 //ターンカウントを１つ増やす
                 TurnCount++;
                 Map.Instance.CheckMapData();
-                IsCardUsingConfirm = false;
                 if (DestroyedNum > 0)
                 {
                     AddScore();
@@ -283,11 +282,8 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         SelectedCard = null;
         IsMouseOnTile = false;
         IsMultiEffect = false;
-        IsCardUsingConfirm = false;
-        IsMeteorDestroyed = false;
         DestroyedNum = 0;
         PayedCost = 0;
-        WaitCopy_Card13 = false;
         _player.hands = new List<Card>();
         Player.Score = 0;
     }
@@ -307,6 +303,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
             //生成する場所を乱数で出す
             int x = Random.Range(0,10);
             Vector3 checkPos = new Vector3(x, 0, -columns);
+            //生成しようとしている座標が空白の場合にのみ生成を行う
             if (Map.Instance.CheckEmpty(checkPos))
             {
                 _generator.Generate(checkPos);
@@ -314,6 +311,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 Map.Instance.map[columns, x] = Map.Instance.meteor;
             }
 
+            //指定された数の隕石が生成された場合、ループを終了させる
             if (created == amount)
             {
                 break;
@@ -342,20 +340,33 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         Player.Score += (int)GetScore;
     }
 
+    /// <summary>
+    /// 使用カードをセットする関数
+    /// </summary>
+    /// <param name="card">セットするカードオブジェクト</param>
     public void SetSelectCard(Card card)
     {
+        //手札リストから削除する
         _player.hands.Remove(card);
+        //使用カードとして登録する
         SelectedCard = card;
-        //効果が処理された後に削除するために、タグを付けておく
-        card.tag = "Selected";
+        //使用カード置き場を親オブジェクトにする
         card.transform.SetParent(SelectedCardPosition);
+        //カードをスライド移動させる
         card.transform.DOMove(SelectedCardPosition.transform.position, 0.1f, true);
+        //残った手札の位置を調整
         ResetCardPosition();
     }
 
+    /// <summary>
+    /// コストカードをセットする関数
+    /// </summary>
+    /// <param name="card">セットするカードオブジェクト</param>
     public void SetCostCard(Card card)
     {
+        //手札リストから削除する
         _player.hands.Remove(card);
+        //使用コストとしてコストリストに登録する
         costCardList.Add(card);
         //選択されているコストの数を加算する
         switch(card.ID)
@@ -368,20 +379,30 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
             PayedCost++;
             break;
         }
-        //コストとして使用された時に削除する用にタグを付けておく
-        card.tag = "Cost";
+        //使用コスト置き場を親オブジェクトにする
         card.transform.SetParent(SelectedCostPosition);
         Vector3 movePoint = new Vector3(0, 95 - 70 * (costCardList.Count - 1), 0);
+        //カードをスライド移動させる
         card.transform.DOLocalMove(movePoint, 0.1f, true);
+        //何枚目のコストかによってカードオブジェクトにあるキャンバスの表示順を変更する
         card.GetComponentInChildren<Canvas>().sortingOrder = costCardList.Count - 1;
+        //残った手札の位置を調整
         ResetCardPosition();
     }
 
+    /// <summary>
+    /// 使用カードや使用コストを手札に戻す
+    /// </summary>
+    /// <param name="card">戻すカードオブジェクト</param>
+    /// <param name="IsCost">コストか使用カードか</param>
     public void ResetToHand(Card card, bool IsCost)
     {
+        //コストカードを戻す場合
         if (IsCost)
         {
+            //コストリストから削除する
             costCardList.Remove(card);
+            //戻すカードによって、支払い済みのコストの値を減らす
             switch(card.ID)
             {
             case 11: //サクリファイス・レプリカ
@@ -393,33 +414,49 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 break;
             }
         }
+        //手札リストに追加する
         _player.hands.Add(card);
-        card.tag = "Untagged";
+        //手札置き場を親オブジェクトにする
         card.transform.SetParent(_player.playerHand);
         Vector3 movePoint = new Vector3(-315 + 70 * (_player.hands.Count - 1), 0, 0);
+        //カードをスライド移動させる
         card.transform.DOLocalMove(movePoint, 0.1f, true);
+        //何枚目の手札かによってカードオブジェクトにあるキャンバスの表示順を変更する
         card.GetComponentInChildren<Canvas>().sortingOrder = _player.hands.Count - 1;
+        //使用コストとして選択されているカードの位置を調整
         ResetCostPosition();
+        //カード使用ボタンの表示を解除する
         CardUseButton.SetActive(false);
     }
 
+    /// <summary>
+    /// 手札のカードの位置を調整する関数
+    /// </summary>
     public void ResetCardPosition()
     {
         for (int num = 0; num < _player.hands.Count; num++)
         {
+            //何枚目の手札かによってカードオブジェクトにあるキャンバスの表示順を変更する
             _player.hands[num].GetComponentInChildren<Canvas>().sortingOrder = num;
             _player.hands[num].transform.localPosition = new Vector3(-315 + 70 * num, 0, 0);
         }
     }
 
+    /// <summary>
+    /// 手札にカーソルが重なっているカードが存在する場合に手札のカードの位置を調整する関数
+    /// </summary>
     public void ResetCardPositionWhenWatching()
     {
         bool StartReset = false;
+        //順番に手札リストにあるカードを調べる
         for (int num = 0; num < _player.hands.Count; num++)
         {
+            //タグがついているカードが存在する場合
             if (_player.hands[num].tag == "Watching" && StartReset == false)
             {
+                //カードの拡大によって位置を調整
                 _player.hands[num].transform.localPosition = new Vector3(-315 + 70 * num + 14, 0, 0);
+                //このカードが最後のカードじゃなかった場合、後ろのカードの位置の調整を開始する
                 if (num != _player.hands.Count)
                 {
                     StartReset = true;
@@ -432,23 +469,34 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         }
     }
 
+    /// <summary>
+    /// 使用コストのカードの位置を調整する関数
+    /// </summary>
     public void ResetCostPosition()
     {
         for (int num = 0; num < costCardList.Count; num++)
         {
+            //何枚目のコストかによってカードオブジェクトにあるキャンバスの表示順を変更する
             costCardList[num].GetComponentInChildren<Canvas>().sortingOrder = num;
             costCardList[num].transform.localPosition = new Vector3(0, 95 - 70 * num, 0);
         }
     }
 
+    /// <summary>
+    /// 使用コストにカーソルが重なっているカードが存在する場合に使用コストのカードの位置を調整する関数
+    /// </summary>
     public void ResetCostPositionWhenWatching()
     {
         bool StartReset = false;
+        //順番にコストリストにあるカードを調べる
         for (int num = 0; num < costCardList.Count; num++)
         {
+            //タグがついているカードが存在する場合
             if (costCardList[num].tag == "Watching" && StartReset == false)
             {
+                //カードの拡大によって位置を調整
                 costCardList[num].transform.localPosition = new Vector3(0, 95 - 70 * num - 19, 0);
+                //このカードが最後のカードじゃなかった場合、後ろのカードの位置の調整を開始する
                 if (num != costCardList.Count)
                 {
                     StartReset = true;
@@ -461,9 +509,14 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         }
     }
 
+    /// <summary>
+    /// 使用カードボタンが押された時の処理
+    /// </summary>
     public void UseButtonOnClick()
     {
+        //カード効果処理フェイズに移行する
         gameState = GameState.effect;
+        //使用カードボタンの表示を解除する
         CardUseButton.SetActive(false);
     }
 }

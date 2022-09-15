@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
+using Random = UnityEngine.Random;
+using DG.Tweening;
 
 public class CardData : MonoBehaviour
 {
@@ -28,47 +30,47 @@ public class CardData : MonoBehaviour
     [SerializeField, Header("カード枠")] private Image CardFrame = null;
     [SerializeField, Header("カード選択枠")] private Sprite[] _cardFrameImage = new Sprite[2];
     [SerializeField, Header("効果テキスト")] private Text CardEffectText = null;
-    [SerializeField, Header("カードイラスト")] public Image CardIllustration = null;
+    [SerializeField, Header("カードイラスト")] private Image CardIllustration = null;
     [SerializeField, Header("カードイラスト")] private Sprite[] _illustrationImage = new Sprite[35];
     #endregion
 
     /// <summary>
     /// カード情報の初期化
     /// </summary>
-    /// <param name="id">カード番号</param>
-    /// <param name="name">カード名</param>
-    /// <param name="cost">カードコスト</param>
-    /// <param name="type">カードタイプ</param>
-    /// <param name="IsDestroyEffect">破壊効果持ちかどうか</param>
-    /// <param name="effectText">カード効果</param>
-    public void Init(int id, string name, string cost, string type, string IsDestroy, string effectText)
+    /// <param name="cardID">カード番号</param>
+    public void Init(int cardID)
     {
-        this.ID = id;
-        this.Name = name;
-        this.Cost = int.Parse(cost);
-        if (type == "0")
+        this.ID = cardID;
+        this.Name = GameDirector.Instance._player._cardData[cardID][1];
+        this.Cost = int.Parse(GameDirector.Instance._player._cardData[cardID][2]);
+        if (GameDirector.Instance._player._cardData[cardID][3] == "0")
         {
             this.CardTypeValue = CardType.Convergence;
         }
-        else if (type == "1")
+        else if (GameDirector.Instance._player._cardData[cardID][3] == "1")
         {
             this.CardTypeValue = CardType.Diffusion;
         }
-        else if (type == "2")
+        else if (GameDirector.Instance._player._cardData[cardID][3] == "2")
         {
             this.CardTypeValue = CardType.Cost;
         }
-        if (IsDestroy == "0")
+        if (GameDirector.Instance._player._cardData[cardID][4] == "0")
         {
             IsDestroyEffect = true;
         }
-        else if (IsDestroy == "1")
+        else if (GameDirector.Instance._player._cardData[cardID][4] == "1")
         {
             IsDestroyEffect = false;
         }
-        this.EffectText = effectText.Replace("n","\n");
+        this.EffectText = GameDirector.Instance._player._cardData[cardID][5].Replace("n","\n");
 
         GetComponentInChildren<Canvas>().sortingLayerName = "Card";
+
+        if (CardName.color.a == 0)
+        {
+            FadeIn();
+        }
     }
 
     /// <summary>
@@ -206,7 +208,7 @@ public class CardData : MonoBehaviour
         #region グラビトンブレイク
         case 9:
             GameDirector.Instance.IsMultiEffect = true;
-            Vector3 checkPos = new Vector3(basicPosX, 0, -basicPosZ);
+            /*Vector3 checkPos = new Vector3(basicPosX, 0, -basicPosZ);
             if (!Map.Instance.CheckEmpty(checkPos))
             {
                 for (int i = 0; i < TileMap.Instance.checkListX.Count; i++)
@@ -261,7 +263,7 @@ public class CardData : MonoBehaviour
                 }
             }
             TileMap.Instance.checkListX = new List<int>();
-            TileMap.Instance.checkListZ = new List<int>();
+            TileMap.Instance.checkListZ = new List<int>();*/
             break;
         #endregion
 
@@ -590,10 +592,11 @@ public class CardData : MonoBehaviour
 
         #region 複製魔法
         case 13:
-            if (GameDirector.Instance._player.hands.Count > 1)
-            {
-                GameDirector.Instance.WaitCopy_Card13 = true;
-            }
+            int[] CardID = new int[31]{1,2,3,4,5,6,7,8,9,10,12,14,16,17,18,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35};
+            int ranNum = Random.Range(0,CardID.Length);
+            int copyID = CardID[ranNum];
+            GameDirector.Instance.gameState = GameDirector.GameState.extra;
+            FadeOut(copyID);
             break;
         #endregion
 
@@ -991,5 +994,23 @@ public class CardData : MonoBehaviour
         {
             GameDirector.Instance._player.MoveList[num].MoveToTargetPoint(GameDirector.Instance._player.targetPosXList[num], -GameDirector.Instance._player.targetPosZList[num]);
         }
+    }
+
+    public void FadeOut(int newID)
+    {
+        CardName.DOFade(0f, 0.5f);
+        CardCost.DOFade(0f, 0.5f);
+        CardFrame.DOFade(0f, 0.5f);
+        CardEffectText.DOFade(0f, 0.5f);
+        CardIllustration.DOFade(0f, 0.5f).OnComplete(()=>Init(newID));
+    }
+
+    public void FadeIn()
+    {
+        CardName.DOFade(1f, 0.5f);
+        CardCost.DOFade(1f, 0.5f);
+        CardFrame.DOFade(1f, 0.5f);
+        CardEffectText.DOFade(1f, 0.5f);
+        CardIllustration.DOFade(1f, 0.5f);
     }
 }

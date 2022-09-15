@@ -11,7 +11,7 @@ public class Tile : MonoBehaviour
     
     private void Start()
     {
-        //値を初期化
+        //色の値を初期化
         tile.color = new Color(255,255,255,0);
     }
 
@@ -34,11 +34,12 @@ public class Tile : MonoBehaviour
             tile.color = new Color(1, 1, 1, 0);
         }
 
-        //効果処理フェイズで使用するカードが選択されている、かつ必要分のコストが選択されており、さらにこのマスがクリックされた場合
+        //効果処理フェイズで収束カードが使用カードとして選択されている、かつ必要分のコストが選択されており、さらにこのマスがクリックされた場合
         if (GameDirector.Instance.gameState == GameDirector.GameState.active && GameDirector.Instance.SelectedCard != null && GameDirector.Instance.SelectedCard.CardTypeValue == CardData.CardType.Convergence && GameDirector.Instance.PayedCost >= GameDirector.Instance.SelectedCard.Cost && IsMouseOver == true && Input.GetMouseButtonDown(0))
         {
             SoundManager.Instance.PlaySE(5);
             bool IsTarget = false;
+            //破壊効果を含むカードを選択している場合、この範囲内で破壊できる隕石が存在するかどうかを調べる
             if (GameDirector.Instance.SelectedCard.IsDestroyEffect == true)
             {
                 for (int z = 0; z < 10; z++)
@@ -48,6 +49,7 @@ public class Tile : MonoBehaviour
                         if (TileMap.Instance.tileMap[x, z].tag == "Search" || TileMap.Instance.tileMap[x, z].tag == "Area")
                         {
                             Vector3 checkPos = new Vector3(x, 0, -z);
+                            //一つでも隕石が存在する場合、探索を終了させる
                             if (!Map.Instance.CheckEmpty(checkPos))
                             {
                                 IsTarget = true;
@@ -55,13 +57,13 @@ public class Tile : MonoBehaviour
                         }
                     }
                 }
-
+                //隕石が一つも存在していない場合、ここで処理を終了させる
                 if (IsTarget == false)
                 {
                     return;
                 }
             }
-            //範囲が選択された場合、範囲内の隕石を検索する
+            //範囲内に隕石が存在するか、破壊効果を含まない効果だった場合、カード効果処理フェイズに移行する
             GameDirector.Instance.gameState = GameDirector.GameState.effect;
         }
     }
@@ -77,14 +79,17 @@ public class Tile : MonoBehaviour
             IsSEPlayed = true;
         }
 
+        //必要分のコストが支払われている場合、白く表示する
         if (GameDirector.Instance.SelectedCard != null && GameDirector.Instance.PayedCost >= GameDirector.Instance.SelectedCard.Cost)
         {
             tile.color = new Color(1, 1, 1, 0.5f);
         }
+        //必要分のコストが支払われていない場合、赤く表示する
         else if (GameDirector.Instance.SelectedCard == null || GameDirector.Instance.PayedCost < GameDirector.Instance.SelectedCard.Cost)
         {
             tile.color = new Color(1,0,0,0.5f);
         }
+        //このマスを特定するためのタグ付け
         this.tag = "Search";
         IsMouseOver = true;
         GameDirector.Instance.IsMouseOnTile = true;
