@@ -131,7 +131,10 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                     {
                         //カードの効果を処理する
                         SelectedCard.CardEffect();
-                        IsPlayerSelectMove = true;
+                        if (GameDirector.Instance.SelectedCard.ID != 13)
+                        {
+                            IsPlayerSelectMove = true;
+                        }
                     }
                     else
                     {
@@ -142,7 +145,22 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 break;
 
             case GameState.extra: //複製魔法処理フェイズ
-                if (SelectedCard.CardTypeValue == CardData.CardType.Diffusion)
+                CardUseButton.SetActive(false);
+                if (IsPlayerSelectMove == true)
+                {
+                    Debug.Log("Player have choose");
+                }
+                else
+                {
+                    Debug.Log("Player have not choose");
+                }
+                //収束カードの場合、効果範囲を盤面上に表示する
+                if (SelectedCard.CardTypeValue == CardData.CardType.Convergence)
+                {
+                    TileMap.Instance.FindBasePoint();
+                }
+                //拡散カードの場合、カード使用ボタンを表示する
+                else if (SelectedCard.CardTypeValue == CardData.CardType.Diffusion)
                 {
                     CardUseButton.SetActive(true);
                 }
@@ -346,6 +364,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     /// <param name="card">セットするカードオブジェクト</param>
     public void SetSelectCard(Card card)
     {
+        card.transform.localScale = new Vector3(2.1f, 2.1f, 2.1f) * 1.1f;
         //手札リストから削除する
         _player.hands.Remove(card);
         //使用カードとして登録する
@@ -425,8 +444,12 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         card.GetComponentInChildren<Canvas>().sortingOrder = _player.hands.Count - 1;
         //使用コストとして選択されているカードの位置を調整
         ResetCostPosition();
-        //カード使用ボタンの表示を解除する
-        CardUseButton.SetActive(false);
+        if (!IsCost)
+        {
+            //カード使用ボタンの表示を解除する
+            CardUseButton.SetActive(false);
+            card.transform.localScale = new Vector3(1.6f, 1.6f, 1.6f) * 1.1f;
+        }
     }
 
     /// <summary>
