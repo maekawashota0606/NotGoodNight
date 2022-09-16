@@ -15,4 +15,5 @@ public class AnimationSingleTest : MonoBehaviour
 	{
 		anim.Play();
 	}
+
 }
