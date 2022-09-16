@@ -78,6 +78,7 @@ public class Map : SingletonMonoBehaviour<Map>
 			for (int j = 0; j < 10; j++)
 			{
 				printMapData += map[i, j].ToString() + ",";
+                //マップデータ上で隕石を確認した場合、カウンターを増やす
                 if (map[i, j] == meteor)
                 {
                     meteorNum++;
@@ -86,9 +87,11 @@ public class Map : SingletonMonoBehaviour<Map>
 			printMapData += "\n";
 		}
 		Debug.Log("マップ\n" + printMapData);
+        //マップデータで確認できた隕石の数と実際の隕石の数が異なっている場合
         if (meteorNum != GameDirector.Instance.meteors.Count)
         {
             Debug.LogError("The number of meteor on map data is not match with the real number of meteor");
+            //マップデータを再登録する
             UpdateMapData();
         }
         else
@@ -97,6 +100,9 @@ public class Map : SingletonMonoBehaviour<Map>
         }
     }
 
+    /// <summary>
+    /// マップデータを再登録する関数
+    /// </summary>
     public void UpdateMapData()
     {
         //マップデータを初期化
@@ -114,10 +120,12 @@ public class Map : SingletonMonoBehaviour<Map>
             {"□", "□", "□", "□", "□", "□", "□", "□", "□", "□"}
         };
 
+        //実際に存在している隕石をマップデータの該当座標に登録する
         for (int num = 0; num < GameDirector.Instance.meteors.Count; num++)
         {
             map[(int)GameDirector.Instance.meteors[num].transform.position.z * -1, (int)GameDirector.Instance.meteors[num].transform.position.x] = meteor;
         }
+        //ダブルチェック
         CheckMapData();
     }
 }

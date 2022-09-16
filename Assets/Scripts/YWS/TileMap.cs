@@ -6,6 +6,7 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
 {
     //タイル収納マップ
     public GameObject[,] tileMap = new GameObject[10, 10];
+    //グラビトンブレイク用の座標保存リスト
     public List<int> checkListX = new List<int>();
     public List<int> checkListZ = new List<int>();
 
@@ -14,7 +15,7 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
     /// </summary>
     public void FindBasePoint()
     {
-        //効果処理フェイズで使用カードが選択されていおり、マウスカーソルが盤面の上にいる場合
+        //使用カードが選択されていおり、マウスカーソルが盤面の上にいる場合
         if (GameDirector.Instance.SelectedCard != null && GameDirector.Instance.IsMouseOnTile == true)
         {
             //マウスカーソルがいるマスが探す
@@ -24,7 +25,13 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
                 {
                     if (tileMap[j, i].tag == "Search")
                     {
+                        //使用カードによって範囲を表示する
                         GameDirector.Instance.SelectedCard.DecideSearchArea(j, i);
+                        if (GameDirector.Instance.SelectedCard.ID == 9)
+                        {
+                            checkListX.Add(j);
+                            checkListZ.Add(i);
+                        }
                     }
                 }
             }
@@ -68,7 +75,6 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
         }
         if (GameDirector.Instance.DestroyedNum != 0)
         {
-            GameDirector.Instance.IsMeteorDestroyed = true;
             if (GameDirector.Instance.IsMultiEffect == false)
             {
                 GameDirector.Instance.IsPlayerSelectMove = true;

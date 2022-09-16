@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b4c68c088234d9046a5955e4ed09122d
+guid: 80780617fd007e34db0f73348d40a648
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - PixelMplus10
+  - PixelMplus12
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
