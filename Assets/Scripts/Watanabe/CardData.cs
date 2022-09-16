@@ -1007,6 +1007,7 @@ public class CardData : MonoBehaviour
 
     public void FadeIn()
     {
+        GameDirector.Instance.PayedCost = this.Cost;
         CardName.DOFade(1f, 0.5f);
         CardCost.DOFade(1f, 0.5f);
         CardFrame.DOFade(1f, 0.5f);

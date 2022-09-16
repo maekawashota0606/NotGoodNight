@@ -146,14 +146,6 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
 
             case GameState.extra: //複製魔法処理フェイズ
                 CardUseButton.SetActive(false);
-                if (IsPlayerSelectMove == true)
-                {
-                    Debug.Log("Player have choose");
-                }
-                else
-                {
-                    Debug.Log("Player have not choose");
-                }
                 //収束カードの場合、効果範囲を盤面上に表示する
                 if (SelectedCard.CardTypeValue == CardData.CardType.Convergence)
                 {

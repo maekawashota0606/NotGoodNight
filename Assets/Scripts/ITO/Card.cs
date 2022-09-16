@@ -191,8 +191,7 @@ public class Card : CardData
                 flg = false;
             }
             //使用カードが選択されており、このカードが使用コスト置き場の上でドラッグを解除された場合
-            else if (GameDirector.Instance.SelectedCard != null && GameDirector.Instance.SelectedCard.Cost > GameDirector.Instance.PayedCost 
-                    && IsClick == false && hit.gameObject.CompareTag("CostCardSpace"))
+            else if (GameDirector.Instance.SelectedCard != null && GameDirector.Instance.SelectedCard.Cost > GameDirector.Instance.PayedCost && IsClick == false && hit.gameObject.CompareTag("CostCardSpace"))
             {
                 //このカードを使用コストとして登録する
                 GameDirector.Instance.SetCostCard(this);

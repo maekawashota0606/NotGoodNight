@@ -35,7 +35,21 @@ public class Tile : MonoBehaviour
         }
 
         //効果処理フェイズで収束カードが使用カードとして選択されている、かつ必要分のコストが選択されており、さらにこのマスがクリックされた場合
-        if (GameDirector.Instance.gameState == GameDirector.GameState.active && GameDirector.Instance.SelectedCard != null && GameDirector.Instance.SelectedCard.CardTypeValue == CardData.CardType.Convergence && GameDirector.Instance.PayedCost >= GameDirector.Instance.SelectedCard.Cost && IsMouseOver == true && Input.GetMouseButtonDown(0))
+        if (GameDirector.Instance.gameState == GameDirector.GameState.active || GameDirector.Instance.gameState == GameDirector.GameState.extra)
+        {
+            ConfirmeArea();
+        }
+    }
+
+    private void ConfirmeArea()
+    {
+        if (GameDirector.Instance.SelectedCard == null)
+        {
+            return;
+        }
+
+        //効果処理フェイズで収束カードが使用カードとして選択されている、かつ必要分のコストが選択されており、さらにこのマスがクリックされた場合
+        if (GameDirector.Instance.SelectedCard.CardTypeValue == CardData.CardType.Convergence && GameDirector.Instance.PayedCost >= GameDirector.Instance.SelectedCard.Cost && IsMouseOver == true && Input.GetMouseButtonDown(0))
         {
             SoundManager.Instance.PlaySE(5);
             bool IsTarget = false;
