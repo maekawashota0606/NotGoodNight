@@ -631,6 +631,10 @@ public class CardData : MonoBehaviour
 
         #region 聖櫃の開放
         case 17:
+            for (int i = 0; i < GameDirector.Instance._player.hands.Count; i++)
+            {
+                GameDirector.Instance._player.hands[i].Cost = 0;
+            }
             break;
         #endregion
 
