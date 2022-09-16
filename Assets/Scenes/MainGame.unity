@@ -1738,7 +1738,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2110949644}
         m_TargetAssemblyTypeName: Player, Assembly-CSharp
-        m_MethodName: DrawCard
+        m_MethodName: DrawButtonOnClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2623,3 +2623,5 @@ MonoBehaviour:
   IsDrawEffect: 0
   DrawCount_Card10: 0
   EffectTurn_Card14: 0
+  EffectTurn_Card19: 0
+  EffectTurn_Card28: 0

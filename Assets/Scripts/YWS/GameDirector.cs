@@ -119,7 +119,6 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                     //使用されたカードをすべて削除する
                     _player.DeleteUsedCost();
                     _player.DeleteUsedCard();
-                    SelectedCard = null;
                     TileMap.Instance.ResetTileTag();
                     //隕石落下フェイズに移行する
                     gameState = GameState.fall;

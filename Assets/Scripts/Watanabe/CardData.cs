@@ -610,7 +610,7 @@ public class CardData : MonoBehaviour
 
         #region 不破の城塞
         case 16:
-            for (int i = 0; i < GameDirector.Instance._player.hands.Count; i++)
+            for (int i = 0; i < GameDirector.Instance._player.hands.Count+2; i++)
             {
                 if (GameDirector.Instance.meteors.Count == 0 || GameDirector.Instance._player.hands.Count == 0)
                 {
@@ -741,6 +741,7 @@ public class CardData : MonoBehaviour
 
         #region 光の奔流
         case 28:
+            GameDirector.Instance._player.EffectTurn_Card28 = 4;
             break;
         #endregion
 
