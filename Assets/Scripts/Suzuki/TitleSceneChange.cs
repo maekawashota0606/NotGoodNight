@@ -21,6 +21,7 @@ public class TitleSceneChange : MonoBehaviour
     public void TutorialOnClick()
     {
         SoundManager.Instance.PlaySE(0);
+        SceneManager.LoadScene("Tutorial");
     }
 
     public void ExitOnClick()
