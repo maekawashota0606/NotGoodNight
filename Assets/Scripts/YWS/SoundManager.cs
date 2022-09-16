@@ -33,7 +33,8 @@ public class SoundManager : MonoBehaviour
 
                 if (instance == null)
                 {
-                    Debug.LogError("SoundManager Instance Error");
+                    Debug.LogWarning("SoundManager Instance Error");
+                    instance = new SoundManager();
                 }
             }
 
@@ -113,6 +114,7 @@ public class SoundManager : MonoBehaviour
     // BGM再生
     public void PlayBGM(int index)
     {
+        if (BGM == null) return;
         if (0 > index || BGM.Length <= index)
         {
             return;
@@ -139,6 +141,7 @@ public class SoundManager : MonoBehaviour
     // SE再生
     public void PlaySE(int index)
     {
+        if (SE == null) return;
         if (0 > index || SE.Length <= index)
         {
             return;
