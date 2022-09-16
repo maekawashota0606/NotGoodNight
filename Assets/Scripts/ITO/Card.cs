@@ -163,6 +163,12 @@ public class Card : CardData
     /// <param name="eventData"></param>
     public void OnDrag(BaseEventData eventData)
     {
+        //複製魔法処理フェイズの時、ドラッグを行えない
+        if (GameDirector.Instance.gameState == GameDirector.GameState.extra)
+        {
+            return;
+        }
+
         var pointerEventData = eventData as PointerEventData;
         //マウスカーソルの位置にカードオブジェクトを追従させる
         transform.position = target;
@@ -174,12 +180,16 @@ public class Card : CardData
     /// <param name="eventData"></param>
     public void OnEndDrag(BaseEventData eventData)
     {
+        //複製魔法処理フェイズの時、ドラッグを行えない
+        if (GameDirector.Instance.gameState == GameDirector.GameState.extra)
+        {
+            return;
+        }
+
         var pointerEventData = eventData as PointerEventData;
         bool flg = true;
-
         var raycastResults = new List<RaycastResult>();
         EventSystem.current.RaycastAll(pointerEventData, raycastResults);
-
         foreach (var hit in raycastResults)
         {
             //使用カードが選択されておらず、このカードが使用カード置き場の上でドラッグを解除された場合
@@ -262,7 +272,7 @@ public class Card : CardData
             case 19: //魔力障壁
                 GameDirector.Instance.DoMeteorFall = false;
                 GameDirector.Instance.CanMeteorGenerate = false;
-                Player.EffectTurn_Card19 = 1;
+                GameDirector.Instance._player.EffectTurn_Card19 = 1;
                 break;
 
             default:

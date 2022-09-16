@@ -819,7 +819,7 @@ MonoBehaviour:
   _cardFrameImage:
   - {fileID: 21300000, guid: 14dc46251bbd9284082b686335c931a1, type: 3}
   - {fileID: 21300000, guid: 80ab095d1b5402945a6db90b6d4d57c2, type: 3}
-  - {fileID: 21300000, guid: 80ab095d1b5402945a6db90b6d4d57c2, type: 3}
+  - {fileID: 21300000, guid: bf4dbf0ae94bf5b45a0b43709d6f50a0, type: 3}
   CardEffectText: {fileID: 5487714943500923691}
   CardIllustration: {fileID: 147435973975379909}
   _illustrationImage:

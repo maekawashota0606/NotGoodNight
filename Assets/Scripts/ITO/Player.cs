@@ -41,7 +41,8 @@ public class Player : MonoBehaviour
     public int DrawCount_Card10 = 0;
     //効果の持続ターンカウント
     public int EffectTurn_Card14 = 0;
-    public static int EffectTurn_Card19 = 0;
+    public int EffectTurn_Card19 = 0;
+    public int EffectTurn_Card28 = 0;
 
     #endregion
 
@@ -113,46 +114,25 @@ public class Player : MonoBehaviour
         }
         totalCardNum += hands.Count;
         //手札は10枚が上限なので、10枚の状態でドローは行えない
-        if (totalCardNum == 10 || IsClick == true)
+        if (totalCardNum == 10)
         {
             return;
         }
 
         //ドローするカードの番号を乱数で生成する
-        int[] CardID = new int[33]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,18,19,20,21,22,23,24,25,26,27,29,30,31,32,33,34,35};
-        //int ID = Random.Range(1,36);
-        int ID = 17;
-        int DrawNum = Random.Range(0,CardID.Length);
+        int[] CardID = new int[34]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,29,30,31,32,33,34,35};
+        int ID = Random.Range(1,36);
+        //int ID = 28;
+        //int DrawNum = Random.Range(0,CardID.Length);
         //int ID = CardID[DrawNum];
+
         SoundManager.Instance.PlaySE(7);
-        //ゲーム開始時の初期手札のドロー
-        if (GameDirector.Instance.gameState == GameDirector.GameState.standby)
-        {
-            GameObject genCard = Instantiate(cardPrefab, playerHand);
-            Card newCard = genCard.GetComponent<Card>();
-            newCard.Init(ID);
-            //カードオブジェクトをリストに入れる
-            hands.Add(newCard);
-        }
-        //アクティブフェイズでのプレイヤーの行動としてのドロー
-        else if (GameDirector.Instance.gameState == GameDirector.GameState.active)
-        {
-            IsClick = true;
-            GameObject genCard = Instantiate(cardPrefab, playerHand);
-            Card newCard = genCard.GetComponent<Card>();
-            newCard.Init(ID);
-            //カードオブジェクトをリストに入れる
-            hands.Add(newCard);
-            DrawCount_Card10++;
-            //カードを引いたら隕石落下フェイズに移行する
-            GameDirector.Instance.gameState = GameDirector.GameState.fall;
-        }
+        GameObject genCard = Instantiate(cardPrefab, playerHand);
+        Card newCard = genCard.GetComponent<Card>();
+        newCard.Init(ID);
         //効果によるドロー
-        else if (GameDirector.Instance.gameState == GameDirector.GameState.effect && IsDrawEffect == true)
+        if (GameDirector.Instance.gameState == GameDirector.GameState.effect && IsDrawEffect == true)
         {
-            GameObject genCard = Instantiate(cardPrefab, playerHand);
-            Card newCard = genCard.GetComponent<Card>();
-            newCard.Init(ID);
             if (GameDirector.Instance.SelectedCard.ID == 18 && newCard.Cost > 0)
             {
                 newCard.Cost--;
@@ -161,11 +141,40 @@ public class Player : MonoBehaviour
             {
                 newCard.Cost = 0;
             }
-            //カードオブジェクトをリストに入れる
-            hands.Add(newCard);
         }
+        //カードオブジェクトをリストに入れる
+        hands.Add(newCard);
         //手札のカードの位置を調整する
         GameDirector.Instance.ResetCardPosition();
+        IsClick = false;
+    }
+
+    /// <summary>
+    /// アクティブフェイズでのプレイヤーの行動としてのドロー
+    /// </summary>
+    public void DrawButtonOnClick()
+    {
+        //使用カードと使用コストは手札から外されているため、手札の数を計算する
+        int totalCardNum = 0;
+        if (GameDirector.Instance.SelectedCard != null)
+        {
+            totalCardNum++;
+        }
+        if (GameDirector.Instance.costCardList.Count > 0)
+        {
+            totalCardNum += GameDirector.Instance.costCardList.Count;
+        }
+        totalCardNum += hands.Count;
+        if (GameDirector.Instance.gameState != GameDirector.GameState.active || IsClick == true || totalCardNum == 10)
+        {
+            return;
+        }
+
+        IsClick = true;
+        DrawCard();
+        DrawCount_Card10++;
+        //カードを引いたら隕石落下フェイズに移行する
+        GameDirector.Instance.gameState = GameDirector.GameState.fall;
     }
 
     /// <summary>
@@ -173,6 +182,11 @@ public class Player : MonoBehaviour
     /// </summary>
     public void DeleteUsedCost()
     {
+        //コストカードが一枚もない場合は削除を行わなくていい
+        if (GameDirector.Instance.costCardList.Count == 0)
+        {
+            return;
+        }
         //コストリストにあるカードをすべて削除する
         for (int i = 0; i < GameDirector.Instance.costCardList.Count; i++)
         {
@@ -187,8 +201,14 @@ public class Player : MonoBehaviour
     /// </summary>
     public void DeleteUsedCard()
     {
+        //使用カードが存在しない場合は削除を行わなくていい
+        if (GameDirector.Instance.SelectedCard == null)
+        {
+            return;
+        }
         //使用カードとして登録しているカードを削除する
         Destroy(GameDirector.Instance.SelectedCard.gameObject);
+        GameDirector.Instance.SelectedCard = null;
         GameDirector.Instance.PayedCost = 0;
     }
 
@@ -218,6 +238,20 @@ public class Player : MonoBehaviour
                 GameDirector.Instance.DoMeteorFall = true;
                 GameDirector.Instance.CanMeteorGenerate = true;
             }
+        }
+        #endregion
+
+        #region 光の奔流
+        if (EffectTurn_Card28 > 0)
+        {
+            if (EffectTurn_Card28 < 4)
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    DrawCard();
+                }
+            }
+            EffectTurn_Card28--;
         }
         #endregion
     }

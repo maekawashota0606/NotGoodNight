@@ -13,8 +13,6 @@ public class Meteorite : MonoBehaviour
     //移動が開始する前の座標を保存しておく変数
     private int StartXPosition = 0;
     private int StartZPosition = 0;
-    private float TargetXPosition = 0;
-    private float TargetZPosition = 0;
     //このターン落下を行っているかどうか
     public bool FallFinished = false;
     public bool MoveFinished = false;
