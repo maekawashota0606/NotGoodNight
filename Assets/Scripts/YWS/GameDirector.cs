@@ -459,6 +459,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         ResetCostPosition();
         if (!IsCost)
         {
+            SelectedCard = null;
             //カード使用ボタンの表示を解除する
             CardUseButton.SetActive(false);
             card.transform.localScale = new Vector3(1.6f, 1.6f, 1.6f) * 1.1f;
