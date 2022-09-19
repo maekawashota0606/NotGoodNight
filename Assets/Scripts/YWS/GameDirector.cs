@@ -445,6 +445,10 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 PayedCost--;
                 break;
             }
+            if (SelectedCard != null && SelectedCard.Cost > PayedCost)
+            {
+                CardUseButton.SetActive(false);
+            }
         }
         //手札リストに追加する
         _player.hands.Add(card);

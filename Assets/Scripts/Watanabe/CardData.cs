@@ -797,7 +797,7 @@ public class CardData : MonoBehaviour
         #region ラスト・ショット
         case 35:
             GameDirector.Instance._player.IsDrawEffect = true;
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < 10; i++)
             {
                 GameDirector.Instance._player.DrawCard();
             }

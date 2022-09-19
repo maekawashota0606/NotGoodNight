@@ -104,13 +104,16 @@ public class Player : MonoBehaviour
     {
         //使用カードと使用コストは手札から外されているため、手札の数を計算する
         int totalCardNum = 0;
-        if (GameDirector.Instance.SelectedCard != null)
+        if (IsDrawEffect == false)
         {
-            totalCardNum++;
-        }
-        if (GameDirector.Instance.costCardList.Count > 0)
-        {
-            totalCardNum += GameDirector.Instance.costCardList.Count;
+            if (GameDirector.Instance.SelectedCard != null)
+            {
+                totalCardNum++;
+            }
+            if (GameDirector.Instance.costCardList.Count > 0)
+            {
+                totalCardNum += GameDirector.Instance.costCardList.Count;
+            }
         }
         totalCardNum += hands.Count;
         //手札は10枚が上限なので、10枚の状態でドローは行えない
