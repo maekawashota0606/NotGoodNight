@@ -555,6 +555,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     /// </summary>
     public void UseButtonOnClick()
     {
+        SoundManager.Instance.PlaySE(3);
         //カード効果処理フェイズに移行する
         gameState = GameState.effect;
         //使用カードボタンの表示を解除する
