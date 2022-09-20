@@ -202,6 +202,11 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 //隕石が存在しない、隕石の落下を行わない、またはすべての隕石の落下が終了した場合、ゲーム終了判定フェイズに移行する
                 if (meteors.Count == 0 || CheckMeteorMove() == true || DoMeteorFall == false)
                 {
+                    if (DestroyedNum > 0)
+                    {
+                        AddScore();
+                        DestroyedNum = 0;
+                    }
                     gameState = GameState.judge;
                 }
                 break;
@@ -250,11 +255,6 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 //ターンカウントを１つ増やす
                 TurnCount++;
                 Map.Instance.CheckMapData();
-                if (DestroyedNum > 0)
-                {
-                    AddScore();
-                    DestroyedNum = 0;
-                }
                 //持続系のカード効果のターンカウントを進める、効果が切れたら効果の処理を元に戻す
                 _player.CheckEffectTurn();
                 //アクティブフェイズに戻る
