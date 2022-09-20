@@ -25,13 +25,16 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
                 {
                     if (tileMap[j, i].tag == "Search")
                     {
-                        //使用カードによって範囲を表示する
-                        GameDirector.Instance.SelectedCard.DecideSearchArea(j, i);
                         if (GameDirector.Instance.SelectedCard.ID == 9)
                         {
+                            checkListX = new List<int>();
+                            checkListZ = new List<int>();
                             checkListX.Add(j);
                             checkListZ.Add(i);
+                            Debug.Log(checkListX.Count + " " + checkListZ.Count);
                         }
+                        //使用カードによって範囲を表示する
+                        GameDirector.Instance.SelectedCard.DecideSearchArea(j, i);
                     }
                 }
             }

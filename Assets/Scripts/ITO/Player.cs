@@ -124,7 +124,7 @@ public class Player : MonoBehaviour
 
         //ドローするカードの番号を乱数で生成する
         int ID = Random.Range(1,36);
-        //int ID = 28;
+        //int ID = 9;
 
         SoundManager.Instance.PlaySE(7);
         GameObject genCard = Instantiate(cardPrefab, playerHand);

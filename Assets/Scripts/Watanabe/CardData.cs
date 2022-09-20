@@ -207,14 +207,12 @@ public class CardData : MonoBehaviour
 
         #region グラビトンブレイク
         case 9:
-            GameDirector.Instance.IsMultiEffect = true;
-            /*Vector3 checkPos = new Vector3(basicPosX, 0, -basicPosZ);
+            Vector3 checkPos = new Vector3(basicPosX, 0, -basicPosZ);
             if (!Map.Instance.CheckEmpty(checkPos))
             {
-                for (int i = 0; i < TileMap.Instance.checkListX.Count; i++)
+                while (true)
                 {
-                    Debug.Log(i);
-                    Vector3 basicPos = new Vector3(TileMap.Instance.checkListX[i], 0, -TileMap.Instance.checkListZ[i]); Debug.Log(basicPos);
+                    Vector3 basicPos = new Vector3(TileMap.Instance.checkListX[0], 0, -TileMap.Instance.checkListZ[0]);
                     Vector3 UpPos = basicPos + Vector3.forward;
                     Vector3 DownPos = basicPos + Vector3.back;
                     Vector3 LeftPos = basicPos + Vector3.left;
@@ -222,48 +220,50 @@ public class CardData : MonoBehaviour
 
                     if (-(int)UpPos.z > -1)
                     {
-                        if (TileMap.Instance.tileMap[(int)UpPos.x, -(int)UpPos.z].tag != "Search" && TileMap.Instance.tileMap[(int)UpPos.x, -(int)UpPos.z].tag != "Watching" && !Map.Instance.CheckEmpty(UpPos))
+                        if (TileMap.Instance.tileMap[(int)UpPos.x, -(int)UpPos.z].tag == "Untagged" && !Map.Instance.CheckEmpty(UpPos))
                         {
-                            Debug.Log("up Hit " + (int)UpPos.x + -(int)UpPos.z);
-                            TileMap.Instance.tileMap[(int)UpPos.x, -(int)UpPos.z].tag = "Watching";
+                            TileMap.Instance.tileMap[(int)UpPos.x, -(int)UpPos.z].tag = "Area";
                             TileMap.Instance.checkListX.Add((int)UpPos.x);
                             TileMap.Instance.checkListZ.Add(-(int)UpPos.z);
                         }
                     }
                     if (-(int)DownPos.z < 10)
                     {
-                        if (TileMap.Instance.tileMap[(int)DownPos.x, -(int)DownPos.z].tag != "Search" && TileMap.Instance.tileMap[(int)DownPos.x, -(int)DownPos.z].tag != "Watching" && !Map.Instance.CheckEmpty(DownPos))
+                        if (TileMap.Instance.tileMap[(int)DownPos.x, -(int)DownPos.z].tag == "Untagged" && !Map.Instance.CheckEmpty(DownPos))
                         {
-                            Debug.Log("down Hit " + (int)DownPos.x + -(int)DownPos.z);
-                            TileMap.Instance.tileMap[(int)DownPos.x, -(int)DownPos.z].tag = "Watching";
+                            TileMap.Instance.tileMap[(int)DownPos.x, -(int)DownPos.z].tag = "Area";
                             TileMap.Instance.checkListX.Add((int)DownPos.x);
                             TileMap.Instance.checkListZ.Add(-(int)DownPos.z);
                         }
                     }
                     if ((int)LeftPos.x > -1)
                     {
-                        if (TileMap.Instance.tileMap[(int)LeftPos.x, -(int)LeftPos.z].tag != "Search" && TileMap.Instance.tileMap[(int)LeftPos.x, -(int)LeftPos.z].tag != "Watching" && !Map.Instance.CheckEmpty(LeftPos))
+                        if (TileMap.Instance.tileMap[(int)LeftPos.x, -(int)LeftPos.z].tag == "Untagged" && !Map.Instance.CheckEmpty(LeftPos))
                         {
-                            Debug.Log("left Hit " + (int)LeftPos.x + -(int)LeftPos.z);
-                            TileMap.Instance.tileMap[(int)LeftPos.x, -(int)LeftPos.z].tag = "Watching";
+                            TileMap.Instance.tileMap[(int)LeftPos.x, -(int)LeftPos.z].tag = "Area";
                             TileMap.Instance.checkListX.Add((int)LeftPos.x);
                             TileMap.Instance.checkListZ.Add(-(int)LeftPos.z);
                         }
                     }
                     if ((int)RightPos.x < 10)
                     {
-                        if (TileMap.Instance.tileMap[(int)RightPos.x, -(int)RightPos.z].tag != "Search" && TileMap.Instance.tileMap[(int)RightPos.x, -(int)RightPos.z].tag != "Watching" && !Map.Instance.CheckEmpty(RightPos))
+                        if (TileMap.Instance.tileMap[(int)RightPos.x, -(int)RightPos.z].tag == "Untagged" && !Map.Instance.CheckEmpty(RightPos))
                         {
-                            Debug.Log("right Hit " + (int)RightPos.x + -(int)RightPos.z);
-                            TileMap.Instance.tileMap[(int)RightPos.x, -(int)RightPos.z].tag = "Watching";
+                            TileMap.Instance.tileMap[(int)RightPos.x, -(int)RightPos.z].tag = "Area";
                             TileMap.Instance.checkListX.Add((int)RightPos.x);
                             TileMap.Instance.checkListZ.Add(-(int)RightPos.z);
                         }
                     }
+
+                    TileMap.Instance.checkListX.RemoveAt(0);
+                    TileMap.Instance.checkListZ.RemoveAt(0);
+
+                    if (TileMap.Instance.checkListX.Count == 0 && TileMap.Instance.checkListZ.Count == 0)
+                    {
+                        break;
+                    }
                 }
             }
-            TileMap.Instance.checkListX = new List<int>();
-            TileMap.Instance.checkListZ = new List<int>();*/
             break;
         #endregion
 
@@ -558,7 +558,6 @@ public class CardData : MonoBehaviour
         #region グラビトンブレイク
         case 9:
             TileMap.Instance.MeteorDestory();
-            ExtraEffect();
             break;
         #endregion
             
@@ -817,68 +816,6 @@ public class CardData : MonoBehaviour
     {
         switch(this.ID)
         {
-        #region グラビトンブレイク
-        case 9:
-            for (int i = 0; i < TileMap.Instance.checkListX.Count; i++)
-            {
-                Vector3 basicPos = new Vector3(TileMap.Instance.checkListX[i], 0, -TileMap.Instance.checkListZ[i]);
-                Vector3 UpPos = basicPos + Vector3.forward;
-                Vector3 DownPos = basicPos + Vector3.back;
-                Vector3 LeftPos = basicPos + Vector3.left;
-                Vector3 RightPos = basicPos + Vector3.right;
-
-                if (-(int)UpPos.z > -1)
-                {
-                    if (!Map.Instance.CheckEmpty(UpPos))
-                    {
-                        TileMap.Instance.checkListX.Add((int)UpPos.x);
-                        TileMap.Instance.checkListZ.Add(-(int)UpPos.z);
-                    }
-                }
-                if (-(int)DownPos.z < 10)
-                {
-                    if (!Map.Instance.CheckEmpty(DownPos))
-                    {
-                        TileMap.Instance.checkListX.Add((int)DownPos.x);
-                        TileMap.Instance.checkListZ.Add(-(int)DownPos.z);
-                    }
-                }
-                if ((int)LeftPos.x > -1)
-                {
-                    if (!Map.Instance.CheckEmpty(LeftPos))
-                    {
-                        TileMap.Instance.checkListX.Add((int)LeftPos.x);
-                        TileMap.Instance.checkListZ.Add(-(int)LeftPos.z);
-                    }
-                }
-                if ((int)RightPos.x < 10)
-                {
-                    if (!Map.Instance.CheckEmpty(RightPos))
-                    {
-                        TileMap.Instance.checkListX.Add((int)RightPos.x);
-                        TileMap.Instance.checkListZ.Add(-(int)RightPos.z);
-                    }
-                }
-
-                for (int num = 0; num < GameDirector.Instance.meteors.Count; num++)
-                {
-                    if (GameDirector.Instance.meteors[num].transform.position.x == (int)basicPos.x && GameDirector.Instance.meteors[num].transform.position.z == (int)basicPos.z)
-                    {
-                        //マップから削除
-                        Map.Instance.map[(int)GameDirector.Instance.meteors[num].transform.position.z*-1, (int)GameDirector.Instance.meteors[num].transform.position.x] = Map.Instance.empty;
-                        //隕石オブジェクトを削除する
-                        Destroy(GameDirector.Instance.meteors[num].gameObject);
-                        //リストから削除
-                        GameDirector.Instance.meteors.RemoveAt(num);
-                        GameDirector.Instance.DestroyedNum++;
-                    }
-                }
-            }
-            TileMap.Instance.checkListX = new List<int>();
-            TileMap.Instance.checkListZ = new List<int>();
-            break;
-        #endregion
-
         #region コメットブロー
         case 12:
             GameDirector.Instance._player.IsDrawEffect = true;
