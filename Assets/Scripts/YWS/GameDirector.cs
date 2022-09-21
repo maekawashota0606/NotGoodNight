@@ -74,10 +74,6 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            Map.Instance.CheckMapData();
-        }
         switch (gameState)
         {
             case GameState.standby: //スタンバイフェイズ

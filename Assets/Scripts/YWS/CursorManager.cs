@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CursorManager : MonoBehaviour
 {
+    [SerializeField, Header("カーソルオブジェクトを表示するカメラ")] private Camera cursorCamera = null;
     [SerializeField, Header("カーソルオブジェクト")] private GameObject cursorObj = null;
     private SpriteRenderer cursor = null;
     [SerializeField, Header("カーソル画像")] private Sprite[] CursorImage = new Sprite[2];
@@ -32,7 +33,7 @@ public class CursorManager : MonoBehaviour
     {
         //マウスカーソルの位置を随時更新
         mouse = Input.mousePosition;
-        target = Camera.main.ScreenToWorldPoint(new Vector3(mouse.x, mouse.y, 10));
+        target = cursorCamera.ScreenToWorldPoint(new Vector3(mouse.x, mouse.y, 10));
         //取得したマウスカーソルの位置にカーソルオブジェクトを移動させる
         cursorObj.transform.position = target;
 
