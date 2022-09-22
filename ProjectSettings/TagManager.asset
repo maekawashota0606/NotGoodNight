@@ -8,6 +8,12 @@ TagManager:
   - Search
   - Area
   - Cost
+  - Lock
+  - Move
+  - Watching
+  - SelectedCardSpace
+  - CostCardSpace
+  - PlayerHand
   layers:
   - Default
   - TransparentFX
@@ -16,7 +22,7 @@ TagManager:
   - Water
   - UI
   - Meteor
-  - 
+  - Cursor
   - 
   - 
   - 
@@ -42,6 +48,15 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: BackGround
+    uniqueID: 918877393
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Card
+    uniqueID: 310616489
+    locked: 0
+  - name: Overlay
+    uniqueID: 708607315
     locked: 0

@@ -10,8 +10,16 @@ public class GameClearSceneChange : MonoBehaviour
         SoundManager.Instance.PlayBGM(2);    
     }
 
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            SwitchScene_Title();
+        }
+    }
+
     //ゲームクリアシーンからタイトルシーンへの遷移
-    public void SwitchScene_Title()
+    private void SwitchScene_Title()
     {
         SoundManager.Instance.PlaySE(0);
         SoundManager.Instance.StopBGM();

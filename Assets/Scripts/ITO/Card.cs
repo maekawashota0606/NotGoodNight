@@ -2,200 +2,53 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using Random = UnityEngine.Random;
 
 public class Card : CardData
 {
-    [SerializeField, Header("カード選択フレーム")] private Image image_component = null;
-    //マウスがカードの上に乗っているかどうか
-    public bool IsMouseOver = false;
     //クリックされた状態なのかどうか
     public bool IsClick = false;
     //このカードがコストとして選択されているのかどうか
     public bool IsCost = false;
     private bool IsSEPlayed = false;
+    private Vector3 originPosition = Vector3.zero;
+    private Vector3 mouse = Vector3.zero;
+    private Vector3 target = Vector3.zero;
+    [SerializeField] private Button buttonComponent = null;
 
     void Update()
     {
         base.ShowCardStatus();
-
-        if (GameDirector.Instance.WaitCopy_Card13 == true && IsMouseOver == true && Input.GetMouseButtonDown(0))
-        {
-            GameDirector.Instance.CopyNum_Card13 = this.ID;
-            image_component.color = Color.white;
-        }
-
-        ConfirmUsing();
-        WaitForSelect();
-        SelectingUseCard();
-        PayingCost();
-        UnChoosing();
+        //マウスカーソルの位置を随時更新する
+        mouse = Input.mousePosition;
+        target = Camera.main.ScreenToWorldPoint(new Vector3(mouse.x, mouse.y, 10));
     }
 
     /// <summary>
-    /// 選択されていない待機状態の処理
+    /// 左クリックされた時の処理
     /// </summary>
-    private void WaitForSelect()
+    public void OnClick()
     {
-        //このカードが選択されていない場合
-        if (IsClick == false)
+        SoundManager.Instance.PlaySE(2);
+        if (GameDirector.Instance.gameState != GameDirector.GameState.effect)
         {
-            if (GameDirector.Instance.WaitCopy_Card13 == false)
+            //使用カードとして選択された時の処理
+            if (GameDirector.Instance.SelectedCard == null)
             {
-                //マウスが乗っていたら、カードの枠を黄色にする
-                if (IsMouseOver == true)
-                {
-                    image_component.color = Color.yellow;
-                }
-                //乗っていない場合、白色にする
-                else
-                {
-                    image_component.color = Color.white;
-                }
-            }
-            //複製魔法の対象の選択
-            else if (GameDirector.Instance.WaitCopy_Card13 == true)
-            {
-                //マウスが乗っていたら、カードの枠をマゼンタにする
-                if (IsMouseOver == true)
-                {
-                    image_component.color = Color.magenta;
-                }
-                //乗っていない場合、白色にする
-                else
-                {
-                    image_component.color = Color.white;
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    /// 使用カードとして選択された時の処理
-    /// </summary>
-    private void SelectingUseCard()
-    {
-        //カードが選択されていない場合、このカードがクリックされたら、枠を赤色にする
-        if (GameDirector.Instance.SelectedCard == null && GameDirector.Instance.gameState != GameDirector.GameState.effect && IsMouseOver == true && Input.GetMouseButtonDown(0))
-        {
-            SoundManager.Instance.PlaySE(2);
-            image_component.color = Color.red;
-            IsClick = true;
-            GameDirector.Instance.SelectedCard = this;
-            if (this.IsBasePointInArea == false)
-            {
-                GameDirector.Instance.IsBasePointInArea = false;
-            }
-            //効果が処理された後に削除するために、タグを付けておく
-            this.tag = "Selected";
-        }
-    }
-
-    /// <summary>
-    /// コストカードとして選択された時の処理
-    /// </summary>
-    private void PayingCost()
-    {
-        if (GameDirector.Instance.SelectedCard == null)
-        {
-            return;
-        }
-        else
-        {
-            //使用するカードが選択されており、それがこのカードではなく、かつ選択されているコストが必要コスト以下の場合、このカードがクリックされた時、枠を緑色にする
-            if (GameDirector.Instance.PayedCost < GameDirector.Instance.SelectedCard.Cost && IsClick == false && IsMouseOver == true && Input.GetMouseButtonDown(0))
-            {
-                SoundManager.Instance.PlaySE(2);
-                image_component.color = Color.green;
-                IsClick = true;
-                IsCost = true;
-                //選択されているコストの数を加算する
-                switch(this.ID)
-                {
-                case 11: //サクリファイス・レプリカ
-                    GameDirector.Instance.PayedCost += 2;
-                    break;
-
-                default:
-                    GameDirector.Instance.PayedCost++;
-                    break;
-                }
-                //コストとして使用された時に削除する用にタグを付けておく
-                this.tag = "Cost";
-            }
-        }
-    }
-
-    /// <summary>
-    /// 選択を解除する時の処理
-    /// </summary>
-    private void UnChoosing()
-    {
-        if (GameDirector.Instance.IsCardUsingConfirm == true)
-        {
-            return;
-        }
-        //このカードが選択されている場合で右クリックしたら、選択を解除し、枠を白色にする
-        if (IsClick == true && IsMouseOver == true && Input.GetMouseButtonDown(1))
-        {
-            image_component.color = Color.white;
-            IsClick = false;
-            //コストとして選択されていた場合、すでに選択されているコストの数を減らす
-            if (IsCost == true)
-            {
-                switch(this.ID)
-                {
-                case 11: //サクリファイス・レプリカ
-                    GameDirector.Instance.PayedCost -= 2;
-                    break;
-
-                default:
-                    GameDirector.Instance.PayedCost--;
-                    break;
-                }
-            }
-            //使用カードとして選択されていた場合、色々とリセットする
-            else
-            {
-                GameDirector.Instance.SelectedCard = null;
-                GameDirector.Instance.IsBasePointInArea = true;
-                GameDirector.Instance.PayedCost = 0;
-            }
-            this.tag = "Untagged";
-        }
-
-        //コストとして選択されている、かつ使用カードの選択が解除された時、このカードの選択も解除する
-        if (IsCost == true && GameDirector.Instance.SelectedCard == null)
-        {
-            image_component.color = Color.white;
-            IsClick = false;
-            IsCost = false;
-            this.tag = "Untagged";
-        }
-    }
-
-    /// <summary>
-    /// カードの使用を確定する処理
-    /// </summary>
-    private void ConfirmUsing()
-    {
-        if (GameDirector.Instance.SelectedCard == null)
-        {
-            return;
-        }
-        else
-        {
-            if (GameDirector.Instance.gameState == GameDirector.GameState.active && GameDirector.Instance.PayedCost >= GameDirector.Instance.SelectedCard.Cost && IsClick == true && IsCost == false && IsMouseOver == true && Input.GetMouseButtonDown(0))
-            {
-                if (GameDirector.Instance.SelectedCard.ID == 11 || GameDirector.Instance.SelectedCard.ID == 15 || GameDirector.Instance.SelectedCard.ID == 19 || (GameDirector.Instance.SelectedCard.ID == 35 && Player.hands.Count != 1))
+                if (this.ID == 11 || this.ID == 15 || this.ID == 19 || (this.ID == 35 && GameDirector.Instance._player.hands.Count != 1))
                 {
                     return;
                 }
-                else
-                {
-                    SoundManager.Instance.PlaySE(3);
-                    GameDirector.Instance.IsCardUsingConfirm = true;
-                }
+                IsClick = true;
+                GameDirector.Instance.SetSelectCard(this);
+            }
+            //コストカードとして選択された時の処理
+            else if (GameDirector.Instance.SelectedCard != null && GameDirector.Instance.PayedCost < GameDirector.Instance.SelectedCard.Cost && IsClick == false)
+            {
+                IsClick = true;
+                IsCost = true;
+                GameDirector.Instance.SetCostCard(this);
             }
         }
     }
@@ -203,27 +56,200 @@ public class Card : CardData
     /// <summary>
     /// マウスがカードの上に乗っている時
     /// </summary>
-    private void OnMouseOver()
+    public void OnPointerEnter()
     {
         if (IsSEPlayed == false)
         {
             SoundManager.Instance.PlaySE(1);
             IsSEPlayed = true;
         }
-        IsMouseOver = true;
+        //カードを少し拡大する
+        transform.localScale *= 1.1f;
+        //カードオブジェクトのキャンバスを一番上に表示させるための物に変更する
+        GetComponentInChildren<Canvas>().sortingLayerName = "Overlay";
         GameDirector.Instance.WatchingCard = this;
+        this.tag = "Watching";
+        //カードの位置を調整
+        GameDirector.Instance.ResetCardPositionWhenWatching();
+        GameDirector.Instance.ResetCostPositionWhenWatching();
     }
 
     /// <summary>
     /// マウスがカードの上から離れた時
     /// </summary>
-    private void OnMouseExit()
+    public void OnPointerExit()
     {
+        //カードのサイズを元に戻す
+        transform.localScale /= 1.1f;
+        //カードオブジェクトのキャンバスを元に戻す
+        GetComponentInChildren<Canvas>().sortingLayerName = "Card";
         IsSEPlayed = false;
-        IsMouseOver = false;
         GameDirector.Instance.WatchingCard = null;
+        this.tag = "Untagged";
+        //カードの位置を調整
+        GameDirector.Instance.ResetCardPosition();
+        GameDirector.Instance.ResetCostPosition();
     }
 
+    /// <summary>
+    /// マウスで右クリックされた時の処理
+    /// </summary>
+    /// <param name="eventData"></param>
+    public void OnPointerClick(BaseEventData eventData)
+    {
+        //複製魔法処理フェイズの時、選択を解除できない
+        if (GameDirector.Instance.gameState == GameDirector.GameState.extra)
+        {
+            return;
+        }
+
+        var pointerEventData = eventData as PointerEventData;
+        //EventTriggerを使って右クリックを取得
+        if (pointerEventData.button == PointerEventData.InputButton.Right)
+        {
+            //使用カードだった場合
+            if (IsClick && !IsCost)
+            {
+                //カードを手札に戻す
+                GameDirector.Instance.ResetToHand(this, IsCost);
+                //コストが支払われていた場合
+                if (GameDirector.Instance.PayedCost > 0)
+                {
+                    //コストリストのカード全てを手札に戻す
+                    while (GameDirector.Instance.costCardList.Count > 0)
+                    {
+                        GameDirector.Instance.costCardList[0].IsClick = false;
+                        GameDirector.Instance.costCardList[0].IsCost = false;
+                        GameDirector.Instance.ResetToHand(GameDirector.Instance.costCardList[0], true);
+                    }
+                }
+                IsClick = false;
+                GameDirector.Instance.SelectedCard = null;
+                GameDirector.Instance.PayedCost = 0;
+            }
+            //コストだった場合
+            else if (IsClick && IsCost)
+            {
+                //このカードだけを手札に戻す
+                GameDirector.Instance.ResetToHand(this, IsCost);
+                IsClick = false;
+                IsCost = false;
+            }
+        }
+    }
+
+    /// <summary>
+    /// ドラッグを開始する関数
+    /// </summary>
+    /// <param name="eventData"></param>
+    public void OnBeginDrag(BaseEventData eventData)
+    {
+        //複製魔法処理フェイズの時、ドラッグを行えない
+        if (GameDirector.Instance.gameState == GameDirector.GameState.extra)
+        {
+            return;
+        }
+
+        var pointerEventData = eventData as PointerEventData;
+        //ドラッグ開始前の位置を記録する
+        originPosition = transform.position;
+        //ボタンのクリック判定を避けるため、一時的にカードオブジェクト上にあるボタンコンポーネントを無効にする
+        buttonComponent.enabled = false;
+    }
+
+    /// <summary>
+    /// ドラッグ途中の処理
+    /// </summary>
+    /// <param name="eventData"></param>
+    public void OnDrag(BaseEventData eventData)
+    {
+        //複製魔法処理フェイズの時、ドラッグを行えない
+        if (GameDirector.Instance.gameState == GameDirector.GameState.extra)
+        {
+            return;
+        }
+
+        var pointerEventData = eventData as PointerEventData;
+        //マウスカーソルの位置にカードオブジェクトを追従させる
+        transform.position = target;
+    }
+
+    /// <summary>
+    /// ドラッグ終了時の処理
+    /// </summary>
+    /// <param name="eventData"></param>
+    public void OnEndDrag(BaseEventData eventData)
+    {
+        //複製魔法処理フェイズの時、ドラッグを行えない
+        if (GameDirector.Instance.gameState == GameDirector.GameState.extra)
+        {
+            return;
+        }
+
+        var pointerEventData = eventData as PointerEventData;
+        bool flg = true;
+        var raycastResults = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointerEventData, raycastResults);
+        foreach (var hit in raycastResults)
+        {
+            //使用カードが選択されておらず、このカードが使用カード置き場の上でドラッグを解除された場合
+            if (GameDirector.Instance.SelectedCard == null && hit.gameObject.CompareTag("SelectedCardSpace"))
+            {
+                if (this.ID == 11 || this.ID == 15 || this.ID == 19 || (this.ID == 35 && GameDirector.Instance._player.hands.Count != 1))
+                {
+                    transform.position = originPosition;
+                }
+                else
+                {
+                    //このカードを使用カードとしてセットする
+                    GameDirector.Instance.SetSelectCard(this);
+                    IsClick = true;
+                }
+                flg = false;
+            }
+            //使用カードが選択されており、このカードが使用コスト置き場の上でドラッグを解除された場合
+            else if (GameDirector.Instance.SelectedCard != null && GameDirector.Instance.SelectedCard.Cost > GameDirector.Instance.PayedCost && IsClick == false && hit.gameObject.CompareTag("CostCardSpace"))
+            {
+                //このカードを使用コストとして登録する
+                GameDirector.Instance.SetCostCard(this);
+                IsClick = true;
+                IsCost = true;
+                flg = false;
+            }
+            //このカードが選択されていて、手札置き場の上でドラッグを解除された場合
+            else if (IsClick == true && hit.gameObject.CompareTag("PlayerHand"))
+            {
+                //このカードを手札に戻す
+                GameDirector.Instance.ResetToHand(this, IsCost);
+                //使用カードでコストが支払われていた場合
+                if (!IsCost && GameDirector.Instance.PayedCost > 0)
+                {
+                    //コストリストのカード全てを手札に戻す
+                    while (GameDirector.Instance.costCardList.Count > 0)
+                    {
+                        GameDirector.Instance.costCardList[0].IsClick = false;
+                        GameDirector.Instance.costCardList[0].IsCost = false;
+                        GameDirector.Instance.ResetToHand(GameDirector.Instance.costCardList[0], true);
+                    }
+                    GameDirector.Instance.SelectedCard = null;
+                    GameDirector.Instance.PayedCost = 0;
+                }
+                IsClick = false;
+                IsCost = false;
+                flg = false;
+            }
+        }
+        //使用カード置き場、使用コスト置き場、手札置き場のどれかでもない場所でドラッグを解除された場合、または条件が合わなかった場合、ドラッグ開始前の場所に戻す
+        if (flg)
+        {
+            transform.position = originPosition;
+        }
+        buttonComponent.enabled = true;
+    }
+
+    /// <summary>
+    /// このカードが削除される時の関数
+    /// </summary>
     private void OnDestroy()
     {
         //チェンジリング・マギアの効果
@@ -253,7 +279,7 @@ public class Card : CardData
             case 19: //魔力障壁
                 GameDirector.Instance.DoMeteorFall = false;
                 GameDirector.Instance.CanMeteorGenerate = false;
-                Player.EffectTurn_Card19 = 1;
+                GameDirector.Instance._player.EffectTurn_Card19 = 1;
                 break;
 
             default:

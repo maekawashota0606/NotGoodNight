@@ -11,7 +11,7 @@ public class Tile : MonoBehaviour
     
     private void Start()
     {
-        //値を初期化
+        //色の値を初期化
         tile.color = new Color(255,255,255,0);
     }
 
@@ -20,13 +20,16 @@ public class Tile : MonoBehaviour
         //このマスがカード範囲内に含まれている場合、光らせる
         if (this.tag == "Area")
         {
-            if (GameDirector.Instance.gameState == GameDirector.GameState.effect)
+            if (GameDirector.Instance.SelectedCard != null && GameDirector.Instance.SelectedCard.ID != 9)
             {
-                tile.color = new Color(1, 1, 1, 0.5f);
-            }
-            else
-            {
-                tile.color = new Color(1,0,0,0.5f);
+                if (GameDirector.Instance.PayedCost >= GameDirector.Instance.SelectedCard.Cost)
+                {
+                    tile.color = new Color(1, 1, 1, 0.5f);
+                }
+                else
+                {
+                    tile.color = new Color(1,0,0,0.5f);
+                }
             }
         }
         else if (this.tag == "Untagged")
@@ -34,12 +37,51 @@ public class Tile : MonoBehaviour
             tile.color = new Color(1, 1, 1, 0);
         }
 
-        //効果処理フェイズで使用するカードが選択されている、かつ必要分のコストが選択されており、さらにこのマスがクリックされた場合
-        if (GameDirector.Instance.gameState == GameDirector.GameState.effect && GameDirector.Instance.SelectedCard != null && GameDirector.Instance.SelectedCard.CardTypeValue == CardData.CardType.Attack && GameDirector.Instance.IsCardUsingConfirm == true && IsMouseOver == true && Input.GetMouseButtonDown(0))
+        //効果処理フェイズで収束カードが使用カードとして選択されている、かつ必要分のコストが選択されており、さらにこのマスがクリックされた場合
+        if (GameDirector.Instance.gameState == GameDirector.GameState.active || GameDirector.Instance.gameState == GameDirector.GameState.extra)
+        {
+            ConfirmeArea();
+        }
+    }
+
+    private void ConfirmeArea()
+    {
+        if (GameDirector.Instance.SelectedCard == null)
+        {
+            return;
+        }
+
+        //効果処理フェイズで収束カードが使用カードとして選択されている、かつ必要分のコストが選択されており、さらにこのマスがクリックされた場合
+        if (GameDirector.Instance.SelectedCard.CardTypeValue == CardData.CardType.Convergence && GameDirector.Instance.PayedCost >= GameDirector.Instance.SelectedCard.Cost && IsMouseOver == true && Input.GetMouseButtonDown(0))
         {
             SoundManager.Instance.PlaySE(5);
-            //範囲が選択された場合、範囲内の隕石を検索する
-            TileMap.Instance.MeteorDestory();
+            bool IsTarget = false;
+            //破壊効果を含むカードを選択している場合、この範囲内で破壊できる隕石が存在するかどうかを調べる
+            if (GameDirector.Instance.SelectedCard.IsDestroyEffect == true)
+            {
+                for (int z = 0; z < 10; z++)
+                {
+                    for (int x = 0; x < 10; x++)
+                    {
+                        if (TileMap.Instance.tileMap[x, z].tag == "Search" || TileMap.Instance.tileMap[x, z].tag == "Area")
+                        {
+                            Vector3 checkPos = new Vector3(x, 0, -z);
+                            //一つでも隕石が存在する場合、探索を終了させる
+                            if (!Map.Instance.CheckEmpty(checkPos))
+                            {
+                                IsTarget = true;
+                            }
+                        }
+                    }
+                }
+                //隕石が一つも存在していない場合、ここで処理を終了させる
+                if (IsTarget == false)
+                {
+                    return;
+                }
+            }
+            //範囲内に隕石が存在するか、破壊効果を含まない効果だった場合、カード効果処理フェイズに移行する
+            GameDirector.Instance.gameState = GameDirector.GameState.effect;
         }
     }
 
@@ -53,17 +95,18 @@ public class Tile : MonoBehaviour
             SoundManager.Instance.PlaySE(4);
             IsSEPlayed = true;
         }
-        if (GameDirector.Instance.IsBasePointInArea == true)
+
+        //必要分のコストが支払われている場合、白く表示する
+        if (GameDirector.Instance.SelectedCard != null && GameDirector.Instance.PayedCost >= GameDirector.Instance.SelectedCard.Cost)
         {
-            if (GameDirector.Instance.gameState == GameDirector.GameState.effect)
-            {
-                tile.color = new Color(1, 1, 1, 0.5f);
-            }
-            else
-            {
-                tile.color = new Color(1,0,0,0.5f);
-            }
+            tile.color = new Color(1, 1, 1, 0.5f);
         }
+        //必要分のコストが支払われていない場合、赤く表示する
+        else if (GameDirector.Instance.SelectedCard == null || GameDirector.Instance.PayedCost < GameDirector.Instance.SelectedCard.Cost)
+        {
+            tile.color = new Color(1,0,0,0.5f);
+        }
+        //このマスを特定するためのタグ付け
         this.tag = "Search";
         IsMouseOver = true;
         GameDirector.Instance.IsMouseOnTile = true;

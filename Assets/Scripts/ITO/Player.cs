@@ -10,36 +10,45 @@ public class Player : MonoBehaviour
     //csvファイル用変数
     public TextAsset _csvFile;
     //並び順
-    //｜番号｜名前｜コスト｜カードタイプ｜効果テキスト｜
+    //｜番号｜名前｜コスト｜カードタイプ｜破壊効果持ちかどうか｜効果テキスト｜
     public List<string[]> _cardData = new List<string[]>();
 
     [SerializeField, Header("カードプレハブ")] private GameObject cardPrefab = null;
-    [SerializeField, Header("手札置き場")] private Transform playerHand = null;
+    [SerializeField, Header("手札置き場")] public Transform playerHand = null;
     //手札
-    public static List<Card> hands = new List<Card>();
+    public List<Card> hands = new List<Card>();
     //スコア
-    public int Score = 0;
+    public static int Score = 0;
     [SerializeField, Header("スコアテキスト")] private Text scoreText = null;
     //ライフ
     public int Life = 3;
-    [SerializeField, Header("ライフテキスト")] private Text lifeText = null;
     [SerializeField, Header("盤面")] private Image Board = null;
     [SerializeField, Header("盤面の画像")] private Sprite[] BoardImage = new Sprite[3];
+    [SerializeField, Header("選択カードの置き場")] private Image SelectedCardSpace = null;
+    [SerializeField, Header("選択カード置き場の画像")] private Sprite[] SelectedCardSpaceImage = new Sprite[2];
     //ボタンのダブルクリック防止用フラグ
     private bool IsClick = false;
+    //隕石の引き寄せを行う時に使うデータのリスト
+    public List<Meteorite> MoveList = new List<Meteorite>();
+    public List<int> targetPosXList = new List<int>();
+    public List<int> targetPosZList = new List<int>();
 
     #region カードごとの専用変数
 
     //効果によるドローが発生するかどうか
-    private bool IsDrawEffect = false;
+    public bool IsDrawEffect = false;
     //星屑収集用のこのゲーム中、何回ドローボタンでカードをドローしたかを保存する変数
     public int DrawCount_Card10 = 0;
     //効果の持続ターンカウント
     public int EffectTurn_Card14 = 0;
-    public static int EffectTurn_Card19 = 0;
+    public int EffectTurn_Card19 = 0;
+    public int EffectTurn_Card28 = 0;
 
     #endregion
 
+    /// <summary>
+    /// csvファイスのセットアップ
+    /// </summary>
     public void SetCsv()
     {
         StringReader reader = new StringReader(_csvFile.text);
@@ -59,9 +68,10 @@ public class Player : MonoBehaviour
             Life = 0;
         }
 
-        //獲得スコアと現在ライフを随時更新で画面に表示させる
-        scoreText.text = "Score / " + Score.ToString("d6");
-        lifeText.text = "Life / " + Life.ToString();
+        //獲得スコアを随時更新で画面に表示させる
+        scoreText.text = " " + Score.ToString("d6");
+
+        //残りライフによって盤面の画像を随時更新させる
         if (Life > 0 && Life <= 3)
         {
             Board.sprite = BoardImage[Life-1];
@@ -71,9 +81,14 @@ public class Player : MonoBehaviour
             Board.sprite = BoardImage[2];
         }
 
-        if (GameDirector.Instance.WaitCopy_Card13 == true && GameDirector.Instance.CopyNum_Card13 != 0)
+        //選択された使用カードが使用可能かどうかによって使用カード置き場の画像を切り替える
+        if (GameDirector.Instance.SelectedCard == null || GameDirector.Instance.PayedCost < GameDirector.Instance.SelectedCard.Cost)
         {
-            CopyCard_Card13(GameDirector.Instance.CopyNum_Card13);
+            SelectedCardSpace.sprite = SelectedCardSpaceImage[0];
+        }
+        else if (GameDirector.Instance.SelectedCard != null && GameDirector.Instance.PayedCost >= GameDirector.Instance.SelectedCard.Cost)
+        {
+            SelectedCardSpace.sprite = SelectedCardSpaceImage[1];
         }
 
         if (GameDirector.Instance.gameState == GameDirector.GameState.active)
@@ -87,45 +102,37 @@ public class Player : MonoBehaviour
     /// </summary>
     public void DrawCard()
     {
+        //使用カードと使用コストは手札から外されているため、手札の数を計算する
+        int totalCardNum = 0;
+        if (IsDrawEffect == false)
+        {
+            if (GameDirector.Instance.SelectedCard != null)
+            {
+                totalCardNum++;
+            }
+            if (GameDirector.Instance.costCardList.Count > 0)
+            {
+                totalCardNum += GameDirector.Instance.costCardList.Count;
+            }
+        }
+        totalCardNum += hands.Count;
         //手札は10枚が上限なので、10枚の状態でドローは行えない
-        if (hands.Count == 10 || IsClick == true)
+        if (totalCardNum == 10)
         {
             return;
         }
 
-        int[] CardID = new int[28]{1,2,3,4,5,8,10,11,12,13,14,15,16,18,19,20,21,22,23,24,25,27,29,30,31,32,33,35};
-        //int ID = Random.Range(1,36);
-        int DrawNum = Random.Range(0,CardID.Length);
-        int ID = CardID[DrawNum];
+        //ドローするカードの番号を乱数で生成する
+        int ID = Random.Range(1,36);
+        //int ID = 9;
+
         SoundManager.Instance.PlaySE(7);
-        //ゲーム開始時の初期手札のドロー
-        if (GameDirector.Instance.gameState == GameDirector.GameState.standby)
-        {
-            GameObject genCard = Instantiate(cardPrefab, playerHand);
-            Card newCard = genCard.GetComponent<Card>();
-            newCard.Init(ID,_cardData[ID][1],_cardData[ID][2],_cardData[ID][3],_cardData[ID][4]);
-            //カードオブジェクトをリストに入れる
-            hands.Add(newCard);
-        }
-        //アクティブフェイズでのプレイヤーの行動としてのドロー
-        else if (GameDirector.Instance.gameState == GameDirector.GameState.active)
-        {
-            IsClick = true;
-            GameObject genCard = Instantiate(cardPrefab, playerHand);
-            Card newCard = genCard.GetComponent<Card>();
-            newCard.Init(ID,_cardData[ID][1],_cardData[ID][2],_cardData[ID][3],_cardData[ID][4]);
-            //カードオブジェクトをリストに入れる
-            hands.Add(newCard);
-            DrawCount_Card10++;
-            //カードを引いたら隕石落下フェイズに移行する
-            GameDirector.Instance.gameState = GameDirector.GameState.fall;
-        }
+        GameObject genCard = Instantiate(cardPrefab, playerHand);
+        Card newCard = genCard.GetComponent<Card>();
+        newCard.Init(ID);
         //効果によるドロー
-        else if (GameDirector.Instance.gameState == GameDirector.GameState.effect && IsDrawEffect == true)
+        if (GameDirector.Instance.gameState == GameDirector.GameState.effect && IsDrawEffect == true)
         {
-            GameObject genCard = Instantiate(cardPrefab, playerHand);
-            Card newCard = genCard.GetComponent<Card>();
-            newCard.Init(ID,_cardData[ID][1],_cardData[ID][2],_cardData[ID][3],_cardData[ID][4]);
             if (GameDirector.Instance.SelectedCard.ID == 18 && newCard.Cost > 0)
             {
                 newCard.Cost--;
@@ -134,22 +141,68 @@ public class Player : MonoBehaviour
             {
                 newCard.Cost = 0;
             }
-            //カードオブジェクトをリストに入れる
-            hands.Add(newCard);
         }
+        //カードオブジェクトをリストに入れる
+        hands.Add(newCard);
+        //手札のカードの位置を調整する
+        GameDirector.Instance.ResetCardPosition();
+        IsClick = false;
     }
 
+    /// <summary>
+    /// アクティブフェイズでのプレイヤーの行動としてのドロー
+    /// </summary>
+    public void DrawButtonOnClick()
+    {
+        //使用カードと使用コストは手札から外されているため、手札の数を計算する
+        int totalCardNum = 0;
+        if (GameDirector.Instance.SelectedCard != null)
+        {
+            totalCardNum++;
+        }
+        if (GameDirector.Instance.costCardList.Count > 0)
+        {
+            totalCardNum += GameDirector.Instance.costCardList.Count;
+        }
+        totalCardNum += hands.Count;
+        if (GameDirector.Instance.gameState != GameDirector.GameState.active || IsClick == true || totalCardNum == 10)
+        {
+            return;
+        }
+
+        IsClick = true;
+        if (totalCardNum < 5)
+        {
+            for (int i = 0; i < 5 - totalCardNum; i++)
+            {
+                DrawCard();
+            }
+        }
+        else
+        {
+            DrawCard();
+        }
+        DrawCount_Card10++;
+        //カードを引いたら隕石落下フェイズに移行する
+        GameDirector.Instance.gameState = GameDirector.GameState.fall;
+    }
+
+    /// <summary>
+    /// 使用コストカードの削除
+    /// </summary>
     public void DeleteUsedCost()
     {
-        //使用されたカードすべてにタグがついているので、それらを手札から見つけ出して削除する
-        for (int i = 0; i < hands.Count; i++)
+        //コストカードが一枚もない場合は削除を行わなくていい
+        if (GameDirector.Instance.costCardList.Count == 0)
         {
-            if (hands[i].tag == "Cost")
-            {
-                Destroy(hands[i].gameObject);
-                hands.RemoveAt(i);
-                i--;
-            }
+            return;
+        }
+        //コストリストにあるカードをすべて削除する
+        for (int i = 0; i < GameDirector.Instance.costCardList.Count; i++)
+        {
+            Destroy(GameDirector.Instance.costCardList[i].gameObject);
+            GameDirector.Instance.costCardList.RemoveAt(i);
+            i--;
         }
     }
 
@@ -158,229 +211,15 @@ public class Player : MonoBehaviour
     /// </summary>
     public void DeleteUsedCard()
     {
-        //使用されたカードすべてにタグがついているので、それらを手札から見つけ出して削除する
-        for (int i = 0; i < hands.Count; i++)
+        //使用カードが存在しない場合は削除を行わなくていい
+        if (GameDirector.Instance.SelectedCard == null)
         {
-            if (hands[i].tag == "Selected")
-            {
-                Destroy(hands[i].gameObject);
-                hands.RemoveAt(i);
-                i--;
-            }
+            return;
         }
+        //使用カードとして登録しているカードを削除する
+        Destroy(GameDirector.Instance.SelectedCard.gameObject);
+        GameDirector.Instance.SelectedCard = null;
         GameDirector.Instance.PayedCost = 0;
-    }
-
-    /// <summary>
-    /// 特殊カードの効果処理
-    /// </summary>
-    public void SpecialCardEffect()
-    {
-        switch(GameDirector.Instance.SelectedCard.ID)
-        {
-        case 5: //アストラルリコール
-            IsDrawEffect = true;
-            for (int i = 0; i < 4; i++)
-            {
-                DrawCard();
-            }
-            break;
-        
-        case 10: //星屑収集
-            for (int i = 0; i < DrawCount_Card10; i++)
-            {
-                if (GameDirector.Instance.meteors.Count == 0)
-                {
-                    break;
-                }
-                SoundManager.Instance.PlaySE(6);
-                int DestoryNum = Random.Range(0,GameDirector.Instance.meteors.Count);
-                //マップから削除
-                Map.Instance.map[(int)GameDirector.Instance.meteors[DestoryNum].transform.position.z*-1, (int)GameDirector.Instance.meteors[DestoryNum].transform.position.x] = Map.Instance.empty;
-                //隕石オブジェクトを削除する
-                Destroy(GameDirector.Instance.meteors[DestoryNum].gameObject);
-                //リストから削除
-                GameDirector.Instance.meteors.RemoveAt(DestoryNum);
-                GameDirector.Instance.DestroyedNum++;
-            }
-            break;
-
-        case 13: //複製魔法
-            GameDirector.Instance.WaitCopy_Card13 = true;
-            break;
-
-        case 14: //グラビトンリジェクト
-            EffectTurn_Card14 = 3;
-            GameDirector.Instance.DoMeteorFall = false;
-            GameDirector.Instance.CanMeteorGenerate = false;
-            break;
-
-        case 16: //不破の城塞
-            for (int i = 0; i < hands.Count; i++)
-            {
-                if (GameDirector.Instance.meteors.Count == 0 || hands.Count == 0)
-                {
-                    break;
-                }
-                SoundManager.Instance.PlaySE(6);
-                int DestoryNum = Random.Range(0,GameDirector.Instance.meteors.Count);
-                //マップから削除
-                Map.Instance.map[(int)GameDirector.Instance.meteors[DestoryNum].transform.position.z*-1, (int)GameDirector.Instance.meteors[DestoryNum].transform.position.x] = Map.Instance.empty;
-                //隕石オブジェクトを削除する
-                Destroy(GameDirector.Instance.meteors[DestoryNum].gameObject);
-                //リストから削除
-                GameDirector.Instance.meteors.RemoveAt(DestoryNum);
-                GameDirector.Instance.DestroyedNum++;
-            }
-            break;
-
-        case 18: //詮索するはばたき
-            IsDrawEffect = true;
-            for (int i = 0; i < 3; i++)
-            {
-                DrawCard();
-            }
-            break;
-
-        case 21: //残光のアストラル
-            IsDrawEffect = true;
-            int DrawNum = 2;
-            DrawNum += Score / 30000 * 2;
-            for (int i = 0; i < DrawNum; i++)
-            {
-                DrawCard();
-            }
-            break;
-
-        case 22: //至高天の顕現
-            IsDrawEffect = true;
-            for (int i = 0; i < 2; i++)
-            {
-                DrawCard();
-            }
-            break;
-
-        case 24: //隕石の儀式
-            IsDrawEffect = true;
-            int emptyNum = 0;
-            for (int x = 0; x < 10; x++)
-            {
-                Vector3 checkPos = GameDirector.Instance._DEFAULT_POSITION + new Vector3(x, 0, 0);
-                if (Map.Instance.CheckEmpty(checkPos))
-                {
-                    emptyNum++;
-                }
-            }
-            if (emptyNum > 0)
-            {
-                GameDirector.Instance.MeteorSet(emptyNum,0);
-            }
-            for (int i = 0; i < 6; i++)
-            {
-                DrawCard();
-            }
-            break;
-
-        case 27: //復興の灯
-            Life++;
-            break;
-
-        case 33: //流星群
-            for (int i = 0; i < 70; i++)
-            {
-                int ranX = Random.Range(0,10);
-                int ranZ = Random.Range(0,10);
-                if (TileMap.Instance.tileMap[ranX,ranZ].tag != "Area")
-                {
-                    TileMap.Instance.tileMap[ranX,ranZ].tag = "Area";
-                }
-                else
-                {
-                    i--;
-                }
-            }
-            TileMap.Instance.MeteorDestory();
-            break;
-
-        case 35: //ラスト・ショット
-            IsDrawEffect = true;
-            for (int i = 0; i < 9; i++)
-            {
-                DrawCard();
-            }
-            break;
-
-        default:
-            break;
-        }
-        IsDrawEffect = false;
-    }
-
-    /// <summary>
-    /// 二個以上の効果を持つカードの効果処理
-    /// </summary>
-    public void ExtraEffect()
-    {
-        switch(GameDirector.Instance.SelectedCard.ID)
-        {
-        case 12: //コメットブロー
-            IsDrawEffect = true;
-            for (int i = 0; i < 5; i++)
-            {
-                DrawCard();
-            }
-            break;
-
-        case 20: //アストラルリベリオン
-            IsDrawEffect = true;
-            if (Score >= 50000)
-            {
-                for (int i = 0; i < 7; i++)
-                {
-                    DrawCard();
-                }
-            }
-            break;
-
-        case 23: //グラビトンオフセッツ
-            List<int> columnList = new List<int>{0,1,2,3,4};
-            for (int num = 0; num < 4; num++)
-            {
-                if (columnList.Count == 0)
-                {
-                    break;
-                }
-                int z = Random.Range(0,columnList.Count);
-                for (int x = 0; x < 10; x++)
-                {
-                    Vector3 checkPos = GameDirector.Instance._DEFAULT_POSITION + new Vector3(x, 0, -z);
-                    if (Map.Instance.CheckEmpty(checkPos))
-                    {
-                        GameDirector.Instance.MeteorSet(1,z);
-                        break;
-                    }
-                    else if (x == 9 && !Map.Instance.CheckEmpty(checkPos))
-                    {
-                        columnList.RemoveAt(z);
-                        num--;
-                    }
-                }
-            }
-            break;
-
-        case 25: //知性の光
-            IsDrawEffect = true;
-            for (int i = 0; i < GameDirector.Instance.DestroyedNum; i++)
-            {
-                DrawCard();
-            }
-            break;
-
-        default:
-            break;
-        }
-        IsDrawEffect = false;
-        GameDirector.Instance.IsMultiEffect = false;
     }
 
     /// <summary>
@@ -388,6 +227,7 @@ public class Player : MonoBehaviour
     /// </summary>
     public void CheckEffectTurn()
     {
+        #region グラビトンリジェクト
         if (EffectTurn_Card14 > 0)
         {
             EffectTurn_Card14--;
@@ -397,7 +237,9 @@ public class Player : MonoBehaviour
                 GameDirector.Instance.CanMeteorGenerate = true;
             }
         }
+        #endregion
 
+        #region 魔力障壁
         if (EffectTurn_Card19 > 0)
         {
             EffectTurn_Card19--;
@@ -407,16 +249,52 @@ public class Player : MonoBehaviour
                 GameDirector.Instance.CanMeteorGenerate = true;
             }
         }
+        #endregion
+
+        #region 光の奔流
+        if (EffectTurn_Card28 > 0)
+        {
+            if (EffectTurn_Card28 < 4)
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    DrawCard();
+                }
+            }
+            EffectTurn_Card28--;
+        }
+        #endregion
     }
 
-    public void CopyCard_Card13(int cardID)
+    /// <summary>
+    /// 隕石の引き寄せ効果を使用する時、移動が完了しているかどうかを調べる関数
+    /// </summary>
+    public void CheckIsMoveFinish()
     {
-        GameObject genCard = Instantiate(cardPrefab, playerHand);
-        Card newCard = genCard.GetComponent<Card>();
-        newCard.Init(cardID,_cardData[cardID][1],_cardData[cardID][2],_cardData[cardID][3],_cardData[cardID][4]);
-        hands.Add(newCard);
-        GameDirector.Instance.CopyNum_Card13 = 0;
-        GameDirector.Instance.WaitCopy_Card13 = false;
-        GameDirector.Instance.IsPlayerSelectMove = true;
+        int FinishedNum = 0;
+        if (GameDirector.Instance.WaitingMove == true && MoveList.Count != 0)
+        {
+            //順番に隕石を調べる
+            for (int num = 0; num < MoveList.Count; num++)
+            {
+                //隕石の移動が完了したら、カウンターを増やす
+                if (MoveList[num].MoveFinished == true)
+                {
+                    FinishedNum++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            //すべての隕石の移動が完了した場合
+            if (FinishedNum == MoveList.Count)
+            {
+                GameDirector.Instance.IsPlayerSelectMove = true;
+                //マップの更新
+                Map.Instance.UpdateMapData();
+            }
+        }
     }
 }

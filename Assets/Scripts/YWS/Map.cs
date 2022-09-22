@@ -47,74 +47,6 @@ public class Map : SingletonMonoBehaviour<Map>
         }
     }
 
-    public void CheckUp(int x, int z)
-    {
-        if (z == 0)
-        {
-            return;
-        }
-
-        if (map[z-1, x] == meteor)
-        {
-            TileMap.Instance.tileMap[x, z-1].tag = "Area";
-            CheckUp(x, z-1);
-            CheckDown(x, z-1);
-            CheckLeft(x, z-1);
-            CheckRight(x, z-1);
-        }
-    }
-
-    public void CheckDown(int x, int z)
-    {
-        if (z == 9)
-        {
-            return;
-        }
-
-        if (map[z+1, x] == meteor)
-        {
-            TileMap.Instance.tileMap[x, z+1].tag = "Area";
-            CheckUp(x, z+1);
-            CheckDown(x, z+1);
-            CheckLeft(x, z+1);
-            CheckRight(x, z+1);
-        }
-    }
-
-    public void CheckLeft(int x, int z)
-    {
-        if (x == 0)
-        {
-            return;
-        }
-
-        if (map[z, x-1] == meteor)
-        {
-            TileMap.Instance.tileMap[x-1, z].tag = "Area";
-            CheckUp(x-1, z);
-            CheckDown(x-1, z);
-            CheckLeft(x-1, z);
-            CheckRight(x-1, z);
-        }
-    }
-
-    public void CheckRight(int x, int z)
-    {
-        if (x == 9)
-        {
-            return;
-        }
-
-        if (map[z, x+1] == meteor)
-        {
-            TileMap.Instance.tileMap[x+1, z].tag = "Area";
-            CheckUp(x+1, z);
-            CheckDown(x+1, z);
-            CheckLeft(x+1, z);
-            CheckRight(x+1, z);
-        }
-    }
-
     /// <summary>
     /// マップ上に隕石が存在するかどうか
     /// </summary>
@@ -139,15 +71,61 @@ public class Map : SingletonMonoBehaviour<Map>
     /// </summary>
     public void CheckMapData()
     {
+        int meteorNum = 0;
         string printMapData = "";
 		for (int i = 0; i < 10; i++)
 		{
 			for (int j = 0; j < 10; j++)
 			{
 				printMapData += map[i, j].ToString() + ",";
+                //マップデータ上で隕石を確認した場合、カウンターを増やす
+                if (map[i, j] == meteor)
+                {
+                    meteorNum++;
+                }
 			}
 			printMapData += "\n";
 		}
 		Debug.Log("マップ\n" + printMapData);
+        //マップデータで確認できた隕石の数と実際の隕石の数が異なっている場合
+        if (meteorNum != GameDirector.Instance.meteors.Count)
+        {
+            Debug.LogError("The number of meteor on map data is not match with the real number of meteor");
+            //マップデータを再登録する
+            UpdateMapData();
+        }
+        else
+        {
+            Debug.Log("Meteors number match");
+        }
+    }
+
+    /// <summary>
+    /// マップデータを再登録する関数
+    /// </summary>
+    public void UpdateMapData()
+    {
+        //マップデータを初期化
+        map = new string[height,width]
+        {
+            {"□", "□", "□", "□", "□", "□", "□", "□", "□", "□"},
+            {"□", "□", "□", "□", "□", "□", "□", "□", "□", "□"},
+            {"□", "□", "□", "□", "□", "□", "□", "□", "□", "□"},
+            {"□", "□", "□", "□", "□", "□", "□", "□", "□", "□"},
+            {"□", "□", "□", "□", "□", "□", "□", "□", "□", "□"},
+            {"□", "□", "□", "□", "□", "□", "□", "□", "□", "□"},
+            {"□", "□", "□", "□", "□", "□", "□", "□", "□", "□"},
+            {"□", "□", "□", "□", "□", "□", "□", "□", "□", "□"},
+            {"□", "□", "□", "□", "□", "□", "□", "□", "□", "□"},
+            {"□", "□", "□", "□", "□", "□", "□", "□", "□", "□"}
+        };
+
+        //実際に存在している隕石をマップデータの該当座標に登録する
+        for (int num = 0; num < GameDirector.Instance.meteors.Count; num++)
+        {
+            map[(int)GameDirector.Instance.meteors[num].transform.position.z * -1, (int)GameDirector.Instance.meteors[num].transform.position.x] = meteor;
+        }
+        //ダブルチェック
+        CheckMapData();
     }
 }
