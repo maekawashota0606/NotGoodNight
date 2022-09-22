@@ -28,13 +28,13 @@ public class MainGameSceneChange : MonoBehaviour
     }
 
     //ゲームクリアシーンへの遷移
-    public void SwitchScene_GameClear()
+    private void SwitchScene_GameClear()
     {
         SceneManager.LoadScene("Gameclear");
     }
 
     //ゲームオーバーシーンへの遷移
-    public void SwitchScene_GameOver()
+    private void SwitchScene_GameOver()
     {
         SceneManager.LoadScene("Gameover");
     }
