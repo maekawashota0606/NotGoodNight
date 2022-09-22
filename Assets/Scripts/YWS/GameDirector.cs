@@ -377,6 +377,11 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     /// <param name="card">セットするカードオブジェクト</param>
     public void SetSelectCard(Card card)
     {
+        if (card.ID == 11 || card.ID == 15 || card.ID == 19 || (card.ID == 35 && GameDirector.Instance._player.hands.Count != 1))
+        {
+            return;
+        }
+        
         card.transform.localScale = new Vector3(2.1f, 2.1f, 2.1f) * 1.1f;
         //手札リストから削除する
         _player.hands.Remove(card);

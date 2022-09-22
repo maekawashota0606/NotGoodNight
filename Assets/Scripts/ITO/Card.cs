@@ -195,9 +195,16 @@ public class Card : CardData
             //使用カードが選択されておらず、このカードが使用カード置き場の上でドラッグを解除された場合
             if (GameDirector.Instance.SelectedCard == null && hit.gameObject.CompareTag("SelectedCardSpace"))
             {
-                //このカードを使用カードとしてセットする
-                GameDirector.Instance.SetSelectCard(this);
-                IsClick = true;
+                if (this.ID == 11 || this.ID == 15 || this.ID == 19 || (this.ID == 35 && GameDirector.Instance._player.hands.Count != 1))
+                {
+                    transform.position = originPosition;
+                }
+                else
+                {
+                    //このカードを使用カードとしてセットする
+                    GameDirector.Instance.SetSelectCard(this);
+                    IsClick = true;
+                }
                 flg = false;
             }
             //使用カードが選択されており、このカードが使用コスト置き場の上でドラッグを解除された場合
