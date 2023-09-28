@@ -220,7 +220,7 @@ public class CardData : MonoBehaviour
 
                     if (-(int)UpPos.z > -1)
                     {
-                        if (TileMap.Instance.tileMap[(int)UpPos.x, -(int)UpPos.z].tag == "Untagged" && !Map.Instance.CheckEmpty(UpPos))
+                        if (TileMap.Instance.tileMap[(int)UpPos.x, -(int)UpPos.z].CompareTag("Untagged") && !Map.Instance.CheckEmpty(UpPos))
                         {
                             TileMap.Instance.tileMap[(int)UpPos.x, -(int)UpPos.z].tag = "Area";
                             TileMap.Instance.checkListX.Add((int)UpPos.x);
@@ -229,7 +229,7 @@ public class CardData : MonoBehaviour
                     }
                     if (-(int)DownPos.z < 10)
                     {
-                        if (TileMap.Instance.tileMap[(int)DownPos.x, -(int)DownPos.z].tag == "Untagged" && !Map.Instance.CheckEmpty(DownPos))
+                        if (TileMap.Instance.tileMap[(int)DownPos.x, -(int)DownPos.z].CompareTag("Untagged") && !Map.Instance.CheckEmpty(DownPos))
                         {
                             TileMap.Instance.tileMap[(int)DownPos.x, -(int)DownPos.z].tag = "Area";
                             TileMap.Instance.checkListX.Add((int)DownPos.x);
@@ -238,7 +238,7 @@ public class CardData : MonoBehaviour
                     }
                     if ((int)LeftPos.x > -1)
                     {
-                        if (TileMap.Instance.tileMap[(int)LeftPos.x, -(int)LeftPos.z].tag == "Untagged" && !Map.Instance.CheckEmpty(LeftPos))
+                        if (TileMap.Instance.tileMap[(int)LeftPos.x, -(int)LeftPos.z].CompareTag("Untagged") && !Map.Instance.CheckEmpty(LeftPos))
                         {
                             TileMap.Instance.tileMap[(int)LeftPos.x, -(int)LeftPos.z].tag = "Area";
                             TileMap.Instance.checkListX.Add((int)LeftPos.x);
@@ -247,7 +247,7 @@ public class CardData : MonoBehaviour
                     }
                     if ((int)RightPos.x < 10)
                     {
-                        if (TileMap.Instance.tileMap[(int)RightPos.x, -(int)RightPos.z].tag == "Untagged" && !Map.Instance.CheckEmpty(RightPos))
+                        if (TileMap.Instance.tileMap[(int)RightPos.x, -(int)RightPos.z].CompareTag("Untagged") && !Map.Instance.CheckEmpty(RightPos))
                         {
                             TileMap.Instance.tileMap[(int)RightPos.x, -(int)RightPos.z].tag = "Area";
                             TileMap.Instance.checkListX.Add((int)RightPos.x);
@@ -470,7 +470,7 @@ public class CardData : MonoBehaviour
                 {
                     if (upX >= 0 && upX <= 9 && upZ >= 0 && upZ <= 9)
                     {
-                        if (TileMap.Instance.tileMap[upX,upZ].tag == "Untagged")
+                        if (TileMap.Instance.tileMap[upX,upZ].CompareTag("Untagged"))
                         {
                             TileMap.Instance.tileMap[upX, upZ].tag = "Area";
                         }
@@ -482,7 +482,7 @@ public class CardData : MonoBehaviour
                 {
                     if (downX >= 0 && downX <= 9 && downZ >= 0 && downZ <= 9)
                     {
-                        if (TileMap.Instance.tileMap[downX, downZ].tag == "Untagged")
+                        if (TileMap.Instance.tileMap[downX, downZ].CompareTag("Untagged"))
                         {
                             TileMap.Instance.tileMap[downX, downZ].tag = "Area";
                         }
@@ -715,7 +715,7 @@ public class CardData : MonoBehaviour
             {
                 for (int x = 0; x < 10; x++)
                 {
-                    if (TileMap.Instance.tileMap[x, z].tag == "Search" || TileMap.Instance.tileMap[x, z].tag == "Area")
+                    if (TileMap.Instance.tileMap[x, z].CompareTag("Search") || TileMap.Instance.tileMap[x, z].CompareTag("Area"))
                     {
                         Vector3 checkPos = new Vector3(x, 0, -z);
                         if (Map.Instance.CheckEmpty(checkPos))
@@ -894,7 +894,7 @@ public class CardData : MonoBehaviour
         {
             for (int z = 0; z < 10; z++)
             {
-                if (TileMap.Instance.tileMap[x, z].tag == "Search" || TileMap.Instance.tileMap[x, z].tag == "Area")
+                if (TileMap.Instance.tileMap[x, z].CompareTag("Search") || TileMap.Instance.tileMap[x, z].CompareTag("Area"))
                 {
                     Vector3 checkPos = new Vector3(x, 0, -z);
                     if (!Map.Instance.CheckEmpty(checkPos))

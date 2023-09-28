@@ -498,7 +498,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         for (int num = 0; num < _player.hands.Count; num++)
         {
             //タグがついているカードが存在する場合
-            if (_player.hands[num].tag == "Watching" && StartReset == false)
+            if (_player.hands[num].CompareTag("Watching") && StartReset == false)
             {
                 //カードの拡大によって位置を調整
                 _player.hands[num].transform.localPosition = new Vector3(-315 + 70 * num + 14, 0, 0);
@@ -538,7 +538,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         for (int num = 0; num < costCardList.Count; num++)
         {
             //タグがついているカードが存在する場合
-            if (costCardList[num].tag == "Watching" && StartReset == false)
+            if (costCardList[num].CompareTag("Watching") && StartReset == false)
             {
                 //カードの拡大によって位置を調整
                 costCardList[num].transform.localPosition = new Vector3(0, 95 - 70 * num - 19, 0);
