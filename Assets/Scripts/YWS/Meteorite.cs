@@ -5,15 +5,15 @@ using DG.Tweening;
 
 public class Meteorite : MonoBehaviour
 {
-    //Œo‰ßŠÔ
+    //çµŒéæ™‚é–“
     private float elapsedTime = 0f;
-    [SerializeField, Header("–Ú•WŠÔ")] private float TargetTime = 0.5f;
+    [SerializeField, Header("ç›®æ¨™æ™‚é–“")] private float TargetTime = 0.5f;
     [SerializeField] private float Duration = 2f;
     public bool DoNextTurn = false;
-    //ˆÚ“®‚ªŠJn‚·‚é‘O‚ÌÀ•W‚ğ•Û‘¶‚µ‚Ä‚¨‚­•Ï”
+    //ç§»å‹•ãŒé–‹å§‹ã™ã‚‹å‰ã®åº§æ¨™ã‚’ä¿å­˜ã—ã¦ãŠãå¤‰æ•°
     private int StartXPosition = 0;
     private int StartZPosition = 0;
-    //‚±‚Ìƒ^[ƒ“—‰º‚ğs‚Á‚Ä‚¢‚é‚©‚Ç‚¤‚©
+    //ã“ã®ã‚¿ãƒ¼ãƒ³è½ä¸‹ã‚’è¡Œã£ã¦ã„ã‚‹ã‹ã©ã†ã‹
     public bool FallFinished = false;
     public bool MoveFinished = false;
     [SerializeField] private Animator meteorAnimator = null;
@@ -21,7 +21,7 @@ public class Meteorite : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (TileMap.Instance.tileMap[(int)this.transform.position.x, (int)this.transform.position.z * -1].tag == "Search" || TileMap.Instance.tileMap[(int)this.transform.position.x, (int)this.transform.position.z * -1].tag == "Area")
+        if (TileMap.Instance.tileMap[(int)this.transform.position.x, (int)this.transform.position.z * -1].CompareTag("Search") || TileMap.Instance.tileMap[(int)this.transform.position.x, (int)this.transform.position.z * -1].CompareTag("Area"))
         {
             meteorAnimator.SetBool("IsArea", true);
         }
@@ -36,7 +36,7 @@ public class Meteorite : MonoBehaviour
             MoveFinished = false;
         }
 
-        //—‰º‚Ì‰‰o
+        //è½ä¸‹ã®æ¼”å‡º
         if (DoNextTurn)
         {
             elapsedTime += Time.deltaTime;
@@ -52,7 +52,7 @@ public class Meteorite : MonoBehaviour
     }
 
     /// <summary>
-    /// —‰º‚ğŠJn‚·‚é
+    /// è½ä¸‹ã‚’é–‹å§‹ã™ã‚‹
     /// </summary>
     public void StartFall()
     {
@@ -61,9 +61,9 @@ public class Meteorite : MonoBehaviour
             StartXPosition = (int)this.transform.position.x;
             StartZPosition = (int)this.transform.position.z;
             DoNextTurn = true;
-            //ƒ}ƒbƒv‚ÌŒ³‹‚½êŠ‚Ì‹L˜^‚ğíœ‚µ
+            //ãƒãƒƒãƒ—ã®å…ƒå±…ãŸå ´æ‰€ã®è¨˜éŒ²ã‚’å‰Šé™¤ã—
             Map.Instance.map[StartZPosition*-1, StartXPosition] = Map.Instance.empty;
-            //ƒ}ƒbƒv‚ÌˆÚ“®æ‚ÉV‚½‚É‹L˜^‚ğ‘‚«‚Ş
+            //ãƒãƒƒãƒ—ã®ç§»å‹•å…ˆã«æ–°ãŸã«è¨˜éŒ²ã‚’æ›¸ãè¾¼ã‚€
             Map.Instance.map[StartZPosition*-1+1, StartXPosition] = Map.Instance.meteor;
         }
     }

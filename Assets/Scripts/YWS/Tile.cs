@@ -18,7 +18,7 @@ public class Tile : MonoBehaviour
     void Update()
     {
         //このマスがカード範囲内に含まれている場合、光らせる
-        if (this.tag == "Area")
+        if (this.CompareTag("Area"))
         {
             if (GameDirector.Instance.SelectedCard != null && GameDirector.Instance.SelectedCard.ID != 9)
             {
@@ -32,7 +32,7 @@ public class Tile : MonoBehaviour
                 }
             }
         }
-        else if (this.tag == "Untagged")
+        else if (this.CompareTag("Untagged"))
         {
             tile.color = new Color(1, 1, 1, 0);
         }
@@ -63,7 +63,7 @@ public class Tile : MonoBehaviour
                 {
                     for (int x = 0; x < 10; x++)
                     {
-                        if (TileMap.Instance.tileMap[x, z].tag == "Search" || TileMap.Instance.tileMap[x, z].tag == "Area")
+                        if (TileMap.Instance.tileMap[x, z].CompareTag("Search") || TileMap.Instance.tileMap[x, z].CompareTag("Area"))
                         {
                             Vector3 checkPos = new Vector3(x, 0, -z);
                             //一つでも隕石が存在する場合、探索を終了させる

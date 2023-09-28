@@ -23,7 +23,7 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
             {
                 for (int j = 0; j < 10; j++)
                 {
-                    if (tileMap[j, i].tag == "Search")
+                    if (tileMap[j, i].CompareTag("Search"))
                     {
                         if (GameDirector.Instance.SelectedCard.ID == 9)
                         {
@@ -50,7 +50,7 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
         {
             for (int x = 0; x < 10; x++)
             {
-                if (tileMap[x, z].tag == "Search" || tileMap[x, z].tag == "Area")
+                if (tileMap[x, z].CompareTag("Search") || tileMap[x, z].CompareTag("Area"))
                 {
                     //見つけた範囲内の隕石を破壊する
                     for (int targetNum = 0; targetNum < GameDirector.Instance.meteors.Count; targetNum++)
