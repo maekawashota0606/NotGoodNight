@@ -23,15 +23,18 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
             {
                 for (int j = 0; j < 10; j++)
                 {
-                    if (tileMap[j, i].tag == "Search")
+                    if (tileMap[j, i].CompareTag("Search"))
                     {
-                        //使用カードによって範囲を表示する
-                        GameDirector.Instance.SelectedCard.DecideSearchArea(j, i);
                         if (GameDirector.Instance.SelectedCard.ID == 9)
                         {
+                            checkListX = new List<int>();
+                            checkListZ = new List<int>();
                             checkListX.Add(j);
                             checkListZ.Add(i);
+                            Debug.Log(checkListX.Count + " " + checkListZ.Count);
                         }
+                        //使用カードによって範囲を表示する
+                        GameDirector.Instance.SelectedCard.DecideSearchArea(j, i);
                     }
                 }
             }
@@ -47,7 +50,7 @@ public class TileMap : SingletonMonoBehaviour<TileMap>
         {
             for (int x = 0; x < 10; x++)
             {
-                if (tileMap[x, z].tag == "Search" || tileMap[x, z].tag == "Area")
+                if (tileMap[x, z].CompareTag("Search") || tileMap[x, z].CompareTag("Area"))
                 {
                     //見つけた範囲内の隕石を破壊する
                     for (int targetNum = 0; targetNum < GameDirector.Instance.meteors.Count; targetNum++)

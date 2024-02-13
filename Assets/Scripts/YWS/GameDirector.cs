@@ -74,8 +74,6 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
 
     void Update()
     {
-        //Debug.Log(gameState);
-        //Debug.Log(TurnCount);
         switch (gameState)
         {
             case GameState.standby: //スタンバイフェイズ
@@ -102,9 +100,10 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                     //収束カードの場合、効果範囲を盤面上に表示する
                     if (SelectedCard.CardTypeValue == CardData.CardType.Convergence)
                     {
+                        //プレイヤーがマウスカーソルで指している盤面のマスを特定し、カードの範囲を表示する
                         TileMap.Instance.FindBasePoint();
                     }
-                    //拡散カードの場合、カード使用ボタンを表示する
+                    //拡散カードかつ必要分のコストを支払っている場合、カード使用ボタンを表示する
                     else if (SelectedCard.CardTypeValue == CardData.CardType.Diffusion && PayedCost >= SelectedCard.Cost)
                     {
                         CardUseButton.SetActive(true);
@@ -119,13 +118,16 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                     //使用されたカードをすべて削除する
                     _player.DeleteUsedCost();
                     _player.DeleteUsedCard();
+                    //盤面のすべてマスのタグをリセットする
                     TileMap.Instance.ResetTileTag();
                     //隕石落下フェイズに移行する
                     gameState = GameState.fall;
                 }
 
+                //使用カードが選択されている場合
                 if (SelectedCard != null)
                 {
+                    //かつ隕石の引き寄せによる移動中でない場合
                     if (WaitingMove == false)
                     {
                         //カードの効果を処理する
@@ -145,7 +147,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
 
             case GameState.extra: //複製魔法処理フェイズ
                 CardUseButton.SetActive(false);
-                //収束カードの場合、効果範囲を盤面上に表示する
+                //収束カードの場合、プレイヤーがマウスカーソルで指している盤面のマスを特定し、カードの範囲を表示する
                 if (SelectedCard.CardTypeValue == CardData.CardType.Convergence)
                 {
                     TileMap.Instance.FindBasePoint();
@@ -194,8 +196,13 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                     }
                 }
                 //隕石が存在しない、隕石の落下を行わない、またはすべての隕石の落下が終了した場合、ゲーム終了判定フェイズに移行する
-                if (meteors.Count == 0 || meteors[meteors.Count-1].FallFinished == true || DoMeteorFall == false)
+                if (meteors.Count == 0 || CheckMeteorMove() == true || DoMeteorFall == false)
                 {
+                    if (DestroyedNum > 0)
+                    {
+                        AddScore();
+                        DestroyedNum = 0;
+                    }
                     gameState = GameState.judge;
                 }
                 break;
@@ -244,11 +251,6 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 //ターンカウントを１つ増やす
                 TurnCount++;
                 Map.Instance.CheckMapData();
-                if (DestroyedNum > 0)
-                {
-                    AddScore();
-                    DestroyedNum = 0;
-                }
                 //持続系のカード効果のターンカウントを進める、効果が切れたら効果の処理を元に戻す
                 _player.CheckEffectTurn();
                 //アクティブフェイズに戻る
@@ -340,6 +342,26 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         Map.Instance.map[targetPosZ, targerPosX] = Map.Instance.meteor;
     }
 
+    public bool CheckMeteorMove()
+    {
+        int FinishedNum = 0;
+        for (int num = 0; num < meteors.Count; num++)
+        {
+            if (meteors[num].FallFinished == true)
+            {
+                FinishedNum++;
+            }
+        }
+        if (FinishedNum == meteors.Count)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     /// <summary>
     /// スコアの加算
     /// </summary>
@@ -355,6 +377,11 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     /// <param name="card">セットするカードオブジェクト</param>
     public void SetSelectCard(Card card)
     {
+        if (card.ID == 11 || card.ID == 15 || card.ID == 19 || (card.ID == 35 && GameDirector.Instance._player.hands.Count != 1))
+        {
+            return;
+        }
+        
         card.transform.localScale = new Vector3(2.1f, 2.1f, 2.1f) * 1.1f;
         //手札リストから削除する
         _player.hands.Remove(card);
@@ -423,6 +450,10 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
                 PayedCost--;
                 break;
             }
+            if (SelectedCard != null && SelectedCard.Cost > PayedCost)
+            {
+                CardUseButton.SetActive(false);
+            }
         }
         //手札リストに追加する
         _player.hands.Add(card);
@@ -437,6 +468,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         ResetCostPosition();
         if (!IsCost)
         {
+            SelectedCard = null;
             //カード使用ボタンの表示を解除する
             CardUseButton.SetActive(false);
             card.transform.localScale = new Vector3(1.6f, 1.6f, 1.6f) * 1.1f;
@@ -466,7 +498,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         for (int num = 0; num < _player.hands.Count; num++)
         {
             //タグがついているカードが存在する場合
-            if (_player.hands[num].tag == "Watching" && StartReset == false)
+            if (_player.hands[num].CompareTag("Watching") && StartReset == false)
             {
                 //カードの拡大によって位置を調整
                 _player.hands[num].transform.localPosition = new Vector3(-315 + 70 * num + 14, 0, 0);
@@ -506,7 +538,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
         for (int num = 0; num < costCardList.Count; num++)
         {
             //タグがついているカードが存在する場合
-            if (costCardList[num].tag == "Watching" && StartReset == false)
+            if (costCardList[num].CompareTag("Watching") && StartReset == false)
             {
                 //カードの拡大によって位置を調整
                 costCardList[num].transform.localPosition = new Vector3(0, 95 - 70 * num - 19, 0);
@@ -528,6 +560,7 @@ public class GameDirector : SingletonMonoBehaviour<GameDirector>
     /// </summary>
     public void UseButtonOnClick()
     {
+        SoundManager.Instance.PlaySE(3);
         //カード効果処理フェイズに移行する
         gameState = GameState.effect;
         //使用カードボタンの表示を解除する

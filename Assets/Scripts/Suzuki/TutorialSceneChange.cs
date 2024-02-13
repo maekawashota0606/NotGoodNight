@@ -6,7 +6,9 @@ using UnityEngine.Video;
 
 public class TutorialSceneChange : MonoBehaviour
 {
-    [SerializeField] VideoPlayer videoPlayer;
+    [SerializeField] VideoPlayer videoPlayer = null;
+    private bool repeatHit = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,8 +17,29 @@ public class TutorialSceneChange : MonoBehaviour
     }
 
     // Update is called once per frame
-    void LoopPointReached(VideoPlayer vp)
+    void Update()
     {
-        SceneManager.LoadScene("MainGame");
+        if (repeatHit)
+        {
+            return;
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            repeatHit = true;
+
+            SwitchScene_Title();
+        }
+    }
+
+    private void LoopPointReached(VideoPlayer vp)
+    {
+        repeatHit = true;
+        SwitchScene_Title();
+    }
+
+    private void SwitchScene_Title()
+    {
+        SceneManager.LoadScene("Title");
     }
 }

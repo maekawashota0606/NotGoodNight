@@ -10,16 +10,16 @@ public class GameOverSceneChange : MonoBehaviour
         SoundManager.Instance.PlayBGM(3);    
     }
 
-    //リトライ
-    public void SwitchScene_MainGame()
+    private void Update()
     {
-        SoundManager.Instance.PlaySE(0);
-        SoundManager.Instance.StopBGM();
-        SceneManager.LoadScene("MainGame");
+        if (Input.GetMouseButtonDown(0))
+        {
+            SwitchScene_Title();
+        }
     }
 
     //タイトルシーンへの遷移
-    public void SwitchScene_Title()
+    private void SwitchScene_Title()
     {
         SoundManager.Instance.PlaySE(0);
         SoundManager.Instance.StopBGM();
