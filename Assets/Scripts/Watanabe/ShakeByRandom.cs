@@ -66,8 +66,8 @@ public class ShakeByRandom : MonoBehaviour
     /// <returns>更新後の揺れ位置</returns>>
     private Vector3 UpdateShakePosition(Vector3 currentPosition, ShakeInfo shakeInfo, float totalTime, Vector3 initPosition)
     {
-    // -strength ~ strength の値で揺れの強さを取得
-    var strength = shakeInfo.Strength;
+        // -strength ~ strength の値で揺れの強さを取得
+        var strength = shakeInfo.Strength;
         var randomX = Random.Range(-1.0f * strength, strength);
         var randomY = Random.Range(-1.0f * strength, strength);
 
